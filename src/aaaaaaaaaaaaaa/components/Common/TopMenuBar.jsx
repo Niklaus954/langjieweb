@@ -20,8 +20,8 @@ class TopMenuBar extends Component {
     };
 
     renderActionMenu = menuName => {
-        const { selectedSideMenu } = this.props;
-        if (selectedSideMenu.indexOf(menuName) !== -1) return CONFIG.activeMenuColor;
+        // const { selectedMenu } = this.state;
+        // if (selectedMenu === menuName) return CONFIG.activeMenuColor;
         return '#fff';
     }
 
@@ -32,21 +32,21 @@ class TopMenuBar extends Component {
     menuClick = index => {
         const { updateSideMenuList, updateSelectedSideMenu } = this.props;
         const pathname = CONFIG['menu'][index].subArr[0].pathname;
+        updateSideMenuList(CONFIG.menu[index].subArr);
+        updateSelectedSideMenu(pathname);
         this.props.history.push({
             pathname,
         });
-        updateSideMenuList(CONFIG.menu[index].subArr);
-        updateSelectedSideMenu(pathname);
     }
 
     popperMenuClick = (items, index) => {
         const { updateSideMenuList, updateSelectedSideMenu } = this.props;
         const { pathname } = items;
+        updateSideMenuList(CONFIG.menu[index].subArr);
+        updateSelectedSideMenu(pathname);
         this.props.history.push({
             pathname,
         });
-        updateSideMenuList(CONFIG.menu[index].subArr);
-        updateSelectedSideMenu(pathname);
     }
 
     sideBarClick = () => {
@@ -72,7 +72,6 @@ class TopMenuBar extends Component {
 
     showPopper = index => {
         const { showPopperList, presentPopper } = this.state;
-        const { selectedSideMenu } = this.props;
         let display = showPopperList ? 'block' : 'none';
         if (index !== presentPopper) display = 'none';
         return (
@@ -84,19 +83,12 @@ class TopMenuBar extends Component {
                 <Paper style={{ position: 'absolute', zIndex: 9, display }}>
                     <MenuList>
                         {
-                            CONFIG['menu'][index].subArr.map(items => <MenuItem selected={items.pathname === selectedSideMenu} key={items.id} onClick={() => { this.popperMenuClick(items, index) }}>{items.text}</MenuItem>)
+                            CONFIG['menu'][index].subArr.map(items => <MenuItem key={items.id} onClick={() => { this.popperMenuClick(items, index) }}>{items.text}</MenuItem>)
                         }
                     </MenuList>
                 </Paper>
             </div>
         );
-    }
-
-    jumpToIndex = () => {
-        const { updateSelectedSideMenu } = this.props;
-        setTimeout(() => {
-            updateSelectedSideMenu('');
-        }, 100);
     }
 
     // 移动端
@@ -121,7 +113,7 @@ class TopMenuBar extends Component {
                                 (!matches && this.renderMobileTopBar()) || (matches && <div style={{ margin: 'auto', width: '100%', ...this.showMaxWidth(selectedMenu) }}>
                                     <Toolbar className={classes.toolBar}>
                                         <div>
-                                            <Link to="/index" onClick={() => {this.jumpToIndex()}} style={{ color: '#fff' }}>
+                                            <Link to="/index" style={{ color: '#fff' }}>
                                                 <img style={{ width: 400 }} src={CONFIG.url('/img/朗杰logo-全.png')} alt={'朗杰logo-全.png'} />
                                             </Link>
                                         </div>
@@ -140,7 +132,7 @@ class TopMenuBar extends Component {
                                         <section style={{ color: this.renderActionMenu('solution'), marginRight: 20 }}>
                                             {this.showPopper(1)}
                                         </section>
-                                        <section style={{ color: this.renderActionMenu('service'), marginRight: 20 }}>
+                                        <section style={{ color: this.renderActionMenu('server'), marginRight: 20 }}>
                                             {this.showPopper(2)}
                                         </section>
                                     </div>

@@ -1,6 +1,7 @@
 const Common = {
     routeInit: params => {
         const { updateSideMenuList, updateSelectedSideMenu, pathname, orderPathname, history, menuList } = params;
+        updateSideMenuList(menuList);
         // 获取选中的那个节点
         let tempPathName = pathname;
         if (pathname === orderPathname) {
@@ -13,7 +14,6 @@ const Common = {
         let selectedSideMenu;
         getUnderNode(menuList);
         try {
-            updateSideMenuList(menuList);
             updateSelectedSideMenu(selectedSideMenu);
         } catch (e) {
             history.push({

@@ -1,10 +1,9 @@
 import { connect } from 'react-redux'
 import { updateSideMenuList, updateSelectedSideMenu } from '../actions'
-import Home from '../components/Home'
+import Solution from '../components/Solution'
 
 const mapStateToProps = state => ({
     sideMenuList: state.sideMenuList,
-    selectedSideMenu: state.selectedSideMenu,
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -15,4 +14,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
     mapStateToProps,
     mapDispatchToProps,
-)(Home)
+)(Solution)

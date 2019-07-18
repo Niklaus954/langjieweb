@@ -4,6 +4,15 @@ import {
     Route,
 } from 'react-router-dom'
 import TopMenuBar from '../containers/TopMenuBar'
+import SideBar from '../containers/SideBar'
+import AboutLangjie from './Home/AboutLangjie'
+import WxPublicPlat from './Home/WxPublicPlat'
+import Activity from './Home/Activity'
+import EventRecord from './Home/EventRecord'
+import ContactUs from './Home/ContactUs'
+import CONFIG from '../config'
+import Common from './Common/Common'
+
 import ToolBox from './Solution/ToolBox'
 import CtrlProducts from './Solution/CtrlProducts'
 import ServerTeam from './Solution/ServerTeam'
@@ -18,11 +27,8 @@ import PressShear from './Solution/PressShear'
 import ActionPlat from './Solution/ActionPlat'
 import Application from './Solution/Application'
 import CompleteCtrlSystem from './Solution/CompleteCtrlSystem'
-import SideBar from '../containers/SideBar'
-import CONFIG from '../config'
-import Common from './Common/Common'
 
-class Solution extends Component {
+class Home extends Component {
 
     componentDidMount() {
         this.init(this.props);
@@ -33,14 +39,23 @@ class Solution extends Component {
     }
 
     init = props => {
-        const { updateSideMenuList, updateSelectedSideMenu } = props;
+        let { updateSideMenuList, updateSelectedSideMenu, selectedSideMenu } = props;
+        let orderPathname, menuList;
+        selectedSideMenu = selectedSideMenu ? selectedSideMenu : this.props.location.pathname;
+        if (selectedSideMenu.indexOf('/home') !== -1) {
+            orderPathname = '/home';
+            menuList = CONFIG.menu[0].subArr;
+        } else if (selectedSideMenu.indexOf('/solution') !== -1) {
+            orderPathname = '/solution';
+            menuList = CONFIG.menu[1].subArr;
+        }
         Common.routeInit({
             updateSideMenuList,
             updateSelectedSideMenu,
             pathname: this.props.location.pathname,
-            orderPathname: '/solution',
+            orderPathname,
             history: this.props.history,
-            menuList: CONFIG.menu[1].subArr,
+            menuList,
         });
     }
 
@@ -48,10 +63,16 @@ class Solution extends Component {
         return (
             <Router>
                 <div>
-                    <TopMenuBar selectedMenu={'solution'} />
-                    {/* <div style={{width: '100%', margin: 'auto', maxWidth: CONFIG.indexPageMaxWidth, display: 'flex'}}>
+                    <TopMenuBar selectedMenu={'home'} />
+                    <div style={{width: '100%', margin: 'auto', maxWidth: CONFIG.indexPageMaxWidth, display: 'flex'}}>
                         <SideBar />
                         <div>
+                            <Route path="/home/AboutLangjie" component={AboutLangjie} />
+                            <Route path="/home/WxPublicPlat" component={WxPublicPlat} />
+                            <Route path="/home/activity" component={Activity} />
+                            <Route path="/home/eventRecord" component={EventRecord} />
+                            <Route path="/home/contactUs" component={ContactUs} />
+
                             <Route path="/solution/actionPlat" component={ActionPlat} />
                             <Route path="/solution/toolBox" component={ToolBox} />
                             <Route path="/solution/ctrlProducts" component={CtrlProducts} />
@@ -67,11 +88,11 @@ class Solution extends Component {
                             <Route path="/solution/dynamicFatigue" component={DynamicFatigue} />
                             <Route path="/solution/pressShear" component={PressShear} />
                         </div>
-                    </div> */}
+                    </div>
                 </div>
             </Router>
         )
     }
 }
 
-export default Solution
+export default Home

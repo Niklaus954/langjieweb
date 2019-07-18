@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import {
     withRouter,
-    Link,
 } from 'react-router-dom'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
@@ -30,13 +29,13 @@ class SideBar extends Component {
         this.initSelected(this.props);
     }
 
-    async componentWillReceiveProps(props) {
+    componentWillReceiveProps(props) {
         if (this.isFirstRender) this.initSelected(props);
         this.isFirstRender = false;
     }
 
     // 页面初始化或属性更新时触发需要展开的节点
-    initSelected = async params => {
+    initSelected = params => {
         let { sideMenuList, selectedSideMenu } = params;
         // sideMenuList = CONFIG.menu;
         let expandMenu = [];
@@ -108,7 +107,12 @@ class SideBar extends Component {
     // 展开隐藏
     toggleMenu = items => {
         let { expandMenu } = this.state;
-        const { updateSelectedSideMenu } = this.props;
+        // 判断当前节点是否有展开的属性
+        if (Number(items.id) > 0) {
+            this.props.history.push({
+                pathname: items.pathname,
+            });
+        }
         if (!items.subArr) return;
         const id = items.id;
         if (expandMenu.indexOf(id) === -1) {
@@ -119,7 +123,6 @@ class SideBar extends Component {
         this.setState({
             expandMenu,
         });
-        updateSelectedSideMenu(items.pathname);
     }
 
     // 节点递归渲染
@@ -147,14 +150,14 @@ class SideBar extends Component {
         function renderList(node, num) {
             return (
                 <div key={node.id}>
-                    <Link to={node.pathname}>
+                    {/* <Link to={node.pathname}> */}
                         <ListItem button selected={node.pathname === selectedSideMenu ? true : false} onClick={() => {that.toggleMenu(node)}} style={{ paddingLeft: 16 * num }}>
                             <ListItemText primary={node.text} />
                             { node.subArr && (
                                 expandMenu.indexOf(node.id) !== -1 ? <ExpandLess /> : <ExpandMore />
                             )}
                         </ListItem>
-                    </Link>
+                    {/* </Link> */}
                     <Collapse in={expandMenu.indexOf(node.id) !== -1} timeout="auto" unmountOnExit>
                         { node.subArr && ++num && node.subArr.map(it => (
                             renderList(it, num)

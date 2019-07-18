@@ -24,25 +24,25 @@ import Common from './Common/Common'
 
 class Solution extends Component {
 
-    componentDidMount() {
-        this.init(this.props);
-    }
+    // componentDidMount() {
+    //     this.init(this.props);
+    // }
 
-    componentWillReceiveProps(props) {
-        this.init(props);
-    }
+    // componentWillReceiveProps(props) {
+    //     this.init(props);
+    // }
 
-    init = props => {
-        const { updateSideMenuList, updateSelectedSideMenu } = props;
-        Common.routeInit({
-            updateSideMenuList,
-            updateSelectedSideMenu,
-            pathname: this.props.location.pathname,
-            orderPathname: '/solution',
-            history: this.props.history,
-            menuList: CONFIG.menu[1].subArr,
-        });
-    }
+    // init = props => {
+    //     const { updateSideMenuList, updateSelectedSideMenu } = props;
+    //     Common.routeInit({
+    //         updateSideMenuList,
+    //         updateSelectedSideMenu,
+    //         pathname: this.props.location.pathname,
+    //         orderPathname: '/solution',
+    //         history: this.props.history,
+    //         menuList: CONFIG.menu[1].subArr,
+    //     });
+    // }
 
     render() {
         return (
