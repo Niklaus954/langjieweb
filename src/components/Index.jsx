@@ -6,12 +6,12 @@ import CONFIG from '../config'
 
 const Index = () => {
     return (
-        <div>
-            <div style={{maxWidth: CONFIG.indexPageMaxWidth, margin: 'auto'}}>
+        <div style={{width: '100%', margin: 'auto', maxWidth: CONFIG.indexPageMaxWidth}}>
+            <div>
                 <CarouselArea />
             </div>
             <div style={{width: '100%', height: 20}}></div>
-            <div style={{maxWidth: CONFIG.indexPageMaxWidth, margin: 'auto'}}>
+            <div>
                 <FetchHotInfoList />
             </div>
             <div style={{width: '100%', height: 20}}></div>

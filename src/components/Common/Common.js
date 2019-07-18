@@ -1,14 +1,14 @@
 const Common = {
     routeInit: params => {
-        const { updateSideMenuList, updateSelectedSideMenu, pathname, orderPathname, history, menuList } = params;
+        const { updateSideMenuList, updateSelectedSideMenu, pathname, history, menuList } = params;
         // 获取选中的那个节点
         let tempPathName = pathname;
-        if (pathname === orderPathname) {
-            tempPathName = menuList[0].pathname;
-            history.push({
-                pathname: tempPathName,
-            });
-        }
+        // if (pathname === orderPathname) {
+        //     tempPathName = menuList[0].pathname;
+        //     history.push({
+        //         pathname: tempPathName,
+        //     });
+        // }
         // 递归定位到最底层
         let selectedSideMenu;
         getUnderNode(menuList);

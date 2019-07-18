@@ -1,12 +1,12 @@
-import React from 'react'
-import SendIcon from '@material-ui/icons/Send'
+
 
 const CONFIG = {
     // url: pathname => 'http://192.168.50.230:8090' + pathname,
     url: pathname => 'https://os.langjie.com' + pathname,
-    minDeviceWidth: 600,
+    minDeviceWidth: 800,
     indexPageMaxWidth: 1300,
     activeMenuColor: '#f60',
+    jumpDelay: 100,
     menu: [
         {
             id: -1,

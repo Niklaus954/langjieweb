@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import {
     withRouter,
-    Link,
 } from 'react-router-dom'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
@@ -107,6 +106,11 @@ class SideBar extends Component {
 
     // 展开隐藏
     toggleMenu = items => {
+        if (items.id > 0) {
+            this.props.history.push({
+                pathname: items.pathname,
+            });
+        }
         let { expandMenu } = this.state;
         const { updateSelectedSideMenu } = this.props;
         if (!items.subArr) return;
@@ -116,10 +120,12 @@ class SideBar extends Component {
         } else {
             expandMenu.splice(expandMenu.indexOf(id), 1);
         }
-        this.setState({
-            expandMenu,
-        });
-        updateSelectedSideMenu(items.pathname);
+        setTimeout(() => {
+            this.setState({
+                expandMenu,
+            });
+            updateSelectedSideMenu(items.pathname);
+        }, CONFIG.jumpDelay);
     }
 
     // 节点递归渲染
@@ -147,14 +153,14 @@ class SideBar extends Component {
         function renderList(node, num) {
             return (
                 <div key={node.id}>
-                    <Link to={node.pathname}>
+                    {/* <Link to={node.pathname}> */}
                         <ListItem button selected={node.pathname === selectedSideMenu ? true : false} onClick={() => {that.toggleMenu(node)}} style={{ paddingLeft: 16 * num }}>
                             <ListItemText primary={node.text} />
                             { node.subArr && (
                                 expandMenu.indexOf(node.id) !== -1 ? <ExpandLess /> : <ExpandMore />
                             )}
                         </ListItem>
-                    </Link>
+                    {/* </Link> */}
                     <Collapse in={expandMenu.indexOf(node.id) !== -1} timeout="auto" unmountOnExit>
                         { node.subArr && ++num && node.subArr.map(it => (
                             renderList(it, num)

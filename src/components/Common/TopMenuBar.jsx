@@ -96,7 +96,7 @@ class TopMenuBar extends Component {
         const { updateSelectedSideMenu } = this.props;
         setTimeout(() => {
             updateSelectedSideMenu('');
-        }, 100);
+        }, CONFIG.jumpDelay);
     }
 
     // 移动端

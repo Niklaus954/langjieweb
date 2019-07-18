@@ -27,6 +27,7 @@ import PressShear from './Solution/PressShear'
 import ActionPlat from './Solution/ActionPlat'
 import Application from './Solution/Application'
 import CompleteCtrlSystem from './Solution/CompleteCtrlSystem'
+import MediaQuery from 'react-responsive';
 
 import Cloud from './Service/Cloud'
 
@@ -46,33 +47,42 @@ class Home extends Component {
 
     init = props => {
         const { updateSideMenuList, updateSelectedSideMenu } = props;
-        let orderPathname, menuList;
+        let menuList;
         if (this.props.location.pathname.indexOf('/home') !== -1) {
-            orderPathname = '/home';
+            // orderPathname = '/home';
             menuList = CONFIG.menu[0].subArr;
         } else if (this.props.location.pathname.indexOf('/solution') !== -1) {
-            orderPathname = '/solution';
+            // orderPathname = '/solution';
             menuList = CONFIG.menu[1].subArr;
         } else if (this.props.location.pathname.indexOf('/service') !== -1) {
-            orderPathname = '/service';
+            // orderPathname = '/service';
             menuList = CONFIG.menu[2].subArr;
         }
+        if (!this.isMobile) menuList = CONFIG.menu;
         // menuList = CONFIG.menu;
         const params = {
             updateSideMenuList,
             updateSelectedSideMenu,
             pathname: this.props.location.pathname,
-            orderPathname,
+            // orderPathname,
             history: this.props.history,
             menuList,
         };
         Common.routeInit(params);
     }
 
+    checkIsPc = matches => {
+        this.isMobile = matches;
+        return <span></span>;
+    }
+
     render() {
         return (
             <Router>
-                <div style={{width: '100%', margin: 'auto', maxWidth: CONFIG.indexPageMaxWidth, display: 'flex'}}>
+                <MediaQuery minDeviceWidth={CONFIG.minDeviceWidth}>
+                    { matches => this.checkIsPc(matches) }
+                </MediaQuery>
+                <div>
                     <Route path="/home/AboutLangjie" component={AboutLangjie} />
                     <Route path="/home/WxPublicPlat" component={WxPublicPlat} />
                     <Route path="/home/activity" component={Activity} />
