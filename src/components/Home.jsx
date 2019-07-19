@@ -82,30 +82,28 @@ class Home extends Component {
                 <MediaQuery minDeviceWidth={CONFIG.minDeviceWidth}>
                     { matches => this.checkIsPc(matches) }
                 </MediaQuery>
-                <div>
-                    <Route path="/home/AboutLangjie" component={AboutLangjie} />
-                    <Route path="/home/WxPublicPlat" component={WxPublicPlat} />
-                    <Route path="/home/activity" component={Activity} />
-                    <Route path="/home/eventRecord" component={EventRecord} />
-                    <Route path="/home/contactUs" component={ContactUs} />
+                <Route path="/home/AboutLangjie" component={AboutLangjie} />
+                <Route path="/home/WxPublicPlat" component={WxPublicPlat} />
+                <Route path="/home/activity" component={Activity} />
+                <Route path="/home/eventRecord" component={EventRecord} />
+                <Route path="/home/contactUs" component={ContactUs} />
 
-                    <Route path="/solution/actionPlat" component={ActionPlat} />
-                    <Route path="/solution/toolBox" component={ToolBox} />
-                    <Route path="/solution/ctrlProducts" component={CtrlProducts} />
-                    <Route path="/solution/serverTeam" component={ServerTeam} />
-                    <Route path="/solution/secondryDevelop" component={SecondryDevelop} />
-                    <Route path="/solution/application" component={Application} />
-                    <Route path="/solution/maxTest" component={MaxTest} />
-                    <Route path="/solution/dynaTest" component={DynaTest} />
-                    <Route path="/solution/completeCtrlSystem" component={CompleteCtrlSystem} />
-                    <Route path="/solution/flexuralCompression" component={FlexuralCompression} />
-                    <Route path="/solution/electronicUniversal" component={ElectronicUniversal} />
-                    <Route path="/solution/electroHydraulicUniversal" component={ElectroHydraulicUniversal} />
-                    <Route path="/solution/dynamicFatigue" component={DynamicFatigue} />
-                    <Route path="/solution/pressShear" component={PressShear} />
+                <Route path="/solution/actionPlat" component={ActionPlat} />
+                <Route path="/solution/toolBox" component={ToolBox} />
+                <Route path="/solution/ctrlProducts" component={CtrlProducts} />
+                <Route path="/solution/serverTeam" component={ServerTeam} />
+                <Route path="/solution/secondryDevelop" component={SecondryDevelop} />
+                <Route path="/solution/application" component={Application} />
+                <Route path="/solution/maxTest" component={MaxTest} />
+                <Route path="/solution/dynaTest" component={DynaTest} />
+                <Route path="/solution/completeCtrlSystem" component={CompleteCtrlSystem} />
+                <Route path="/solution/flexuralCompression" component={FlexuralCompression} />
+                <Route path="/solution/electronicUniversal" component={ElectronicUniversal} />
+                <Route path="/solution/electroHydraulicUniversal" component={ElectroHydraulicUniversal} />
+                <Route path="/solution/dynamicFatigue" component={DynamicFatigue} />
+                <Route path="/solution/pressShear" component={PressShear} />
 
-                    <Route path="/service/cloud" component={Cloud} />
-                </div>
+                <Route path="/service/cloud" component={Cloud} />
             </Router>
         )
     }

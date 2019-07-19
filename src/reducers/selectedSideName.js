@@ -1,12 +1,12 @@
 import CONFIG from '../config'
 
-const sideMenuList = (state = CONFIG.menu, action) => {
+const selectedSideName = (state = CONFIG.defaultIndexTitle, action) => {
     switch (action.type) {
-        case 'UPDATE_SIDE_MENU_LIST':
+        case 'UPDATE_SELECTED_SIDE_NAME':
             return action.data;
         default:
             return state
     }
 }
 
-export default sideMenuList
+export default selectedSideName

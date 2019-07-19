@@ -1,4 +1,4 @@
-const selectedSideMenuIndex = (state = '', action) => {
+const selectedSideMenu = (state = '', action) => {
     switch (action.type) {
         case 'UPDATE_SELECTED_SIDE_MENU':
             return action.data;
@@ -7,4 +7,4 @@ const selectedSideMenuIndex = (state = '', action) => {
     }
 }
 
-export default selectedSideMenuIndex
+export default selectedSideMenu

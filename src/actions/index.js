@@ -22,6 +22,11 @@ export const updateSelectedSideMenu = data => ({
 	data,
 })
 
+export const updateSelectedSideName = data => ({
+	type: 'UPDATE_SELECTED_SIDE_NAME',
+	data,
+})
+
 export const showSideMenuBar = data => ({
 	type: 'SHOW_SIDE_MENU_BAR',
 	data,

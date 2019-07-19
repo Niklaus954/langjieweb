@@ -11,23 +11,25 @@ import TopMenuBar from '../containers/TopMenuBar'
 import SideBar from '../containers/SideBar'
 import CONFIG from '../config'
 import MediaQuery from 'react-responsive';
+import About from './Index/About.jsx'
 
 const App = ({ selectedSideMenu }) => {
     return (
         <Router>
             <TopMenuBar />
-            <div style={{width: '100%', margin: 'auto', maxWidth: CONFIG.indexPageMaxWidth, display: 'flex'}}>
-                <MediaQuery minDeviceWidth={CONFIG.minDeviceWidth}>
-                    { matches => ( (!matches && <SideBar />) || ( matches && selectedSideMenu && <SideBar /> ) ) }
-                </MediaQuery>
-                <Switch>
-                    <Route path="/index" component={Index} />
-                    <Route path="/home/*" component={Home} />
-                    <Route path="/solution/*" component={Home} />
-                    <Route path="/service" component={Home} />
-                    <Redirect from='/' to='/index' />
-                </Switch>
-            </div>
+                <div style={{width: '100%', margin: 'auto', maxWidth: CONFIG.indexPageMaxWidth, display: 'flex'}}>
+                    <MediaQuery minDeviceWidth={CONFIG.minDeviceWidth}>
+                        { matches => ( (!matches && <SideBar />) || ( matches && selectedSideMenu && <SideBar /> ) ) }
+                    </MediaQuery>
+                    <Switch>
+                        <Route path="/index" component={Index} />
+                        <Route path="/home/*" component={Home} />
+                        <Route path="/solution/*" component={Home} />
+                        <Route path="/service" component={Home} />
+                        <Redirect from='/' to='/index' />
+                    </Switch>
+                </div>
+            <About />
         </Router>
     )
 }

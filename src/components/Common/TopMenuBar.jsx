@@ -10,6 +10,7 @@ import MenuList from "@material-ui/core/MenuList";
 import { AccountCircle, Menu, Search } from '@material-ui/icons';
 import MediaQuery from 'react-responsive';
 import CONFIG from '../../config'
+import Common from './Common'
 
 class TopMenuBar extends Component {
 
@@ -93,18 +94,16 @@ class TopMenuBar extends Component {
     }
 
     jumpToIndex = () => {
-        const { updateSelectedSideMenu } = this.props;
-        setTimeout(() => {
-            updateSelectedSideMenu('');
-        }, CONFIG.jumpDelay);
+        Common.jumpToIndex(this.props);
     }
 
     // 移动端
     renderMobileTopBar = () => {
+        const { selectedSideName } = this.props;
         return (
             <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: 10, paddingRight: 10}}>
                 <Menu onClick={() => {this.sideBarClick()}} />
-                <p>杭州朗杰测控技术开发有限公司</p>
+                <p>{selectedSideName}</p>
                 <AccountCircle/>
             </div>
         );

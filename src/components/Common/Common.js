@@ -1,3 +1,5 @@
+import CONFIG from '../../config'
+
 const Common = {
     routeInit: params => {
         const { updateSideMenuList, updateSelectedSideMenu, pathname, history, menuList } = params;
@@ -30,6 +32,13 @@ const Common = {
                 }
             });
         }
+    },
+    jumpToIndex: params => {
+        const { updateSelectedSideMenu, updateSelectedSideName } = params;
+        setTimeout(() => {
+            updateSelectedSideMenu('');
+            updateSelectedSideName(CONFIG.defaultIndexTitle);
+        }, CONFIG.jumpDelay);
     }
 };
 

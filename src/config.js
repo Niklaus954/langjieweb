@@ -6,7 +6,8 @@ const CONFIG = {
     minDeviceWidth: 800,
     indexPageMaxWidth: 1300,
     activeMenuColor: '#f60',
-    jumpDelay: 100,
+    jumpDelay: 150,
+    defaultIndexTitle: '杭州朗杰测控技术开发有限公司',
     menu: [
         {
             id: -1,
