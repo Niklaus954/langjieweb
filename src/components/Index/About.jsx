@@ -1,55 +1,10 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { withRouter } from 'react-router-dom'
-import { withStyles } from '@material-ui/core/styles';
-import MediaQuery from 'react-responsive';
+import { makeStyles } from '@material-ui/core/styles';
 import CONFIG from '../../config'
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
-class About extends Component {
-    render() {
-        const { classes } = this.props;
-        const pathname = this.props.location.pathname;
-        let showAbout = false;
-        if (pathname === '/index') showAbout = true;
-        return (
-            <MediaQuery minDeviceWidth={CONFIG.minDeviceWidth}>
-                {
-                    matches => (
-                        showAbout && <div className={classes.aboutWrap}>
-                            <div style={{maxWidth: CONFIG.indexPageMaxWidth, display: matches ? 'flex' : 'block', width: '100%', margin: 'auto'}}>
-                                <div className={classes.itemsBlock}>
-                                    <div>相关资源</div>
-                                    <p>1</p>
-                                    <p>2</p>
-                                    <p>3</p>
-                                </div>
-                                <div className={classes.itemsBlock}>
-                                    <div>社区</div>
-                                    <p>1</p>
-                                    <p>2</p>
-                                    <p>3</p>
-                                </div>
-                                <div className={classes.itemsBlock}>
-                                    <div>帮助</div>
-                                    <p>1</p>
-                                    <p>2</p>
-                                    <p>3</p>
-                                </div>
-                                <div className={classes.itemsBlock}>
-                                    <div>更多产品</div>
-                                    <p>1</p>
-                                    <p>2</p>
-                                    <p>3</p>
-                                </div>
-                            </div>
-                        </div>
-                    )
-                }
-            </MediaQuery>
-        );
-    }
-}
-
-export default withRouter(withStyles(theme => ({
+const useStyles = makeStyles(theme => ({
     aboutWrap: {
         display: 'flex',
         background: '#000',
@@ -60,4 +15,44 @@ export default withRouter(withStyles(theme => ({
         textAlign: 'center',
         color: '#fff'
     },
-}))(About))
+}));
+
+const About = ({location}) => {
+    const classes = useStyles();
+    const isPc = useMediaQuery(CONFIG.minDeviceWidth);
+    const pathname = location.pathname;
+    let showAbout = false;
+    if (pathname === '/index') showAbout = true;
+    return (
+        showAbout && <div className={classes.aboutWrap}>
+            <div style={{maxWidth: CONFIG.indexPageMaxWidth, display: isPc ? 'flex' : 'block', width: '100%', margin: 'auto'}}>
+                <div className={classes.itemsBlock}>
+                    <div>相关资源</div>
+                    <p>1</p>
+                    <p>2</p>
+                    <p>3</p>
+                </div>
+                <div className={classes.itemsBlock}>
+                    <div>社区</div>
+                    <p>1</p>
+                    <p>2</p>
+                    <p>3</p>
+                </div>
+                <div className={classes.itemsBlock}>
+                    <div>帮助</div>
+                    <p>1</p>
+                    <p>2</p>
+                    <p>3</p>
+                </div>
+                <div className={classes.itemsBlock}>
+                    <div>更多产品</div>
+                    <p>1</p>
+                    <p>2</p>
+                    <p>3</p>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+export default withRouter(About);

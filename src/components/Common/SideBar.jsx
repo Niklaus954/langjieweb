@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     withRouter,
     Link,
@@ -9,89 +9,38 @@ import ListItemText from '@material-ui/core/ListItemText'
 import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-import MediaQuery from 'react-responsive';
 import Drawer from '@material-ui/core/Drawer';
 import CONFIG from '../../config'
 import { Search } from '@material-ui/icons';
 import Button from '@material-ui/core/Button';
 import Common from './Common'
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
-class SideBar extends Component {
+const SideBar = ({sideMenuList, selectedSideMenu, updateSelectedSideName, updateSelectedSideMenu, history, sideMenuBar, showSideMenuBar}) => {
+    const [expandMenu, setExpandMenu] = useState([]);
+    const isPc = useMediaQuery(CONFIG.minDeviceWidth);
 
-    constructor(props) {
-        super(props);
-        this.renderSideList = this.renderSideList.bind(this);
-        this.isFirstRender = 0;
-    }
+    useEffect(() => {
+        initSelected();
+    }, [1,2,3]);
 
-    state = {
-        open: false,
-        expandMenu: [],
-    };
-
-    componentDidMount() {
-        this.initSelected(this.props);
-    }
-
-    async componentWillReceiveProps(props) {
-        this.initSelected(props);
-        // this.isFirstRender++;
-        // const max = window.innerWidth < CONFIG.minDeviceWidth ? 3 : 2;
-        // if (this.isFirstRender < max) this.initSelected(props);
-    }
-
-    // 获取上部需要展开的节点id
-    getTopIdArr = (sideMenuList, selectedSideMenu) => {
-        const expandMenu = [];
-        const merageArr = [];
-        funMergeArr(sideMenuList);
-        merageArr.forEach((items, index) => {
-            if (items.pathname === selectedSideMenu) {
-                getTopNodes(items.id);
-            }
-        });
-        return expandMenu;
-
-        function getTopNodes(id) {
-            merageArr.forEach((items, index) => {
-                if (items.id === id) {
-                    expandMenu.push(items.supId);
-                    if (items.supId) getTopNodes(items.supId);
-                }
-            });
-        }
-
-        function funMergeArr(list) {
-            list.forEach((items, index) => {
-                merageArr.push(items);
-                if (items.subArr) {
-                    funMergeArr(items.subArr);
-                }
-            });
-        }
-    }
-
-    // 页面初始化或属性更新时触发需要展开的节点
-    initSelected = async params => {
-        let { sideMenuList, selectedSideMenu, updateSelectedSideName } = params;
+    // 页面初始化需要展开的节点
+    const initSelected = () => {
+        console.log('节点初始化');
         let expandMenu = [];
         let presentTitle;
         // 获取当前节点的下层
         getExpand(sideMenuList, {});
         // 获取当前节点的上层
-        const topArr = this.getTopIdArr(sideMenuList, selectedSideMenu);
+        const topArr = getTopIdArr(sideMenuList, selectedSideMenu);
         // 合并
         expandMenu = [...expandMenu, ...topArr];
         expandMenu = [...new Set(expandMenu)];
 
-        this.setState({
-            expandMenu,
-        });
+        setExpandMenu(expandMenu);
 
         // 通知title改变
-        if (selectedSideMenu) {
-            updateSelectedSideName(presentTitle);
-        }
+        if (selectedSideMenu) updateSelectedSideName(presentTitle);
 
         function getExpand(list, parentItem) {
             list.forEach((items, index) => {
@@ -107,14 +56,43 @@ class SideBar extends Component {
                 }
             });
         }
+
+        // 获取上部需要展开的节点id
+        function getTopIdArr(sideMenuList, selectedSideMenu) {
+            const expandMenu = [];
+            const merageArr = [];
+            funMergeArr(sideMenuList);
+            merageArr.forEach((items, index) => {
+                if (items.pathname === selectedSideMenu) {
+                    getTopNodes(items.id);
+                }
+            });
+            return expandMenu;
+
+            function getTopNodes(id) {
+                merageArr.forEach((items, index) => {
+                    if (items.id === id) {
+                        expandMenu.push(items.supId);
+                        if (items.supId) getTopNodes(items.supId);
+                    }
+                });
+            }
+
+            function funMergeArr(list) {
+                list.forEach((items, index) => {
+                    merageArr.push(items);
+                    if (items.subArr) {
+                        funMergeArr(items.subArr);
+                    }
+                });
+            }
+        }
     }
 
     // 展开隐藏
-    toggleMenu = items => {
-        let { expandMenu } = this.state;
-        const { updateSelectedSideMenu, updateSelectedSideName } = this.props;
+    const toggleMenu = items => {
         if (items.id > 0) {
-            this.props.history.push({
+            history.push({
                 pathname: items.pathname,
             });
             updateSelectedSideName(items.text);
@@ -128,17 +106,12 @@ class SideBar extends Component {
         }
         updateSelectedSideMenu(items.pathname);
         setTimeout(() => {
-            this.setState({
-                expandMenu,
-            });
+            setExpandMenu(expandMenu);
         }, CONFIG.jumpDelay);
     }
 
     // 节点递归渲染
-    renderSideList = () => {
-        let { sideMenuList, selectedSideMenu } = this.props;
-        const { expandMenu } = this.state;
-        const that = this;
+    const renderSideList = () => {
         const headerHeight = window['$']('.MuiPaper-root').height() ? window['$']('.MuiPaper-root').height() : 0;
         const barHeight = window.innerHeight - headerHeight;
         return (
@@ -158,7 +131,7 @@ class SideBar extends Component {
         function renderList(node, num) {
             return (
                 <div key={node.id}>
-                    <ListItem button selected={node.pathname === selectedSideMenu} onClick={() => { that.toggleMenu(node) }} style={{ paddingLeft: 16 * num }}>
+                    <ListItem button selected={node.pathname === selectedSideMenu} onClick={() => { toggleMenu(node) }} style={{ paddingLeft: 16 * num }}>
                         <ListItemText primary={node.text} />
                         {node.subArr && (
                             expandMenu.indexOf(node.id) !== -1 ? <ExpandLess /> : <ExpandMore />
@@ -174,9 +147,7 @@ class SideBar extends Component {
         }
     }
 
-    // 移动端额外的sidebar渲染
-    mobileComponents = () => {
-        const { selectedSideMenu } = this.props;
+    const mobileComponents = () => {
         return (
             <div style={{marginTop: 6, marginBottom: 6, height: 40}}>
                 { !selectedSideMenu && <div>
@@ -185,7 +156,10 @@ class SideBar extends Component {
                 </div> }
                 { selectedSideMenu && <div style={{paddingLeft: 12, paddingRight: 12}}>
                     <Link to={'/index'}>
-                        <Button variant="outlined" style={{width: '100%'}} onClick={() => {Common.jumpToIndex(this.props)}}>
+                        <Button variant="outlined" style={{width: '100%'}} onClick={() => {Common.jumpToIndex({
+                            updateSelectedSideMenu,
+                            updateSelectedSideName,
+                        })}}>
                             回到首页
                         </Button>
                     </Link>
@@ -194,25 +168,12 @@ class SideBar extends Component {
         );
     }
 
-    render() {
-        const { sideMenuBar, showSideMenuBar } = this.props;
-        return (
-            <MediaQuery minDeviceWidth={CONFIG.minDeviceWidth} >
-                {matches => {
-                    if (matches) {
-                        return this.renderSideList()
-                    } else {
-                        return (
-                            <Drawer open={sideMenuBar} onClose={() => { showSideMenuBar(!sideMenuBar) }}>
-                                {this.mobileComponents()}
-                                {this.renderSideList()}
-                            </Drawer>
-                        )
-                    }
-                }}
-            </MediaQuery>
-        )
-    }
+    return (
+        (isPc && renderSideList()) || (!isPc && <Drawer open={sideMenuBar} onClose={() => { showSideMenuBar(!sideMenuBar) }}>
+            {mobileComponents()}
+            {renderSideList()}
+        </Drawer>)
+    )
 }
 
 export default withRouter(SideBar)

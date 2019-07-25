@@ -3,7 +3,7 @@
 const CONFIG = {
     // url: pathname => 'http://192.168.50.230:8090' + pathname,
     url: pathname => 'https://os.langjie.com' + pathname,
-    minDeviceWidth: 800,
+    minDeviceWidth: '(min-width:800px)',
     indexPageMaxWidth: 1300,
     activeMenuColor: '#f60',
     jumpDelay: 0,

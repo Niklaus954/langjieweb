@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
-import { withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
-import MediaQuery from 'react-responsive';
 import CONFIG from '../../config'
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 
 const checkWidth = (matches, index, seq) => {
@@ -46,47 +46,7 @@ const checkImgOrText = (matches, items, index, seq, classes) => {
     }
 }
 
-class HotInfoList extends Component {
-
-    componentWillMount() {
-        const { fetchHostInfoList } = this.props;
-        fetchHostInfoList();
-    }
-
-    renderItem = (items, index) => {
-        const { classes } = this.props;
-        return (
-                <MediaQuery key={index} minDeviceWidth={CONFIG.minDeviceWidth}>
-                    {
-                        matches => (
-                            <div className={classes.container} key={index} onClick={() => this.props.history.push('/solution/dynaTest')} >
-                                <div style={{ gridColumnEnd: checkWidth(matches, index, 1) }}>
-                                    <Paper className={classes.paper}>{checkImgOrText(matches, items, index, 1, classes)}</Paper>
-                                </div>
-                                <div style={{ gridColumnEnd: checkWidth(matches, index, 2), marginTop: matches ? 0 : -20 }}>
-                                    <Paper className={classes.paper}>{checkImgOrText(matches, items, index, 2, classes)}</Paper>
-                                </div>
-                            </div>
-                        )
-                    }
-                </MediaQuery>
-            
-        )
-    }
-
-    render() {
-        const { hotInfoList } = this.props;
-        return (
-            <div>
-                {
-                    hotInfoList.map((items,index) => this.renderItem(items, index))
-                }
-            </div>
-        );
-    }
-}
-
-export default withRouter(withStyles(theme => ({
+const useStyles = makeStyles(theme => ({
     container: {
         display: 'grid',
         gridTemplateColumns: 'repeat(12, 1fr)',
@@ -120,4 +80,36 @@ export default withRouter(withStyles(theme => ({
         fontSize: 16,
         lineHeight: '32px',
     },
-}))(HotInfoList));
+}));
+
+const HotInfoList = ({fetchHostInfoList, hotInfoList, history}) => {
+    const classes = useStyles();
+    const isPc = useMediaQuery(CONFIG.minDeviceWidth);
+    
+    useEffect(() => {
+        fetchHostInfoList();
+    });
+
+    const renderItem = (items, index) => {
+        return (
+            <div className={classes.container} key={index} onClick={() => history.push('/solution/dynaTest')} >
+                <div style={{ gridColumnEnd: checkWidth(isPc, index, 1) }}>
+                    <Paper className={classes.paper}>{checkImgOrText(isPc, items, index, 1, classes)}</Paper>
+                </div>
+                <div style={{ gridColumnEnd: checkWidth(isPc, index, 2), marginTop: isPc ? 0 : -20 }}>
+                    <Paper className={classes.paper}>{checkImgOrText(isPc, items, index, 2, classes)}</Paper>
+                </div>
+            </div>
+        )
+    }
+
+    return (
+        <div>
+            {
+                hotInfoList.map((items,index) => renderItem(items, index))
+            }
+        </div>
+    );
+}
+
+export default withRouter(HotInfoList);
