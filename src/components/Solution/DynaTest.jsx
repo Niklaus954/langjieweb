@@ -1,18 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { withRouter, Link } from 'react-router-dom';
 
-
-class DynaTest extends Component {
-
-    componentWillMount() {
-        
-    }
-
-    render() {
-        return (
-            <div><Link to={'/solution/electroHydraulicUniversal'}>DynaTest</Link></div>
-        )
-    }
+const DynaTest = ({history}) => {
+    return (
+        <Link to={'/solution/electroHydraulicUniversal'}><div>DynaTest</div></Link>
+    );
 }
 
 export default withRouter(DynaTest);

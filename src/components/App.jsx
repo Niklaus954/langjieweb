@@ -24,9 +24,9 @@ const App = ({ selectedSideMenu }) => {
                 }
                 <Switch>
                     <Route path="/index" component={Index} />
-                    <Route path="/home/*" component={Home} />
-                    <Route path="/solution/*" component={Home} />
-                    <Route path="/service/*" component={Home} />
+                    <Route path="/home*" component={Home} />
+                    <Route path="/solution*" component={Home} />
+                    <Route path="/service*" component={Home} />
                     <Redirect from='/' to='/index' />
                 </Switch>
             </div>

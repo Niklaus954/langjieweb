@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import TopMenuBar from '../components/Common/TopMenuBar'
-import { showSideMenuBar, updateSideMenuList, updateSelectedSideMenu, updateSelectedSideName } from '../actions'
+import { showSideMenuBar, updateSideMenuList, updateSelectedSideMenu, updateSelectedSideName, updateSideBarExpand } from '../actions'
 
 const mapStateToProps = state => ({
     sideMenuBar: state.showSideMenuBar,
@@ -14,6 +14,7 @@ const mapDispatchToProps = dispatch => ({
     updateSideMenuList: data => dispatch(updateSideMenuList(data)),
     updateSelectedSideMenu: data => dispatch(updateSelectedSideMenu(data)),
     updateSelectedSideName: data => dispatch(updateSelectedSideName(data)),
+    updateSideBarExpand: data => dispatch(updateSideBarExpand(data)),
 })
 
 export default connect(

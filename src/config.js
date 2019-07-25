@@ -3,17 +3,19 @@
 const CONFIG = {
     // url: pathname => 'http://192.168.50.230:8090' + pathname,
     url: pathname => 'https://os.langjie.com' + pathname,
+    minDeviceWidthNum: 800,
     minDeviceWidth: '(min-width:800px)',
     indexPageMaxWidth: 1300,
     activeMenuColor: '#f60',
     jumpDelay: 0,
     defaultIndexTitle: '杭州朗杰测控技术开发有限公司',
+    getPathName: pathname => pathname.split('?')[0],
     menu: [
         {
             id: -1,
             text: '关于朗杰',
             type: 'home',
-            pathname: '/home',
+            pathname: '/homePage',
             subArr: [
                 {
                     id: 1,
@@ -56,7 +58,7 @@ const CONFIG = {
             id: -2,
             text: '解决方案',
             type: 'solution',
-            pathname: '/solution',
+            pathname: '/solutionPage',
             subArr: [
                 {
                     id: 6,
@@ -168,11 +170,11 @@ const CONFIG = {
             id: -3,
             text: '客户服务',
             type: 'service',
-            pathname: '/service',
+            pathname: '/servicePage',
             subArr: [
                 {
                     id: 20,
-                    supId: 14,
+                    supId: -3,
                     text: '云服务',
                     pathname: '/service/cloud',                            
                     type: 'service',

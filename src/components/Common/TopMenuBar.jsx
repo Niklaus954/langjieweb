@@ -33,7 +33,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const TopMenuBar = ({selectedSideMenu, updateSideMenuList, updateSelectedSideMenu, history, sideMenuBar, showSideMenuBar, updateSelectedSideName, selectedSideName, selectedMenu}) => {
+const TopMenuBar = ({selectedSideMenu, updateSideMenuList, updateSelectedSideMenu, history, sideMenuBar, showSideMenuBar, updateSelectedSideName, selectedSideName, selectedMenu, updateSideBarExpand}) => {
     const [showPopperList, setShowPopperList] = useState(false);
     const [presentPopper, setPresentPopper] = useState('');
     // const [keywords, setKeywords] = useState('');
@@ -104,6 +104,7 @@ const TopMenuBar = ({selectedSideMenu, updateSideMenuList, updateSelectedSideMen
         Common.jumpToIndex({
             updateSelectedSideMenu,
             updateSelectedSideName,
+            updateSideBarExpand,
         });
     }
 

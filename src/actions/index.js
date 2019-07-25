@@ -31,3 +31,8 @@ export const showSideMenuBar = data => ({
 	type: 'SHOW_SIDE_MENU_BAR',
 	data,
 })
+
+export const updateSideBarExpand = data => ({
+	type: 'UPDATE_SIDE_BAR_EXPAND',
+	data,
+})
