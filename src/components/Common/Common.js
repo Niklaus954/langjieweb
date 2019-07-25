@@ -5,12 +5,6 @@ const Common = {
         const { updateSideMenuList, updateSelectedSideMenu, pathname, history, menuList } = params;
         // 获取选中的那个节点
         let tempPathName = pathname;
-        // if (pathname === orderPathname) {
-        //     tempPathName = menuList[0].pathname;
-        //     history.push({
-        //         pathname: tempPathName,
-        //     });
-        // }
         // 递归定位到最底层
         let selectedSideMenu;
         getUnderNode(menuList);
@@ -35,10 +29,8 @@ const Common = {
     },
     jumpToIndex: params => {
         const { updateSelectedSideMenu, updateSelectedSideName } = params;
-        setTimeout(() => {
-            updateSelectedSideMenu('');
-            updateSelectedSideName(CONFIG.defaultIndexTitle);
-        }, CONFIG.jumpDelay);
+        updateSelectedSideMenu('');
+        updateSelectedSideName(CONFIG.defaultIndexTitle);
     }
 };
 

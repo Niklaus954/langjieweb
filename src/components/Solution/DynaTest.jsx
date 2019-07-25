@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { withRouter, Link } from 'react-router-dom';
+
 
 class DynaTest extends Component {
 
@@ -8,9 +10,9 @@ class DynaTest extends Component {
 
     render() {
         return (
-            <div>DynaTest</div>
+            <div><Link to={'/solution/electroHydraulicUniversal'}>DynaTest</Link></div>
         )
     }
 }
 
-export default DynaTest;
+export default withRouter(DynaTest);

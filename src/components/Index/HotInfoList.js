@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import MediaQuery from 'react-responsive';
@@ -58,7 +59,7 @@ class HotInfoList extends Component {
                 <MediaQuery key={index} minDeviceWidth={CONFIG.minDeviceWidth}>
                     {
                         matches => (
-                            <div className={classes.container} key={index} >
+                            <div className={classes.container} key={index} onClick={() => this.props.history.push('/solution/dynaTest')} >
                                 <div style={{ gridColumnEnd: checkWidth(matches, index, 1) }}>
                                     <Paper className={classes.paper}>{checkImgOrText(matches, items, index, 1, classes)}</Paper>
                                 </div>
@@ -85,7 +86,7 @@ class HotInfoList extends Component {
     }
 }
 
-export default withStyles(theme => ({
+export default withRouter(withStyles(theme => ({
     container: {
         display: 'grid',
         gridTemplateColumns: 'repeat(12, 1fr)',
@@ -119,4 +120,4 @@ export default withStyles(theme => ({
         fontSize: 16,
         lineHeight: '32px',
     },
-}))(HotInfoList);
+}))(HotInfoList));

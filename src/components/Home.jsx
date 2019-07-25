@@ -3,8 +3,6 @@ import {
     HashRouter as Router,
     Route,
 } from 'react-router-dom'
-import TopMenuBar from '../containers/TopMenuBar'
-import SideBar from '../containers/SideBar'
 import AboutLangjie from './Home/AboutLangjie'
 import WxPublicPlat from './Home/WxPublicPlat'
 import Activity from './Home/Activity'
@@ -32,10 +30,6 @@ import MediaQuery from 'react-responsive';
 import Cloud from './Service/Cloud'
 
 class Home extends Component {
-    constructor(props) {
-        super(props);
-        this.isFirstRender = true;
-    }
 
     componentDidMount() {
         this.init(this.props);
@@ -49,22 +43,17 @@ class Home extends Component {
         const { updateSideMenuList, updateSelectedSideMenu } = props;
         let menuList;
         if (this.props.location.pathname.indexOf('/home') !== -1) {
-            // orderPathname = '/home';
             menuList = CONFIG.menu[0].subArr;
         } else if (this.props.location.pathname.indexOf('/solution') !== -1) {
-            // orderPathname = '/solution';
             menuList = CONFIG.menu[1].subArr;
         } else if (this.props.location.pathname.indexOf('/service') !== -1) {
-            // orderPathname = '/service';
             menuList = CONFIG.menu[2].subArr;
         }
         if (!this.isMobile) menuList = CONFIG.menu;
-        // menuList = CONFIG.menu;
         const params = {
             updateSideMenuList,
             updateSelectedSideMenu,
             pathname: this.props.location.pathname,
-            // orderPathname,
             history: this.props.history,
             menuList,
         };

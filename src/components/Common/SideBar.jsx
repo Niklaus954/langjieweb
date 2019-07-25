@@ -34,47 +34,10 @@ class SideBar extends Component {
     }
 
     async componentWillReceiveProps(props) {
-        this.isFirstRender++;
-        const max = window.innerWidth < CONFIG.minDeviceWidth ? 3 : 2;
-        if (this.isFirstRender < max) this.initSelected(props);
-    }
-
-    // 页面初始化或属性更新时触发需要展开的节点
-    initSelected = async params => {
-        let { sideMenuList, selectedSideMenu, updateSelectedSideName } = params;
-        // sideMenuList = CONFIG.menu;
-        let expandMenu = [];
-        let presentTitle;
-        // 获取当前节点的下层
-        getExpand(sideMenuList, {});
-        // 获取当前节点的上层
-        const topArr = this.getTopIdArr(sideMenuList, selectedSideMenu);
-        // 合并
-        expandMenu = [...expandMenu, ...topArr];
-
-        this.setState({
-            expandMenu,
-        });
-
-        // 通知title改变
-        if (selectedSideMenu) {
-            updateSelectedSideName(presentTitle);
-        }
-
-        function getExpand(list, parentItem) {
-            list.forEach((items, index) => {
-                if (items.pathname === selectedSideMenu) {
-                    presentTitle = items.text;
-                    if (parentItem.pathname) {
-                        expandMenu.push(parentItem.id);
-                    } else {
-                        expandMenu.push(items.id);
-                    }
-                } else if (items.subArr) {
-                    getExpand(items.subArr, items);
-                }
-            });
-        }
+        this.initSelected(props);
+        // this.isFirstRender++;
+        // const max = window.innerWidth < CONFIG.minDeviceWidth ? 3 : 2;
+        // if (this.isFirstRender < max) this.initSelected(props);
     }
 
     // 获取上部需要展开的节点id
@@ -108,13 +71,43 @@ class SideBar extends Component {
         }
     }
 
-    // sideMenuClick = items => {
-    //     const { updateSelectedSideMenu, showSideMenuBar, sideMenuBar } = this.props;
-    //     // 改变选中部分的颜色，其实用不到
-    //     updateSelectedSideMenu(items.pathname);
-    //     // 移动端收起draw
-    //     // showSideMenuBar(!sideMenuBar);
-    // }
+    // 页面初始化或属性更新时触发需要展开的节点
+    initSelected = async params => {
+        let { sideMenuList, selectedSideMenu, updateSelectedSideName } = params;
+        let expandMenu = [];
+        let presentTitle;
+        // 获取当前节点的下层
+        getExpand(sideMenuList, {});
+        // 获取当前节点的上层
+        const topArr = this.getTopIdArr(sideMenuList, selectedSideMenu);
+        // 合并
+        expandMenu = [...expandMenu, ...topArr];
+        expandMenu = [...new Set(expandMenu)];
+
+        this.setState({
+            expandMenu,
+        });
+
+        // 通知title改变
+        if (selectedSideMenu) {
+            updateSelectedSideName(presentTitle);
+        }
+
+        function getExpand(list, parentItem) {
+            list.forEach((items, index) => {
+                if (items.pathname === selectedSideMenu) {
+                    presentTitle = items.text;
+                    if (parentItem.pathname) {
+                        expandMenu.push(parentItem.id);
+                    } else {
+                        expandMenu.push(items.id);
+                    }
+                } else if (items.subArr) {
+                    getExpand(items.subArr, items);
+                }
+            });
+        }
+    }
 
     // 展开隐藏
     toggleMenu = items => {
@@ -133,18 +126,17 @@ class SideBar extends Component {
         } else {
             expandMenu.splice(expandMenu.indexOf(id), 1);
         }
+        updateSelectedSideMenu(items.pathname);
         setTimeout(() => {
             this.setState({
                 expandMenu,
             });
-            updateSelectedSideMenu(items.pathname);
         }, CONFIG.jumpDelay);
     }
 
     // 节点递归渲染
     renderSideList = () => {
         let { sideMenuList, selectedSideMenu } = this.props;
-        // sideMenuList = CONFIG.menu;
         const { expandMenu } = this.state;
         const that = this;
         const headerHeight = window['$']('.MuiPaper-root').height() ? window['$']('.MuiPaper-root').height() : 0;
@@ -166,14 +158,12 @@ class SideBar extends Component {
         function renderList(node, num) {
             return (
                 <div key={node.id}>
-                    {/* <Link to={node.pathname}> */}
-                    <ListItem button selected={node.pathname === selectedSideMenu ? true : false} onClick={() => { that.toggleMenu(node) }} style={{ paddingLeft: 16 * num }}>
+                    <ListItem button selected={node.pathname === selectedSideMenu} onClick={() => { that.toggleMenu(node) }} style={{ paddingLeft: 16 * num }}>
                         <ListItemText primary={node.text} />
                         {node.subArr && (
                             expandMenu.indexOf(node.id) !== -1 ? <ExpandLess /> : <ExpandMore />
                         )}
                     </ListItem>
-                    {/* </Link> */}
                     <Collapse in={expandMenu.indexOf(node.id) !== -1} timeout="auto" unmountOnExit>
                         {node.subArr && ++num && node.subArr.map(it => (
                             renderList(it, num)

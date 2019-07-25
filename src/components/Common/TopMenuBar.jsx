@@ -60,8 +60,6 @@ class TopMenuBar extends Component {
 
     showMaxWidth = selectedMenu => {
         return { maxWidth: CONFIG.indexPageMaxWidth };
-        // if (!selectedMenu) return { maxWidth: CONFIG.indexPageMaxWidth };
-        // return {};
     }
 
     handleToggle = (bool, index) => {
@@ -81,7 +79,7 @@ class TopMenuBar extends Component {
                 onMouseEnter={e => this.handleToggle(true, index)}
                 onMouseLeave={e => this.handleToggle(false, index)}
             >
-                <MButton color="inherit" onClick={() => this.menuClick(index)}>{CONFIG['menu'][index].text}</MButton>
+                <MButton style={{fontSize: 16}} color="inherit" onClick={() => this.menuClick(index)}>{CONFIG['menu'][index].text}</MButton>
                 <Paper style={{ position: 'absolute', zIndex: 9, display }}>
                     <MenuList>
                         {
