@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import {
     withRouter,
     Link,
@@ -15,6 +15,7 @@ import { Search } from '@material-ui/icons';
 import Button from '@material-ui/core/Button';
 import Common from './Common'
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import PropTypes from 'prop-types'
 
 const SideBar = ({sideMenuList, selectedSideMenu, updateSelectedSideName, updateSelectedSideMenu, history, location, sideMenuBar, showSideMenuBar, sideBarExpand, updateSideBarExpand}) => {
     // const [expandMenu, setExpandMenu] = useState([]);
@@ -101,5 +102,18 @@ const SideBar = ({sideMenuList, selectedSideMenu, updateSelectedSideName, update
         </Drawer>)
     )
 }
+
+SideBar.propTypes = {
+    sideMenuList: PropTypes.array.isRequired,
+    selectedSideMenu: PropTypes.string.isRequired,
+    updateSelectedSideName: PropTypes.func.isRequired,
+    updateSelectedSideMenu: PropTypes.func.isRequired,
+    sideBarExpand: PropTypes.array.isRequired,
+    updateSideBarExpand: PropTypes.func.isRequired,
+    location: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired,
+    showSideMenuBar: PropTypes.func.isRequired,
+    sideMenuBar: PropTypes.bool.isRequired,
+};
 
 export default withRouter(SideBar)

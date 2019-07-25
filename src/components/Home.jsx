@@ -26,6 +26,7 @@ import PressShear from './Solution/PressShear'
 import ActionPlat from './Solution/ActionPlat'
 import Application from './Solution/Application'
 import CompleteCtrlSystem from './Solution/CompleteCtrlSystem'
+import PropTypes from 'prop-types'
 
 import Cloud from './Service/Cloud'
 
@@ -164,5 +165,15 @@ const Home = ({updateSideMenuList, updateSelectedSideMenu, sideBarExpand, update
         </Router>
     )
 }
+
+Home.propTypes = {
+    updateSideMenuList: PropTypes.func.isRequired,
+    updateSelectedSideMenu: PropTypes.func.isRequired,
+    sideBarExpand: PropTypes.array.isRequired,
+    updateSideBarExpand: PropTypes.func.isRequired,
+    updateSelectedSideName: PropTypes.func.isRequired,
+    location: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired,
+};
 
 export default withRouter(Home)

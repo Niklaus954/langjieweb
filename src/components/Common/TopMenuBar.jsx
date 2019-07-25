@@ -11,6 +11,7 @@ import { AccountCircle, Menu, Search } from '@material-ui/icons';
 import CONFIG from '../../config'
 import Common from './Common'
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import PropTypes from 'prop-types'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -153,5 +154,18 @@ const TopMenuBar = ({selectedSideMenu, updateSideMenuList, updateSelectedSideMen
         </div>
     )
 }
+
+TopMenuBar.propTypes = {
+    selectedSideMenu: PropTypes.string.isRequired,
+    updateSideMenuList: PropTypes.func.isRequired,
+    updateSelectedSideMenu: PropTypes.func.isRequired,
+    history: PropTypes.object.isRequired,
+    sideMenuBar: PropTypes.bool.isRequired,
+    showSideMenuBar: PropTypes.func.isRequired,
+    updateSelectedSideName: PropTypes.func.isRequired,
+    selectedSideName: PropTypes.string.isRequired,
+    selectedMenu: PropTypes.string,
+    updateSideBarExpand: PropTypes.func.isRequired,
+};
 
 export default withRouter(TopMenuBar);

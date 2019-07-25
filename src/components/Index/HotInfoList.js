@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import CONFIG from '../../config'
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import PropTypes from 'prop-types'
 
 
 const checkWidth = (matches, index, seq) => {
@@ -111,5 +112,11 @@ const HotInfoList = ({fetchHostInfoList, hotInfoList, history}) => {
         </div>
     );
 }
+
+HotInfoList.propTypes = {
+    fetchHostInfoList: PropTypes.func.isRequired,
+    hotInfoList: PropTypes.array.isRequired,
+    history: PropTypes.object.isRequired,
+};
 
 export default withRouter(HotInfoList);

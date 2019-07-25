@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
 import CONFIG from '../../config'
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import PropTypes from 'prop-types'
 
 const useStyles = makeStyles(theme => ({
     aboutWrap: {
@@ -54,5 +55,9 @@ const About = ({location}) => {
         </div>
     );
 }
+
+About.propTypes = {
+    location: PropTypes.object.isRequired,
+};
 
 export default withRouter(About);

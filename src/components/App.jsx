@@ -12,6 +12,7 @@ import SideBar from '../containers/SideBar'
 import CONFIG from '../config'
 import About from './Index/About.jsx'
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import PropTypes from 'prop-types'
 
 const App = ({ selectedSideMenu }) => {
     const isPc = useMediaQuery(CONFIG.minDeviceWidth);
@@ -33,6 +34,10 @@ const App = ({ selectedSideMenu }) => {
             <About />
         </Router>
     )
+}
+
+App.propTypes = {
+    selectedSideMenu: PropTypes.string.isRequired,
 }
 
 export default App
