@@ -3,32 +3,11 @@ import {
     HashRouter as Router,
     Route,
     withRouter,
+    Redirect,
 } from 'react-router-dom'
 import { useEffect } from 'react';
-import AboutLangjie from './Home/AboutLangjie'
-import WxPublicPlat from './Home/WxPublicPlat'
-import Activity from './Home/Activity'
-import EventRecord from './Home/EventRecord'
-import ContactUs from './Home/ContactUs'
 import CONFIG from '../config'
-
-import ToolBox from './Solution/ToolBox'
-import CtrlProducts from './Solution/CtrlProducts'
-import ServerTeam from './Solution/ServerTeam'
-import SecondryDevelop from './Solution/SecondryDevelop'
-import MaxTest from './Solution/MaxTest'
-import DynaTest from './Solution/DynaTest'
-import FlexuralCompression from './Solution/FlexuralCompression'
-import ElectronicUniversal from './Solution/ElectronicUniversal'
-import ElectroHydraulicUniversal from './Solution/ElectroHydraulicUniversal'
-import DynamicFatigue from './Solution/DynamicFatigue'
-import PressShear from './Solution/PressShear'
-import ActionPlat from './Solution/ActionPlat'
-import Application from './Solution/Application'
-import CompleteCtrlSystem from './Solution/CompleteCtrlSystem'
 import PropTypes from 'prop-types'
-
-import Cloud from './Service/Cloud'
 
 const Home = ({updateSideMenuList, updateSelectedSideMenu, sideBarExpand, updateSideBarExpand, updateSelectedSideName, location, history}) => {
     const isPc = window.innerWidth < CONFIG.minDeviceWidthNum ? false : true;
@@ -135,33 +114,31 @@ const Home = ({updateSideMenuList, updateSelectedSideMenu, sideBarExpand, update
         }
     }
 
+    const initRouteArr = () => {
+        const menuArr = [];
+        funMergeArr(CONFIG.menu);
+        // 所有节点归到一个数组
+        function funMergeArr(list) {
+            list.forEach((items, index) => {
+                menuArr.push(items);
+                if (items.subArr) {
+                    funMergeArr(items.subArr);
+                }
+            });
+        }
+        return menuArr.map(items => {
+            const token = CONFIG.getAuthToken();
+            return <Route key={items.id} path={items.pathname} render={() => 
+                (!items.auth ? (<items.component />) : (token ? <items.component /> : <Redirect to={{
+                    pathname: '/login?path=' + items.pathname,
+                }} />)
+            )} />
+        });
+    }
+
     return (
         <Router>
-            <Route path="/homePage" component={AboutLangjie} />
-            <Route path="/home/AboutLangjie" component={AboutLangjie} />
-            <Route path="/home/WxPublicPlat" component={WxPublicPlat} />
-            <Route path="/home/activity" component={Activity} />
-            <Route path="/home/eventRecord" component={EventRecord} />
-            <Route path="/home/contactUs" component={ContactUs} />
-
-            <Route path="/solutionPage" component={ActionPlat} />
-            <Route path="/solution/actionPlat" component={ActionPlat} />
-            <Route path="/solution/toolBox" component={ToolBox} />
-            <Route path="/solution/ctrlProducts" component={CtrlProducts} />
-            <Route path="/solution/serverTeam" component={ServerTeam} />
-            <Route path="/solution/secondryDevelop" component={SecondryDevelop} />
-            <Route path="/solution/application" component={Application} />
-            <Route path="/solution/maxTest" component={MaxTest} />
-            <Route path="/solution/dynaTest" component={DynaTest} />
-            <Route path="/solution/completeCtrlSystem" component={CompleteCtrlSystem} />
-            <Route path="/solution/flexuralCompression" component={FlexuralCompression} />
-            <Route path="/solution/electronicUniversal" component={ElectronicUniversal} />
-            <Route path="/solution/electroHydraulicUniversal" component={ElectroHydraulicUniversal} />
-            <Route path="/solution/dynamicFatigue" component={DynamicFatigue} />
-            <Route path="/solution/pressShear" component={PressShear} />
-
-            <Route path="/servicePage" component={Cloud} />
-            <Route path="/service/cloud" component={Cloud} />
+            { initRouteArr() }
         </Router>
     )
 }

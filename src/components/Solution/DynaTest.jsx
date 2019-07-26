@@ -1,10 +1,10 @@
 import React from 'react';
-import { withRouter, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-const DynaTest = ({history}) => {
+const DynaTest = () => {
     return (
         <Link to={'/solution/electroHydraulicUniversal'}><div>DynaTest</div></Link>
     );
 }
 
-export default withRouter(DynaTest);
+export default DynaTest;

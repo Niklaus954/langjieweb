@@ -9,6 +9,8 @@ import Index from './Index.jsx'
 import Home from '../containers/Home'
 import TopMenuBar from '../containers/TopMenuBar'
 import SideBar from '../containers/SideBar'
+import Login from './Common/Login.jsx'
+import CheckLogin from './Common/CheckLogin.jsx'
 import CONFIG from '../config'
 import About from './Index/About.jsx'
 import useMediaQuery from '@material-ui/core/useMediaQuery';
@@ -28,6 +30,8 @@ const App = ({ selectedSideMenu }) => {
                     <Route path="/home*" component={Home} />
                     <Route path="/solution*" component={Home} />
                     <Route path="/service*" component={Home} />
+                    <Route path="/login" component={Login} />
+                    <Route path="/checkLogin" component={CheckLogin} />
                     <Redirect from='/' to='/index' />
                 </Switch>
             </div>
