@@ -9,12 +9,13 @@ import Index from './Index.jsx'
 import Home from '../containers/Home'
 import TopMenuBar from '../containers/TopMenuBar'
 import SideBar from '../containers/SideBar'
-import Login from './Common/Login.jsx'
+import Login from '../containers/Login'
 import CheckLogin from './Common/CheckLogin.jsx'
 import CONFIG from '../config'
 import About from './Index/About.jsx'
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import PropTypes from 'prop-types'
+import 'antd-mobile/dist/antd-mobile.css';
 
 const App = ({ selectedSideMenu }) => {
     const isPc = useMediaQuery(CONFIG.minDeviceWidth);

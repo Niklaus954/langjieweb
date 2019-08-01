@@ -1,5 +1,4 @@
 import React from 'react'
-import 'antd-mobile/dist/antd-mobile.css';
 import { Carousel } from 'antd-mobile';
 import CONFIG from '../../config'
 

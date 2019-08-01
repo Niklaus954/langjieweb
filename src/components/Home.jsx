@@ -8,6 +8,7 @@ import {
 import { useEffect } from 'react';
 import CONFIG from '../config'
 import PropTypes from 'prop-types'
+import Common from './Common/Common'
 
 const Home = ({updateSideMenuList, updateSelectedSideMenu, sideBarExpand, updateSideBarExpand, updateSelectedSideName, location, history}) => {
     const isPc = window.innerWidth < CONFIG.minDeviceWidthNum ? false : true;
@@ -19,11 +20,11 @@ const Home = ({updateSideMenuList, updateSelectedSideMenu, sideBarExpand, update
     const init = () => {
         console.log('初始化');
         let menuList;
-        if (CONFIG.getPathName(location.pathname).indexOf('/home') !== -1) {
+        if (Common.getPathName(location.pathname).indexOf('/home') !== -1) {
             menuList = CONFIG.menu[0].subArr;
-        } else if (CONFIG.getPathName(location.pathname).indexOf('/solution') !== -1) {
+        } else if (Common.getPathName(location.pathname).indexOf('/solution') !== -1) {
             menuList = CONFIG.menu[1].subArr;
-        } else if (CONFIG.getPathName(location.pathname).indexOf('/service') !== -1) {
+        } else if (Common.getPathName(location.pathname).indexOf('/service') !== -1) {
             menuList = CONFIG.menu[2].subArr;
         }
         if (!isPc) menuList = CONFIG.menu;
@@ -53,7 +54,7 @@ const Home = ({updateSideMenuList, updateSelectedSideMenu, sideBarExpand, update
 
         function getUnderNode(menuList) {
             menuList.forEach((items, index) => {
-                if (items.pathname === CONFIG.getPathName(location.pathname)) {
+                if (items.pathname === Common.getPathName(location.pathname)) {
                     selectedSideMenu = items.pathname;
                     selectedSideText = items.text;
                 } else if (items.subArr) {
@@ -127,7 +128,7 @@ const Home = ({updateSideMenuList, updateSelectedSideMenu, sideBarExpand, update
             });
         }
         return menuArr.map(items => {
-            const token = CONFIG.getAuthToken();
+            const token = Common.getAuthToken();
             return <Route key={items.id} path={items.pathname} render={() => 
                 (!items.auth ? (<items.component />) : (token ? <items.component /> : <Redirect to={{
                     pathname: '/login?path=' + items.pathname,

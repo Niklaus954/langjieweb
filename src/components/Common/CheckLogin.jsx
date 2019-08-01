@@ -3,6 +3,7 @@ import {
     withRouter,
 } from 'react-router-dom'
 import PropTypes from 'prop-types'
+import Common from './Common'
 
 const CheckLogin = ({ location, history }) => {
 
@@ -12,14 +13,7 @@ const CheckLogin = ({ location, history }) => {
         // 后台code校验
         // 跳转到pathname
         const { search } = location;
-        const query = search.split('?')[1];
-        const param = query.split('&');
-        const hashMapper = {};
-        param.forEach((items, index) => {
-            const key = items.split('=')[0];
-            const value = items.split('=')[1];
-            hashMapper[key] = value;
-        });
+        const hashMapper = Common.getLocationParamMapper(search);
         const redirectUrl = hashMapper['redirectUrl'];
         const code = hashMapper['code'];
         console.log(redirectUrl);
@@ -32,7 +26,7 @@ const CheckLogin = ({ location, history }) => {
 
     return (
         <div style={{width: '100%'}}>
-            loading...    
+            loading...
         </div>
     );
 }

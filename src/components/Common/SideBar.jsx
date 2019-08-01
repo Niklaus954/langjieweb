@@ -27,7 +27,7 @@ const SideBar = ({sideMenuList, selectedSideMenu, updateSelectedSideName, update
             pathname: items.pathname,
             state: sideBarExpand,
         });
-        if (CONFIG.getPathName(location.pathname) === items.pathname && items.subArr) {
+        if (Common.getPathName(location.pathname) === items.pathname && items.subArr) {
             // 通知需要展开或隐藏
             history.push({
                 pathname: items.pathname + '?timestamp='+Date.now(),
