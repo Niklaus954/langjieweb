@@ -9,6 +9,7 @@ import Index from './Index.jsx'
 import Home from '../containers/Home'
 import TopMenuBar from '../containers/TopMenuBar'
 import SideBar from '../containers/SideBar'
+import RightSideBar from '../containers/RightSideBar'
 import Login from '../containers/Login'
 import CheckLogin from './Common/CheckLogin.jsx'
 import CONFIG from '../config'
@@ -25,6 +26,9 @@ const App = ({ selectedSideMenu }) => {
             <div style={{width: '100%', margin: 'auto', maxWidth: CONFIG.indexPageMaxWidth, display: 'flex'}}>
                 {
                     (!isPc && <SideBar />) || ( isPc && selectedSideMenu && <SideBar /> )
+                }
+                {
+                    (!isPc && <RightSideBar />)
                 }
                 <Switch>
                     <Route path="/index" component={Index} />

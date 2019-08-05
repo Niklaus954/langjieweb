@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const TopMenuBar = ({selectedSideMenu, updateSideMenuList, updateSelectedSideMenu, history, sideMenuBar, showSideMenuBar, updateSelectedSideName, selectedSideName, selectedMenu, updateSideBarExpand}) => {
+const TopMenuBar = ({selectedSideMenu, updateSideMenuList, updateSelectedSideMenu, history, sideMenuBar, showSideMenuBar, updateSelectedSideName, selectedSideName, selectedMenu, updateSideBarExpand, updateShowRightSideBar}) => {
     const [showPopperList, setShowPopperList] = useState(false);
     const [presentPopper, setPresentPopper] = useState('');
     // const [keywords, setKeywords] = useState('');
@@ -109,13 +109,17 @@ const TopMenuBar = ({selectedSideMenu, updateSideMenuList, updateSelectedSideMen
         });
     }
 
+    const showMobileRightSide = () => {
+        updateShowRightSideBar(true);
+    }
+
     // 移动端
     const renderMobileTopBar = () => {
         return (
             <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: 10, paddingRight: 10}}>
                 <Menu onClick={() => {sideBarClick()}} />
                 <p>{selectedSideName}</p>
-                <AccountCircle/>
+                <AccountCircle onClick={() => {showMobileRightSide()}} />
             </div>
         );
     }
@@ -166,6 +170,7 @@ TopMenuBar.propTypes = {
     selectedSideName: PropTypes.string.isRequired,
     selectedMenu: PropTypes.string,
     updateSideBarExpand: PropTypes.func.isRequired,
+    updateShowRightSideBar: PropTypes.func.isRequired,
 };
 
 export default withRouter(TopMenuBar);

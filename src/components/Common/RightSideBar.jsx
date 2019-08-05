@@ -1,0 +1,48 @@
+import React from 'react'
+import {
+    withRouter,
+} from 'react-router-dom'
+import { Button, Drawer } from '@material-ui/core';
+import Common from './Common'
+import PropTypes from 'prop-types'
+
+const RightSideBar = ({ showRightSideBar, updateShowRightSideBar, selectedSideMenu, location, history }) => {
+    
+    const login = () => {
+        if (location.pathname === '/login') {
+            updateShowRightSideBar(false);
+            return;
+        }
+        history.push({
+            pathname: '/login',
+            search: '?path=' + selectedSideMenu,
+        });
+        updateShowRightSideBar(false);
+    }
+
+    const logout = () => {
+        localStorage.clear();
+        window.location.reload();
+    }
+
+    return (
+        <Drawer anchor={'right'} open={showRightSideBar} onClose={() => updateShowRightSideBar(false)}>
+            {
+                !Common.getAuthToken() && <Button variant="outlined" style={{width: 150, margin: 20}} onClick={() => login()}>登陆</Button>
+            }
+            {
+                Common.getAuthToken() && <Button variant="outlined" style={{width: 150, margin: 20}} onClick={() => logout()}>注销</Button>
+            }
+        </Drawer>
+    )
+}
+
+RightSideBar.propTypes = {
+    showRightSideBar: PropTypes.bool.isRequired,
+    updateShowRightSideBar: PropTypes.func.isRequired,
+    selectedSideMenu: PropTypes.string.isRequired,
+    location: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired,
+};
+
+export default withRouter(RightSideBar)
