@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { updateSelectedSideName } from '../actions'
+import { updateSelectedSideName, updateMemberInfo } from '../actions'
 import Login from '../components/Common/Login.jsx'
 
 const mapStateToProps = state => ({
@@ -8,6 +8,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     updateSelectedSideName: data => dispatch(updateSelectedSideName(data)),
+    updateMemberInfo: data => dispatch(updateMemberInfo(data)),
 })
 
 export default connect(

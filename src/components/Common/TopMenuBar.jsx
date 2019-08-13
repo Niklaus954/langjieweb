@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, withRouter } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -34,13 +34,17 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const TopMenuBar = ({selectedSideMenu, updateSideMenuList, updateSelectedSideMenu, history, sideMenuBar, showSideMenuBar, updateSelectedSideName, selectedSideName, selectedMenu, updateSideBarExpand, updateShowRightSideBar}) => {
+const TopMenuBar = ({memberInfo, selectedSideMenu, updateSideMenuList, updateSelectedSideMenu, history, sideMenuBar, showSideMenuBar, updateSelectedSideName, selectedSideName, selectedMenu, updateSideBarExpand, updateShowRightSideBar, location}) => {
     const [showPopperList, setShowPopperList] = useState(false);
     const [presentPopper, setPresentPopper] = useState('');
     // const [keywords, setKeywords] = useState('');
     const isPc = useMediaQuery(CONFIG.minDeviceWidth);
 
     const classes = useStyles();
+
+    useEffect(() => {
+        if (location.pathname === '/index') updateSelectedSideName(CONFIG.defaultIndexTitle);
+    });
 
     const renderActionMenu = menuName => {
         if (selectedSideMenu.indexOf(menuName) !== -1) return CONFIG.activeMenuColor;
@@ -119,7 +123,12 @@ const TopMenuBar = ({selectedSideMenu, updateSideMenuList, updateSelectedSideMen
             <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: 10, paddingRight: 10}}>
                 <Menu onClick={() => {sideBarClick()}} />
                 <p>{selectedSideName}</p>
-                <AccountCircle onClick={() => {showMobileRightSide()}} />
+                {
+                    !memberInfo.name && <AccountCircle onClick={() => {showMobileRightSide()}} />
+                }
+                {
+                    memberInfo.name && <img style={{width: 30, height: 30, borderRadius: '50%'}} src={memberInfo.portrait} alt={'头像'} onClick={() => {showMobileRightSide()}}/>
+                }
             </div>
         );
     }
@@ -139,7 +148,12 @@ const TopMenuBar = ({selectedSideMenu, updateSideMenuList, updateSelectedSideMen
                                 <input placeholder={'请输入关键字...'} style={{padding: 10, borderRadius: 4, border: 'none', width: 260}} />
                                 <Search style={{position: 'relative', top: 8, left: -30, color: '#3f51b5', cursor: 'pointer'}} />
                             </div>
-                            <AccountCircle style={{ fontSize: 38, marginRight: 40, cursor: 'pointer' }} />
+                            {
+                                !memberInfo.name && <AccountCircle style={{ fontSize: 38, marginRight: 40, cursor: 'pointer' }} />
+                            }
+                            {
+                                memberInfo.name && <img style={{width: 38, height: 38, borderRadius: '50%', cursor: 'pointer', marginRight: 40, fontSize: 38}} src={memberInfo.portrait} alt={'头像'} />
+                            }
                         </div>
                     </Toolbar>
                     <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -164,6 +178,7 @@ TopMenuBar.propTypes = {
     updateSideMenuList: PropTypes.func.isRequired,
     updateSelectedSideMenu: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
     sideMenuBar: PropTypes.bool.isRequired,
     showSideMenuBar: PropTypes.func.isRequired,
     updateSelectedSideName: PropTypes.func.isRequired,

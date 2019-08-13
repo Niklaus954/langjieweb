@@ -13,7 +13,20 @@ const Common = {
     getPathName: pathname => pathname.split('?')[0],
 
     // 获取token
-    getAuthToken: () => localStorage.getItem('token'),
+    getAuthToken: () => {
+        let payload;
+        try {
+            payload = JSON.parse(localStorage.getItem('lj_token'));
+            const { lj_token, endDate } = payload;
+            if (Date.now() > endDate) {
+                return null;
+            } else {
+                return lj_token;
+            }
+        } catch (error) {
+            return null;
+        }
+    },
     
     // 获取get的参数对象
     getLocationParamMapper: search => {

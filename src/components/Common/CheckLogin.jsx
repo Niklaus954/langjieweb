@@ -19,7 +19,7 @@ const CheckLogin = ({ location, history }) => {
         console.log(redirectUrl);
         console.log(code);
         setTimeout(() => {
-            localStorage.setItem('token', 'aaaaaaaaaaaa');
+            localStorage.setItem('lj_token', '{}');
             history.push(redirectUrl);
         }, 5000);
     }, []);

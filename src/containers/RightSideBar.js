@@ -5,6 +5,7 @@ import { updateShowRightSideBar } from '../actions'
 const mapStateToProps = state => ({
     showRightSideBar: state.showRightSideBar,
     selectedSideMenu: state.selectedSideMenu,
+    memberInfo: state.memberInfo,
 })
 
 const mapDispatchToProps = dispatch => ({

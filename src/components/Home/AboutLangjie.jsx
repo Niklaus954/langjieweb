@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import apiAboutLangjie from '../../api/apiAboutLangjie'
 
 class AboutLangjie extends Component {
 
-    componentWillMount() {
-        
+    async componentWillMount() {
+        const result = await apiAboutLangjie.fetchBasicInfo();
+        console.log(result);
     }
 
     render() {

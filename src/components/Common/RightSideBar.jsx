@@ -6,7 +6,7 @@ import { Button, Drawer } from '@material-ui/core';
 import Common from './Common'
 import PropTypes from 'prop-types'
 
-const RightSideBar = ({ showRightSideBar, updateShowRightSideBar, selectedSideMenu, location, history }) => {
+const RightSideBar = ({ showRightSideBar, updateShowRightSideBar, selectedSideMenu, memberInfo, location, history }) => {
     
     const login = () => {
         if (location.pathname === '/login') {
@@ -28,10 +28,19 @@ const RightSideBar = ({ showRightSideBar, updateShowRightSideBar, selectedSideMe
     return (
         <Drawer anchor={'right'} open={showRightSideBar} onClose={() => updateShowRightSideBar(false)}>
             {
-                !Common.getAuthToken() && <Button variant="outlined" style={{width: 150, margin: 20}} onClick={() => login()}>登陆</Button>
+                !Common.getAuthToken() && (
+                    <div>
+                        <Button variant="outlined" style={{width: 150, margin: 20}} onClick={() => login()}>登陆</Button>
+                    </div>
+                )
             }
             {
-                Common.getAuthToken() && <Button variant="outlined" style={{width: 150, margin: 20}} onClick={() => logout()}>注销</Button>
+                Common.getAuthToken() && (
+                    <div>
+                        <div style={{textAlign: 'center', marginTop: 16}}>{memberInfo.name}</div>
+                        <Button variant="outlined" style={{width: 150, margin: 20}} onClick={() => logout()}>注销</Button>
+                    </div>
+                )
             }
         </Drawer>
     )

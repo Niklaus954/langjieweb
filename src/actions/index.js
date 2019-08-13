@@ -41,3 +41,8 @@ export const updateShowRightSideBar = data => ({
 	type: 'UPDATE_SHOW_RIGHT_SIDE_BAR',
 	data,
 })
+
+export const updateMemberInfo = data => ({
+	type: 'UPDATE_MEMBER_INFO',
+	data,
+})

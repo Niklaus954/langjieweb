@@ -6,6 +6,7 @@ import showSideMenuBar from './showSideMenuBar'
 import selectedSideName from './selectedSideName'
 import sideBarExpand from './sideBarExpand'
 import showRightSideBar from './showRightSideBar'
+import memberInfo from './memberInfo'
 
 export default combineReducers({
 	hotInfoList,
@@ -15,4 +16,5 @@ export default combineReducers({
 	showSideMenuBar,
 	sideBarExpand,
 	showRightSideBar,
+	memberInfo,
 })

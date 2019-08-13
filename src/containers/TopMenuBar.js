@@ -8,6 +8,7 @@ const mapStateToProps = state => ({
     selectedSideMenu: state.selectedSideMenu,
     selectedSideName: state.selectedSideName,
     showRightSideBar: state.showRightSideBar,
+    memberInfo: state.memberInfo,
 })
 
 const mapDispatchToProps = dispatch => ({
