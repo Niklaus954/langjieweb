@@ -2,6 +2,7 @@ import React from 'react'
 import CarouselArea from './Index/CarouselArea.jsx'
 import FetchHotInfoList from '../containers/FetchHotInfoList'
 import CONFIG from '../config'
+import About from './Index/About.jsx'
 
 const Index = () => {
     return (
@@ -14,6 +15,7 @@ const Index = () => {
                 <FetchHotInfoList />
             </div>
             <div style={{width: '100%', height: 20}}></div>
+            <About />
         </div>
     )
 }

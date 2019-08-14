@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     withRouter,
     Link,
@@ -18,7 +18,6 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import PropTypes from 'prop-types'
 
 const SideBar = ({sideMenuList, selectedSideMenu, updateSelectedSideName, updateSelectedSideMenu, history, location, sideMenuBar, showSideMenuBar, sideBarExpand, updateSideBarExpand}) => {
-    // const [expandMenu, setExpandMenu] = useState([]);
     const isPc = useMediaQuery(CONFIG.minDeviceWidth);
 
     // 展开隐藏
@@ -38,10 +37,8 @@ const SideBar = ({sideMenuList, selectedSideMenu, updateSelectedSideName, update
 
     // 节点递归渲染
     const renderSideList = () => {
-        const headerHeight = window['$']('.MuiPaper-root').height() ? window['$']('.MuiPaper-root').height() : 0;
-        const barHeight = window.innerHeight - headerHeight;
         return (
-            <div style={{ width: 200, height: barHeight, borderRight: '1px solid #eee', overflow: 'auto' }}>
+            <div style={{ width: 200, minWidth: 200, borderRight: '1px solid #eee', overflow: 'auto' }}>
                 <List style={{ padding: 0 }}>
                     {
                         sideMenuList.map((items, index) => (

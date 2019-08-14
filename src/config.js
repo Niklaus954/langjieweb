@@ -20,13 +20,13 @@ import CompleteCtrlSystem from './components/Solution/CompleteCtrlSystem'
 import Cloud from './components/Service/Cloud'
 
 const CONFIG = {
-    url: pathname => 'http://192.168.50.230:8090' + pathname,
-    // url: pathname => 'https://os.langjie.com' + pathname,
+    // url: pathname => 'http://192.168.50.230:8090' + pathname,
+    url: pathname => 'https://os.langjie.com' + pathname,
     wxLoginAppid: 'wx19792965396beb35',
     minDeviceWidthNum: 800,
     minDeviceWidth: '(min-width:800px)',
     indexPageMaxWidth: 1300,
-    activeMenuColor: '#f60',
+    activeMenuColor: '#ffde03',
     defaultIndexTitle: '杭州朗杰测控技术开发有限公司',
     menu: [
         {
@@ -111,15 +111,6 @@ const CONFIG = {
                             auth: false,
                         },
                         {
-                            id: 8,
-                            supId: 6,
-                            text: '控制器产品',
-                            type: 'solution',
-                            pathname: '/solution/ctrlProducts',
-                            component: CtrlProducts,   
-                            auth: false,
-                        },
-                        {
                             id: 9,
                             supId: 6,
                             text: '服务团队',
@@ -138,6 +129,15 @@ const CONFIG = {
                             auth: false,
                         },
                     ],
+                },
+                {
+                    id: 8,
+                    supId: -2,
+                    text: '控制器产品',
+                    type: 'solution',
+                    pathname: '/solution/ctrlProducts',
+                    component: CtrlProducts,   
+                    auth: false,
                 },
                 {
                     id: 11,

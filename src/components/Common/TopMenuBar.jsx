@@ -5,9 +5,10 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import MButton from '@material-ui/core/Button';
 import Paper from "@material-ui/core/Paper";
+import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import MenuList from "@material-ui/core/MenuList";
-import { AccountCircle, Menu, Search } from '@material-ui/icons';
+import { AccountCircle, Menu as MenuIcon, Search } from '@material-ui/icons';
 import CONFIG from '../../config'
 import Common from './Common'
 import useMediaQuery from '@material-ui/core/useMediaQuery';
@@ -37,6 +38,7 @@ const useStyles = makeStyles(theme => ({
 const TopMenuBar = ({memberInfo, selectedSideMenu, updateSideMenuList, updateSelectedSideMenu, history, sideMenuBar, showSideMenuBar, updateSelectedSideName, selectedSideName, selectedMenu, updateSideBarExpand, updateShowRightSideBar, location}) => {
     const [showPopperList, setShowPopperList] = useState(false);
     const [presentPopper, setPresentPopper] = useState('');
+    const [ anchorEl, setAnchorEl] = useState(null);
     // const [keywords, setKeywords] = useState('');
     const isPc = useMediaQuery(CONFIG.minDeviceWidth);
 
@@ -121,7 +123,7 @@ const TopMenuBar = ({memberInfo, selectedSideMenu, updateSideMenuList, updateSel
     const renderMobileTopBar = () => {
         return (
             <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: 10, paddingRight: 10}}>
-                <Menu onClick={() => {sideBarClick()}} />
+                <MenuIcon onClick={() => {sideBarClick()}} />
                 <p>{selectedSideName}</p>
                 {
                     !memberInfo.name && <AccountCircle onClick={() => {showMobileRightSide()}} />
@@ -133,6 +135,41 @@ const TopMenuBar = ({memberInfo, selectedSideMenu, updateSideMenuList, updateSel
         );
     }
 
+    const handleMemberClick = event => {
+        setAnchorEl(event.currentTarget);
+    }
+
+    const handleMemberClose = () => {
+        setAnchorEl(null);
+    }
+
+    const renderAccountMenuItem = () => {
+        if (memberInfo.name) {
+            let timeGreet;
+            const nowHours = new Date().getHours();
+            if (nowHours > 3 && nowHours <= 11) {
+                timeGreet = '上午好！';
+            } else if (nowHours > 11 && nowHours <= 13) {
+                timeGreet = '中午好！';
+            } else if (nowHours > 13 && nowHours <= 18) {
+                timeGreet = '下午好！';
+            } else {
+                timeGreet = '晚上好！';
+            }
+            return(
+                <div style={{minWidth: 150}}>
+                    <MenuItem onClick={handleMemberClose}>{timeGreet + memberInfo.name}</MenuItem>
+                    <MenuItem onClick={handleMemberClose}>注销</MenuItem>
+                </div>
+            );
+        }
+        return(
+            <div style={{minWidth: 150}}>
+                <MenuItem onClick={handleMemberClose}>登陆</MenuItem>
+            </div>
+        ); 
+    }
+
     return (
         <div className={classes.root}>
             <AppBar position="static">
@@ -140,8 +177,21 @@ const TopMenuBar = ({memberInfo, selectedSideMenu, updateSideMenuList, updateSel
                     <Toolbar className={classes.toolBar}>
                         <div>
                             <Link to="/index" onClick={() => {jumpToIndex()}} style={{ color: '#fff' }}>
-                                <img style={{ width: 400 }} src={CONFIG.url('/img/朗杰logo-全.png')} alt={'朗杰logo-全.png'} />
+                                <img style={{ width: 190, marginLeft: 20 }} src={CONFIG.url('/img/朗杰logo-白.png')} alt={'朗杰logo-白.png'} />
                             </Link>
+                        </div>
+                        <div style={{display: 'flex'}}>
+                            <div style={{ display: 'flex', alignItems: 'baseline', marginRight: 20 }}>
+                                <section style={{ color: renderActionMenu('home'), marginRight: 20 }}>
+                                    {showPopper(0)}
+                                </section>
+                                <section style={{ color: renderActionMenu('solution'), marginRight: 20 }}>
+                                    {showPopper(1)}
+                                </section>
+                                <section style={{ color: renderActionMenu('service'), marginRight: 20 }}>
+                                    {showPopper(2)}
+                                </section>
+                            </div>
                         </div>
                         <div style={{display: 'flex'}}>
                             <div style={{display: 'flex', alignItems: 'baseline', marginRight: 20}}>
@@ -149,24 +199,23 @@ const TopMenuBar = ({memberInfo, selectedSideMenu, updateSideMenuList, updateSel
                                 <Search style={{position: 'relative', top: 8, left: -30, color: '#3f51b5', cursor: 'pointer'}} />
                             </div>
                             {
-                                !memberInfo.name && <AccountCircle style={{ fontSize: 38, marginRight: 40, cursor: 'pointer' }} />
+                                !memberInfo.name && <AccountCircle aria-controls="simple-menu" aria-haspopup="true" onClick={handleMemberClick} style={{ fontSize: 38, marginRight: 40, cursor: 'pointer' }} />
                             }
                             {
-                                memberInfo.name && <img style={{width: 38, height: 38, borderRadius: '50%', cursor: 'pointer', marginRight: 40, fontSize: 38}} src={memberInfo.portrait} alt={'头像'} />
+                                memberInfo.name && <img aria-controls="simple-menu" aria-haspopup="true" onClick={handleMemberClick} style={{width: 38, height: 38, borderRadius: '50%', cursor: 'pointer', marginRight: 40, fontSize: 38}} src={memberInfo.portrait} alt={'头像'} />
                             }
+                            <Menu
+                                style={{marginTop: 40}}
+                                id="simple-menu"
+                                keepMounted
+                                open={Boolean(anchorEl)}
+                                anchorEl={anchorEl}
+                                onClose={handleMemberClose}
+                            >
+                                { renderAccountMenuItem() }
+                            </Menu>
                         </div>
                     </Toolbar>
-                    <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                        <section style={{ color: renderActionMenu('home'), marginRight: 20 }}>
-                            {showPopper(0)}
-                        </section>
-                        <section style={{ color: renderActionMenu('solution'), marginRight: 20 }}>
-                            {showPopper(1)}
-                        </section>
-                        <section style={{ color: renderActionMenu('service'), marginRight: 20 }}>
-                            {showPopper(2)}
-                        </section>
-                    </div>
                 </div>)}
             </AppBar>
         </div>

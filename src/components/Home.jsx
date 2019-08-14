@@ -139,7 +139,9 @@ const Home = ({updateSideMenuList, updateSelectedSideMenu, sideBarExpand, update
 
     return (
         <Router>
-            { initRouteArr() }
+            <div style={{padding: 10, overflow: 'auto', wordBreak: 'break-all', whiteSpace: 'preWrap'}}>
+                { initRouteArr() }
+            </div>
         </Router>
     )
 }
