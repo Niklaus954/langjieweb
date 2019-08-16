@@ -14,7 +14,15 @@ const fetchEventRecord = async params => {
     return result;
 }
 
+const fetchContactUs = async params => {
+    const result = await api({
+        url: '/open/knowledge/35',
+    });
+    return result;
+}
+
 export default {
     fetchBasicInfo,
     fetchEventRecord,
+    fetchContactUs,
 };

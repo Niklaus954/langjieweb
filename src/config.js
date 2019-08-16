@@ -7,6 +7,7 @@ import ToolBox from './components/Solution/ToolBox'
 import CtrlProducts from './components/Solution/CtrlProducts'
 import ServerTeam from './components/Solution/ServerTeam'
 import SecondryDevelop from './components/Solution/SecondryDevelop'
+import Dyna from './components/Solution/Dyna'
 import MaxTest from './components/Solution/MaxTest'
 import DynaTest from './components/Solution/DynaTest'
 import FlexuralCompression from './components/Solution/FlexuralCompression'
@@ -97,7 +98,7 @@ const CONFIG = {
                     supId: -2,
                     text: '安可迅平台',
                     type: 'solution',
-                    pathname: '/solution/actionPlat',     
+                    pathname: '/solution/actionPlat',
                     component: ActionPlat,               
                     auth: false,
                     subArr: [
@@ -138,6 +139,17 @@ const CONFIG = {
                     pathname: '/solution/ctrlProducts',
                     component: CtrlProducts,   
                     auth: false,
+                    subArr: [
+                        {
+                            id: 21,
+                            supId: 8,
+                            text: '代龙',
+                            type: 'solution',
+                            pathname: '/solution/dyna',
+                            component: Dyna,               
+                            auth: false,
+                        },
+                    ],
                 },
                 {
                     id: 11,

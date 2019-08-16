@@ -6,7 +6,7 @@
 	<link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
 	<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0">
 	<meta name="theme-color" content="#000000" />
-	<!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
+	<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 	<link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
 	<title>杭州朗杰测控技术开发有限公司</title>
 	<style>
@@ -21,9 +21,16 @@
 		li {
 			list-style-type: none;
 		}
+		.am-steps-item-finish .am-steps-item-tail:after {
+			background-color: #3f51b5!important;
+		}
+		.am-steps-item-finish .am-steps-item-icon > .am-steps-icon {
+			color: #3f51b5!important;
+		}
 	</style>
 </head>
-<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<!-- <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script> -->
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=5pMjYGfmzv0AlkNkwxyRTWWCNwpHeqlc"></script>
 
 <body>
 	<div id="root"></div>
