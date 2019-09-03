@@ -18,20 +18,13 @@ const useStyles = makeStyles(theme => ({
     root: {
         flexGrow: 1,
     },
-    menuButton: {
-        marginRight: theme.spacing(2),
-    },
-    title: {
-        flexGrow: 1,
-    },
     toolBar: {
         display: 'flex',
         justifyContent: 'space-between',
+        alignItems: 'center',
         paddingLeft: 0,
         paddingRight: 0,
         width: '100%',
-        margin: 'auto',
-        marginTop: 1,
     },
 }));
 
@@ -41,6 +34,7 @@ const TopMenuBar = ({memberInfo, selectedSideMenu, updateSideMenuList, updateSel
     const [ anchorEl, setAnchorEl] = useState(null);
     // const [keywords, setKeywords] = useState('');
     const isPc = useMediaQuery(CONFIG.minDeviceWidth);
+    const isIE = !!window.ActiveXObject || "ActiveXObject" in window;
 
     const classes = useStyles();
 
@@ -159,25 +153,38 @@ const TopMenuBar = ({memberInfo, selectedSideMenu, updateSideMenuList, updateSel
             return(
                 <div style={{minWidth: 150}}>
                     <MenuItem onClick={handleMemberClose}>{timeGreet + memberInfo.name}</MenuItem>
-                    <MenuItem onClick={handleMemberClose}>注销</MenuItem>
+                    <MenuItem onClick={logout}>注销</MenuItem>
                 </div>
             );
         }
         return(
             <div style={{minWidth: 150}}>
-                <MenuItem onClick={handleMemberClose}>登陆</MenuItem>
+                <MenuItem onClick={login}>登陆</MenuItem>
             </div>
         ); 
+    }
+
+    const login = () => {
+        history.push({
+            pathname: '/login',
+            search: '?path=' + location.pathname,
+        });
+        handleMemberClose();
+    }
+
+    const logout = () => {
+        localStorage.clear();
+        window.location.reload();
     }
 
     return (
         <div className={classes.root}>
             <AppBar position="static">
                 {(!isPc && renderMobileTopBar()) || (isPc && <div style={{ margin: 'auto', width: '100%', ...showMaxWidth(selectedMenu) }}>
-                    <Toolbar className={classes.toolBar}>
+                    <Toolbar className={classes.toolBar} style={{position: 'relative', top: isIE ? 10 : 0}}>
                         <div>
                             <Link to="/index" onClick={() => {jumpToIndex()}} style={{ color: '#fff' }}>
-                                <img style={{ width: 190, marginLeft: 20 }} src={CONFIG.url('/img/朗杰logo-白.png')} alt={'朗杰logo-白.png'} />
+                                <img style={{ width: 190 }} src={CONFIG.url('/img/朗杰logo-白.png')} alt={'朗杰logo-白.png'} />
                             </Link>
                         </div>
                         <div style={{display: 'flex'}}>

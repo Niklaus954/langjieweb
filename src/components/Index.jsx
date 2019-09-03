@@ -1,8 +1,18 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import {
+    withRouter,
+} from 'react-router-dom'
 import CarouselArea from './Index/CarouselArea.jsx'
 import FetchHotInfoList from '../containers/FetchHotInfoList'
+import Common from './Common/Common'
 
-const Index = () => {
+const Index = props => {
+
+    useEffect(() => {
+        // 隐藏侧边栏
+        Common.jumpToIndex(props);
+    }, [ props ]);
+
     return (
         <div style={{margin: 'auto', width: '100%'}}>
             <div style={{width: '100%', margin: 'auto'}}>
@@ -19,4 +29,4 @@ const Index = () => {
     )
 }
 
-export default Index
+export default withRouter(Index)

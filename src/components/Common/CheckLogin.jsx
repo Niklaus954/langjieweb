@@ -4,8 +4,10 @@ import {
 } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import Common from './Common'
+import apiLogin from '../../api/apiLogin'
+import CircularProgress from '@material-ui/core/CircularProgress';
 
-const CheckLogin = ({ location, history }) => {
+const CheckLogin = ({ location, history, updateMemberInfo }) => {
 
     useEffect(() => {
         // 获取code
@@ -16,17 +18,25 @@ const CheckLogin = ({ location, history }) => {
         const hashMapper = Common.getLocationParamMapper(search);
         const redirectUrl = hashMapper['redirectUrl'];
         const code = hashMapper['code'];
-        console.log(redirectUrl);
-        console.log(code);
-        setTimeout(() => {
-            localStorage.setItem('lj_token', '{}');
-            history.push(redirectUrl);
-        }, 5000);
+        // console.log(redirectUrl);
+        // console.log(code);
+        const fetch = async () => {
+            const result = await apiLogin.checkWxCode({
+                formData: { code },
+            });
+            Common.loginCallBack(result, {
+                apiLogin,
+                updateMemberInfo,
+                history,
+                redirectUrl,
+            });
+        }
+        fetch();
     }, []);
 
     return (
-        <div style={{width: '100%'}}>
-            loading...
+        <div style={{width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+             <CircularProgress />
         </div>
     );
 }

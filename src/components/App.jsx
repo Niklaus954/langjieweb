@@ -9,7 +9,7 @@ import TopMenuBar from '../containers/TopMenuBar'
 import SideBar from '../containers/SideBar'
 import RightSideBar from '../containers/RightSideBar'
 import Login from '../containers/Login'
-import CheckLogin from './Common/CheckLogin.jsx'
+import CheckLogin from '../containers/CheckLogin'
 import CONFIG from '../config'
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import PropTypes from 'prop-types'

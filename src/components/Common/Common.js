@@ -40,6 +40,25 @@ const Common = {
         });
         return hashMapper;
     },
+
+    // 登陆后的处理
+    loginCallBack: async (result, params) => {
+        const { apiLogin, updateMemberInfo, history, redirectUrl } = params;
+        if (result.code === 200) {
+            const data = {
+                lj_token: result.data.lj_token,
+                endDate: result.data.endDate,
+                unionid: result.data.unionid,
+            };
+            localStorage.setItem('lj_token', JSON.stringify(data));
+            // 根据unionid获取会员基本信息
+            const memberInfo = await apiLogin.fetchMemberInfo({ unionid: result.data.unionid });
+            localStorage.setItem('lj_member_info', JSON.stringify(memberInfo.data));
+            updateMemberInfo(memberInfo.data);
+
+            history.push(redirectUrl);
+        }
+    }
 };
 
 export default Common

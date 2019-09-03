@@ -30,8 +30,20 @@ const fetchMemberInfo = async params => {
     return result;
 }
 
+const checkWxCode = async params => {
+    const { formData } = params;
+    const result = await api({
+        url: 'https://os.langjie.com/open/login/scanCode',
+        method: 'POST',
+        reloadUrl: true,
+        formData,
+    });
+    return result;
+}
+
 export default {
     fetchVerCode,
     checkVerCode,
     fetchMemberInfo,
+    checkWxCode,
 };

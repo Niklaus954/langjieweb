@@ -23,7 +23,7 @@ import Cloud from './components/Service/Cloud'
 const CONFIG = {
     // url: pathname => 'http://192.168.50.230:8090' + pathname,
     url: pathname => 'https://os.langjie.com' + pathname,
-    wxLoginAppid: 'wx19792965396beb35',
+    wxLoginAppid: 'wx1dbbbe221c943cd9',
     minDeviceWidthNum: 800,
     minDeviceWidth: '(min-width:800px)',
     indexPageMaxWidth: 1300,

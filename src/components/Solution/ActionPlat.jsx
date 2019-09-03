@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 class ActionPlat extends Component {
 
-    componentWillMount() {
+    async componentWillMount() {
         
     }
 

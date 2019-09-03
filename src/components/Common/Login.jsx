@@ -94,23 +94,15 @@ const Login = ({ location, history, updateSelectedSideName, updateMemberInfo }) 
                 verCode,
             },
         });
-        if (result.code === 200) {
-            const data = {
-                lj_token: result.data.lj_token,
-                endDate: result.data.endDate,
-                unionid: result.data.unionid,
-            };
-            localStorage.setItem('lj_token', JSON.stringify(data));
-            // 根据unionid获取会员基本信息
-            const memberInfo = await apiLogin.fetchMemberInfo({ unionid: result.data.unionid });
-            localStorage.setItem('lj_member_info', JSON.stringify(memberInfo.data));
-            updateMemberInfo(memberInfo.data);
-            Toast.hide();
-            const hashMapper = Common.getLocationParamMapper(search);
-            const redirectUrl = hashMapper['path'];
-            history.push(redirectUrl);
-
-        }
+        Toast.hide();
+        const hashMapper = Common.getLocationParamMapper(search);
+        const redirectUrl = hashMapper['path'];
+        Common.loginCallBack(result, {
+            apiLogin,
+            updateMemberInfo,
+            history,
+            redirectUrl,
+        });
     }
 
     return (
@@ -119,7 +111,7 @@ const Login = ({ location, history, updateSelectedSideName, updateMemberInfo }) 
                 key={'loginIframe'}
                 title={'loginIframe'}
                 style={{width: '100%', height: 420, border: 'none', marginTop: 112}} 
-                src={'https://open.weixin.qq.com/connect/qrconnect?appid='+CONFIG.wxLoginAppid+'&redirect_uri=' + encodeURIComponent('https://os.langjie.com/web/#checkLogin?redirectUrl=' + redirectUrl) + '&response_type=code&scope=snsapi_login#wechat_redirect'} 
+                src={'https://open.weixin.qq.com/connect/qrconnect?appid='+CONFIG.wxLoginAppid+'&redirect_uri=' + encodeURIComponent('https://www.langjie.com/web/#checkLogin?redirectUrl=' + redirectUrl) + '&response_type=code&scope=snsapi_login#wechat_redirect'} 
             frameBorder="0" /> }
             { !isPc && <div className={classes.wrap}>
                 <Grid className={classes.item} container alignItems="flex-end">
