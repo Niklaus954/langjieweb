@@ -179,7 +179,7 @@ const TopMenuBar = ({memberInfo, selectedSideMenu, updateSideMenuList, updateSel
 
     return (
         <div className={classes.root}>
-            <AppBar position="static">
+            <AppBar style={{position: 'relative'}}>
                 {(!isPc && renderMobileTopBar()) || (isPc && <div style={{ margin: 'auto', width: '100%', ...showMaxWidth(selectedMenu) }}>
                     <Toolbar className={classes.toolBar} style={{position: 'relative', top: isIE ? 10 : 0}}>
                         <div>

@@ -7,9 +7,9 @@ const LoadingComponent = ({ isLoading, error }) => {
         return <div style={{width: '100%', textAlign: 'center', padding: 20}}>
             <CircularProgress />
         </div>;
-    }else if (error) {
+    } else if (error) {
         return <div>Sorry, there was a problem loading the page.</div>;
-    }else {
+    } else {
         return null;
     }
 };

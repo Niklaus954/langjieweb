@@ -50,7 +50,7 @@ const CONFIG = {
                 {
                     id: 2,
                     supId: -1,
-                    text: '公众号',
+                    text: '推荐阅读',
                     type: 'home',
                     pathname: '/home/wxPublicPlat', 
                     component: WxPublicPlat,                   
@@ -59,7 +59,7 @@ const CONFIG = {
                 {
                     id: 3,
                     supId: -1,
-                    text: '活动',
+                    text: '近期活动',
                     type: 'home',
                     pathname: '/home/activity',
                     component: Activity,                        

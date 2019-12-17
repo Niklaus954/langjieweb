@@ -10,7 +10,7 @@ const memberInfo = (state = lj_member_info, action) => {
         case 'UPDATE_MEMBER_INFO':
             return action.data;
         default:
-            return state
+            return state;
     }
 }
 
