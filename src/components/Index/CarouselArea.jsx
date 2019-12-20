@@ -4,7 +4,6 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import CONFIG from '../../config';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
-import Slider from 'react-slick';
 const useStyles = makeStyles(theme =>({}))
 
 
