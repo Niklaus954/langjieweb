@@ -58,7 +58,20 @@ const Common = {
 
             history.push(redirectUrl);
         }
-    }
+    },
+
+    // 客户服务菜单显示权限
+    authSideMenuList: node => {
+        if (node.auth) {
+            if (Common.getAuthToken()) {
+                // 判断该身份是否拥有这些菜单
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return true;
+    },
 };
 
 export default Common

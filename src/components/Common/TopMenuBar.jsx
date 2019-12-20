@@ -93,7 +93,13 @@ const TopMenuBar = ({memberInfo, selectedSideMenu, updateSideMenuList, updateSel
                 <Paper style={{ position: 'absolute', zIndex: 9, display }}>
                     <MenuList>
                         {
-                            CONFIG['menu'][index].subArr.map(items => <MenuItem selected={items.pathname === selectedSideMenu} key={items.id} onClick={() => { popperMenuClick(items, index) }}>{items.text}</MenuItem>)
+                            CONFIG['menu'][index].subArr.map(items => (
+                                Common.authSideMenuList(items) && <MenuItem 
+                                    selected={items.pathname === selectedSideMenu} 
+                                    key={items.id} 
+                                    onClick={() => { popperMenuClick(items, index) }}
+                                >{items.text}</MenuItem>
+                            ))
                         }
                     </MenuList>
                 </Paper>
