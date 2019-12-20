@@ -43,6 +43,9 @@ const App = ({ selectedSideMenu }) => {
             <TopMenuBar />
             <div style={{height: barHeight}}>
                 <div style={{height: barHeight, overflow: 'auto', WebkitOverflowScrolling: 'touch'}}>
+                    <div style={{width: '100%'}}>
+                        <Route path="/index" component={LazyIndex} />
+                    </div>
                     <div style={getStyle()}>
                         {
                             (!isPc && <SideBar />) || ( isPc && selectedSideMenu && <SideBar /> )
@@ -51,7 +54,7 @@ const App = ({ selectedSideMenu }) => {
                             (!isPc && <RightSideBar />)
                         }
                         <Switch>
-                            <Route path="/index" component={LazyIndex} />
+                    
                             <Route path="/home*" component={LazyHome} />
                             <Route path="/solution*" component={LazyHome} />
                             <Route path="/service*" component={LazyHome} />
@@ -60,7 +63,7 @@ const App = ({ selectedSideMenu }) => {
                             <Redirect from='/' to='/index' />
                         </Switch>
                     </div>
-                    <div style={{width: '100%', background: '#000'}}>
+                    <div style={{width: '100%'}}>
                         <About />
                     </div>
                 </div>
