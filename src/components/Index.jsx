@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { withRouter } from 'react-router-dom'
-import CarouselArea from './Index/CarouselArea.jsx';
-import CarouselA from './Index/CarouselA.jsx';
+import CarouselArea from './Index/CarouselArea.jsx'
 import HotInfoAction from './Index/HotInfoAction.jsx';
 import AppendInfo from './Index/AppendInfo.jsx';
 import SuggestReading from './Index/SuggestReading.jsx';
@@ -20,7 +19,7 @@ const Index = props => {
             <div style={{width: '100%', margin: 'auto'}}>
                 <div style={{height: 50}}></div>
                 <div >
-                    <CarouselA />
+                    <CarouselArea />
                 </div>
                 <div style={{width: '100%'}}>
                     <HotInfoAction/>
