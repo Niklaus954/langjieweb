@@ -17,7 +17,6 @@ const Index = props => {
     return (
         <div style={{margin: 'auto', width: '100%'}}>
             <div style={{width: '100%', margin: 'auto'}}>
-                <div style={{height: 50}}></div>
                 <div >
                     <CarouselArea />
                 </div>
