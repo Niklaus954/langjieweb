@@ -51,7 +51,9 @@ const SideBar = ({sideMenuList, selectedSideMenu, updateSelectedSideName, update
             </div>
         );
 
+        // 身份权限判断
         function renderList(node, num) {
+            if (!Common.authSideMenuList(node)) return;
             return (
                 <div key={node.id}>
                     <ListItem button selected={node.pathname === selectedSideMenu && node.id > 0} onClick={() => { toggleMenu(node) }} style={{ paddingLeft: 16 * num }}>

@@ -19,10 +19,12 @@ import ActionPlat from './components/Solution/ActionPlat'
 import Application from './components/Solution/Application'
 import CompleteCtrlSystem from './components/Solution/CompleteCtrlSystem'
 import Cloud from './components/Service/Cloud'
+import VirCard from './components/Service/VirCard'
+import Repair from './components/Service/Repair'
 
 const CONFIG = {
-    // url: pathname => 'http://192.168.50.230:8090' + pathname,
-    url: pathname => 'https://os.langjie.com' + pathname,
+    url: pathname => 'http://192.168.50.231:8090' + pathname,
+    // url: pathname => 'https://os.langjie.com' + pathname,
     wxLoginAppid: 'wx1dbbbe221c943cd9',
     minDeviceWidthNum: 800,
     minDeviceWidth: '(min-width:800px)',
@@ -243,15 +245,24 @@ const CONFIG = {
             text: '客户服务',
             type: 'service',
             pathname: '/servicePage',
-            component: Cloud,     
-            auth: true,
+            component: Cloud,
+            auth: false,
             subArr: [
                 {
                     id: 20,
                     supId: -3,
-                    text: '云服务',
-                    pathname: '/service/cloud',  
-                    component: Cloud,                          
+                    text: '维修查询',
+                    pathname: '/service/repair',  
+                    component: Repair,                          
+                    auth: true,
+                    type: 'service',
+                },
+                {
+                    id: 22,
+                    supId: -3,
+                    text: '产品查询',
+                    pathname: '/service/virCard',  
+                    component: VirCard,                          
                     auth: true,
                     type: 'service',
                 },
