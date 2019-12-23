@@ -16,6 +16,7 @@ const CarouselArea = () => {
 			setData(['1800.jpg', '1801.jpg', '1802.jpg']);
 		}, 500);
 		window.addEventListener('resize', resize);
+		return window.removeEventListener('resize', resize);
 	}, []);
 	const classes = useStyles()
 
