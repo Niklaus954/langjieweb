@@ -30,31 +30,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const About = ({location}) => {
-    const [ links, setLinks ] = useState([]);
 
-    useEffect(() => {
-        setTimeout(() => {
-            setLinks([
-                {
-                    title: '相关资源',
-                    item: [ 1, 2, 3 ],
-                },
-                {
-                    title: '社区',
-                    item: [ 1, 2, 3 ],
-                },
-                {
-                    title: '帮助',
-                    item: [ 1, 2, 3 ],
-                },
-                {
-                    title: '更多产品',
-                    item: [ 1, 2, 3 ],
-                },
-            ]);
-        }, 1000);
-    }, []);
-
+    const QQ = "http://192.168.50.80:7090/images/QQ.png"
     const classes = useStyles();
     const isPc = useMediaQuery(CONFIG.minDeviceWidth);
     const pathname = location.pathname;
@@ -62,40 +39,23 @@ const About = ({location}) => {
     if (pathname === '/index') showAbout = true;
     return(
         showAbout && 
-        <div style={{background: "#3f51b5", color: "#fff"}}>
+        <div style={{background: "#3f51b5", color: "#ffffff"}}>
             <div className={classes.aboutWrap}>
                 <div className={classes.about}>
                     <div>服务热线：0571-69958000 </div><br/>
                     <div>总机：0571-88930380</div><br/>
-                    <div>传真：0571-85359710</div><br/>
+                    <div>服务QQ： <a style={{cursor: "pointer", color: "#fff"}} href="tencent://message/?uin=1820128000&Site=Sambow&Menu=yes"><img src="http://localhost:7090/images/QQ.png" alt="" width="16px" height="16px"/>在线咨询</a> </div><br/>
                     <div style={{display: isPc ? "block" : "none" }}>
                         <div>Copyright@2001-2020 杭州朗杰测控技术开发有限公司 <Link href="http://www.beian.miit.gov.cn" color="inherit">浙ICP备09063746号-2</Link></div>
                     </div>
                 </div>
-                <div>
-                    <img src="https://wx.langjie.com/img/gallery/list_公众号二维码2017.jpg" alt="朗杰公司二维码"/>
+                <div style={{display: "flex", alignItems: "center"}}>
+                    <img src="https://wx.langjie.com/img/gallery/list_公众号二维码2017.jpg" alt="朗杰公司二维码" width={100} height={100}/>
                 </div>
             </div>
             <div style={{ display: isPc ? "none" : "block", padding: "0 20px 20px 20px"}}>Copyright@2001-2020 杭州朗杰测控技术开发有限公司 <Link href="http://www.beian.miit.gov.cn" color="inherit">浙ICP备09063746号-2</Link></div>
         </div>
     )
-
-    // return (
-    //     showAbout && <div className={classes.aboutWrap}>
-    //         <div style={{maxWidth: CONFIG.indexPageMaxWidth, display: isPc ? 'flex' : 'block', width: '100%', margin: 'auto'}}>
-    //             {
-    //                 links.map(items => (
-    //                     <div key={items.title} className={classes.itemsBlock}>
-    //                         <div>{items.title}</div>
-    //                         {
-    //                             items.item.map((items, index) => <p key={index}>{items}</p>)
-    //                         }
-    //                     </div>
-    //                 ))
-    //             }
-    //         </div>
-    //     </div>
-    // );
 }
 
 About.propTypes = {

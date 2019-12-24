@@ -5,37 +5,52 @@ import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
 const HotInfoAction = () => {
     const isPc = useMediaQuery(CONFIG.minDeviceWidth);
-    
+    const [data, setData] = useState([])
+    useEffect(() => {
+        setTimeout(() => {
+            setData([{
+                tag: "安可迅平台",
+                title: "Action工具助您轻松开发",
+                content: "配合Action工具箱，让您快速开发出属于自己的应用程序,配合Action工具箱，让您快速开发出属于自己的应用程序配合Action工具箱，让您快速开发出属于自己的应用程序配合Action工具箱，让您快速开发出属于自己的应用程序配合Action工具箱，让您快速开发出属于自己的应用程序"
+            }])
+        },500)
+    },[])
     //PC端
     if(isPc) {
         return (
             <div style={{maxWidth: CONFIG.indexPageMaxWidth, margin: "auto"}}>
-                <div style={{display: "flex", flexDirection: "row", margin: "20px 40px 0 40px", height: 160}}>
-                    <div style={{width: "35%", paddingRight: 50}}>
-                        <h3>安可迅平台</h3>
-                        <Divider/>
-                        <h2>Action工具助您轻松开发</h2>
-                        <div></div>
-                    </div>
-                    <div>
-                        <div style={{height: "50%"}}>
-                            <p>配合Action工具箱，让您快速开发出属于自己的应用程序</p>
+                {
+                    data.map((val, index) => (
+                        <div key={index} style={{display: "flex", flexDirection: "row", margin: "20px 40px 20px 40px"}}>
+                            <div style={{width: "31%", paddingRight: 50}}>
+                                <h3>{val.tag}</h3>
+                                <Divider/>
+                                <h2>{val.title}</h2>
+                                <div></div>
+                            </div>
+                            <div style={{width: "69%"}}>
+                                <div>
+                                <p style={{lineHeight: 1.4, fontSize: 16, fontWeight: 400, color: "#333"}}>{val.content}</p>
+                                </div>
+                                <Button color="primary" variant="outlined" href="">获取Action</Button>
+                            </div>
                         </div>
-                        <Button color="primary" variant="outlined" href="">获取Action</Button>
-                    </div>
-                </div>
+                    ))
+                }
             </div>
         )
     }else{
         //移动端
         return(
-            <div style={{margin: 40}}>
-                <h2>安可迅平台</h2>
-                <Divider/>
-                <h3>Action工具助您轻松开发</h3>
-                <p>配合Action工具箱，让您快速开发出属于自己的应用程序</p>
-                <Button color="primary" variant="outlined" href="">获取Action</Button>
-            </div>
+            data.map((val, index) => (
+                <div key={index} style={{margin: 40}}>
+                    <h2>{val.tag}</h2>
+                    <Divider/>
+                    <h3>{val.title}</h3>
+                    <p style={{lineHight: 1.4, fontSize: 14, fontWeight: 400, color: "#333"}}>{val.content}</p>
+                    <Button color="primary" variant="outlined" href="">获取Action</Button>
+                </div>
+            ))
         )
 
     }  
