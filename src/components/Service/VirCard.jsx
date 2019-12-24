@@ -1,14 +1,45 @@
 import React, { Component } from 'react';
+import ItemList from '../Common/ItemList';
+import apiService from '../../api/apiService';
 
 class VirCard extends Component {
+    constructor() {
+        super();
+        this.backSelectedItem = this.backSelectedItem.bind(this);
+    }
 
-    componentWillMount() {
-        
+    state = {
+        selectedItem: [],
+    };
+
+    backSelectedItem(data) {
+        console.log(data);
+        this.setState({
+            selectedItem: data,
+        });
+    }
+
+    renderList(items) {
+        const validTime = items.validTime == 0 ? '永久注册' : items.validTime;
+        return (
+            <div style={{ flex: 1, padding: 4, marginLeft: 4 }}>
+                <p>序列号：{items.serialNo}</p>
+                <p>型号：{items.model}</p>
+                <p>有效期：{validTime}</p>
+            </div>
+        )
     }
 
     render() {
         return (
-            <div>产品查询</div>
+            <div style={{ width: '100%', height: '100%', display: 'flex' }}>
+                <div style={{ width: 400, overflow: 'auto' }}>
+                    <ItemList fetchList={apiService.fetchVirCard} fetchItem={apiService.fetchVirCardInfo} backSelectedItem={this.backSelectedItem} renderList={this.renderList}></ItemList>
+                </div>
+                <div style={{ flex: 1 }}>
+
+                </div>
+            </div>
         )
     }
 }

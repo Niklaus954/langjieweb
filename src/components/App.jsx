@@ -54,7 +54,6 @@ const App = ({ selectedSideMenu }) => {
                             (!isPc && <RightSideBar />)
                         }
                         <Switch>
-                    
                             <Route path="/home*" component={LazyHome} />
                             <Route path="/solution*" component={LazyHome} />
                             <Route path="/service*" component={LazyHome} />

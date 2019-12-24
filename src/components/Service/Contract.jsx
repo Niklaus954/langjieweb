@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ItemList from '../Common/ItemList';
 import apiService from '../../api/apiService';
 
-class Repair extends Component {
+class Contract extends Component {
     constructor() {
         super();
         this.backSelectedItem = this.backSelectedItem.bind(this);
@@ -13,18 +13,17 @@ class Repair extends Component {
     };
 
     backSelectedItem(data) {
-        console.log(data.res_arr);
+        console.log(data);
         this.setState({
-            selectedItem: data.res_arr,
+            selectedItem: data,
         });
     }
 
     renderList(items) {
         return (
             <div style={{ flex: 1, padding: 4, marginLeft: 4 }}>
-                <p>维修单号：{items.repair_contractno}</p>
-                <p>维修物品：{items.goods}</p>
-                <p>问题描述：{items.problem}</p>
+                <p>合同号：{items.serialNo}</p>
+                <p>型号：{items.model}</p>
             </div>
         )
     }
@@ -33,7 +32,7 @@ class Repair extends Component {
         return (
             <div style={{ width: '100%', height: '100%', display: 'flex' }}>
                 <div style={{ width: 400, overflow: 'auto' }}>
-                    <ItemList fetchList={apiService.fetchRepair} fetchItem={apiService.fetchRepairInfo} backSelectedItem={this.backSelectedItem} renderList={this.renderList}></ItemList>
+                    <ItemList fetchList={apiService.fetchVirCard} fetchItem={apiService.fetchVirCardInfo} backSelectedItem={this.backSelectedItem} renderList={this.renderList}></ItemList>
                 </div>
                 <div style={{ flex: 1 }}>
 
@@ -43,4 +42,4 @@ class Repair extends Component {
     }
 }
 
-export default Repair;
+export default Contract;

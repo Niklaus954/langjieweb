@@ -5,13 +5,14 @@ import Common from '../components/Common/Common'
 
 const api = async params => {
     const method = params.method ? params.method : 'get';
-    const { url, formData, reloadUrl } = params;
+    const { url, queryData, formData, reloadUrl } = params;
     const lj_token = Common.getAuthToken();
     try {
         const result = await axios({
             method,
             url: reloadUrl ? url : CONFIG.url(url),
             data: formData,
+            params: queryData,
             headers: { lj_token },
         });
         if (result.data.code !== 200) Toast.info(result.data.msg);

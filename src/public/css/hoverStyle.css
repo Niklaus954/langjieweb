@@ -1,0 +1,4 @@
+.hoverItem:hover {
+    background: #eee;
+    cursor: pointer;
+}
