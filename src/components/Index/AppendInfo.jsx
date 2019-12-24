@@ -27,7 +27,6 @@ const AppendInfo = () => {
 
     const onClick = (e) => {
         e.preventDefault()
-        console.log(e.preventDefault())
     }
     if(isPc) return(
             <div style={{padding: "20px 40px", width: isPc ? "100%" : "", maxWidth: CONFIG.indexPageMaxWidth, margin: "auto"}}>

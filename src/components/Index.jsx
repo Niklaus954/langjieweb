@@ -8,7 +8,6 @@ import FetchHotInfoList from '../containers/FetchHotInfoList'
 import Common from './Common/Common';
 
 const Index = props => {
-
     useEffect(() => {
         // 隐藏侧边栏
         Common.jumpToIndex(props);
