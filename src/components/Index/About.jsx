@@ -44,7 +44,7 @@ const About = ({location}) => {
                 <div className={classes.about}>
                     <div>服务热线：0571-69958000 </div><br/>
                     <div>总机：0571-88930380</div><br/>
-                    <div>服务QQ： <a style={{cursor: "pointer", color: "#fff"}} href="tencent://message/?uin=1820128000&Site=Sambow&Menu=yes"><img src="http://localhost:7090/images/QQ.png" alt="" width="16px" height="16px"/>在线咨询</a> </div><br/>
+                    <div>服务QQ： <a style={{cursor: "pointer", color: "#fff"}} href="tencent://message/?uin=1820128000&Site=Sambow&Menu=yes"><img src={CONFIG.url(`/img/QQ.png`)} alt="" width="16px" height="16px"/>在线咨询</a> </div><br/>
                     <div style={{display: isPc ? "block" : "none" }}>
                         <div>Copyright@2001-2020 杭州朗杰测控技术开发有限公司 <Link href="http://www.beian.miit.gov.cn" color="inherit">浙ICP备09063746号-2</Link></div>
                     </div>
