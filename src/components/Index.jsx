@@ -2,9 +2,7 @@ import React, { useEffect } from 'react'
 import { withRouter } from 'react-router-dom'
 import CarouselArea from './Index/CarouselArea.jsx'
 import HotInfoAction from './Index/HotInfoAction.jsx';
-import AppendInfo from './Index/AppendInfo.jsx';
 import SuggestReading from './Index/SuggestReading.jsx';
-import FetchHotInfoList from '../containers/FetchHotInfoList'
 import Common from './Common/Common';
 
 const Index = props => {
@@ -22,9 +20,6 @@ const Index = props => {
                 <div style={{width: '100%'}}>
                     <HotInfoAction/>
                 </div>
-                {/* <div style={{width: "100%", background: "#fff"}}>
-                    <AppendInfo />
-                </div> */}
                 <div style={{width: "100%", background: "#fff"}}>
                     <SuggestReading />
                 </div>

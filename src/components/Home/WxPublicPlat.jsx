@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react';
 import apiAboutLangjie from '../../api/apiAboutLangjie';
 
@@ -18,6 +19,7 @@ class WxPublicPlat extends Component {
             <div>公众号</div>
         )
     }
+
 }
 
 export default WxPublicPlat;

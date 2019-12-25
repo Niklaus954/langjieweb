@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import apiAboutLangjie from '../../api/apiAboutLangjie';
+
 
 class Activity extends Component {
 
@@ -17,5 +16,6 @@ class Activity extends Component {
         )
     }
 }
+
 
 export default Activity;
