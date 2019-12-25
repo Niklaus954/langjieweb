@@ -1,4 +1,5 @@
-
+import React, { Component }  from 'react';
+import apiAboutLangjie from'../../api/apiAboutLangjie'
 
 class Activity extends Component {
 
