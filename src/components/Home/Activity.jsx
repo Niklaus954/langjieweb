@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
+import apiAboutLangjie from '../../api/apiAboutLangjie';
 
 class Activity extends Component {
 
-    componentWillMount() {
-        
+    async componentWillMount() {
+        const result = await apiAboutLangjie.fetchRecentActivity({
+            page: 1,
+            pageSize: 20,
+        });
+        console.log(result);
     }
 
     render() {

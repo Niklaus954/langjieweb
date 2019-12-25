@@ -1,21 +1,44 @@
 import React,{useEffect, useState} from 'react';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import {
+    withRouter,
+} from 'react-router-dom'
 import CONFIG from '../../config';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
+import apiIndex from '../../api/apiIndex';
+import Common from '../Common/Common';
 
-const SuggestReading = () => {
+const SuggestReading = ({ history }) => {
     const [data, setData] = useState([])
     useEffect(() => {
-        setTimeout(() => {
-            setData([{
-                img: "http://fpoimg.com/400x240",
-                title: "推荐阅读文章标题",
-                content: "威程884是一款USB外置、应用广泛的旗舰型万能控制器，采用单一FPGA芯片同时实现PCI-E总线协议和数据信号处理。采用4路24位高精度的A/D转换器。多功能脉冲调制器能够适配伺服电机、比例伺服系统、变频器等工业作动器，数字颤振的DA信号改善了电液伺服系统的控制表现。"
-            }])
-        },500)
+        apiIndex.fetchArticle().then(result => {
+            const data = {
+                title: result.data.title,
+                href: result.data.href,
+                img: '',
+                content: '',
+            };
+            for (const key in result.data.content) {
+                const r = Common.transToView(result.data.content[key]);
+                if (!data.content && r.type === 'text') {
+                    data.content = r.value;
+                }
+                if (!data.img && r.type === 'picture') {
+                    data.img = CONFIG.url('/img/gallery/' + r.value);
+                }
+            }
+            setData([data]);
+        });
     }, [])
     const isPc = useMediaQuery(CONFIG.minDeviceWidth);
+
+    const goToInfo = item => {
+        history.push({
+            pathname: item.href,
+        });
+    }
+
     if(isPc){
         return(
             <div style={{maxWidth: CONFIG.indexPageMaxWidth, width: isPc ? "100%" : "", margin: "auto"}}>
@@ -28,7 +51,7 @@ const SuggestReading = () => {
                                 <Divider/>
                                 <div>
                                 <p style={{lineHeight: 1.4, fontWeight: 400, color: "#333", fontSize: "16px"}}>{val.content}</p>
-                                    <Button color="primary" variant="outlined" href="./wxPublicPlat">了解详情</Button>
+                                    <Button color="primary" variant="outlined" onClick={() => goToInfo(val)}>了解详情</Button>
                                 </div>
                             </div>
                         </div>
@@ -47,7 +70,7 @@ const SuggestReading = () => {
                             <Divider/>
                             <div>
                             <p style={{lineHeight: "20px"}}>{val.content}</p>
-                                <Button color="primary" variant="outlined" href="/wxPublicPlat">了解详情</Button>
+                                <Button color="primary" variant="outlined" onClick={() => goToInfo(val)}>了解详情</Button>
                             </div>
                         </div>
                     </div>
@@ -57,4 +80,4 @@ const SuggestReading = () => {
     }
 }
 
-export default SuggestReading
+export default withRouter(SuggestReading);

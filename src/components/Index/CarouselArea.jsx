@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from 'react';
+import {
+    withRouter,
+} from 'react-router-dom'
 import { Carousel } from 'antd-mobile';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import CONFIG from '../../config';
 import Button from '@material-ui/core/Button';
+import apiIndex from '../../api/apiIndex';
+import Common from '../Common/Common';
 
-const CarouselArea = () => {
+const CarouselArea = ({history}) => {
 	const isPc = useMediaQuery(CONFIG.minDeviceWidth);
 	const [data, setData] = useState([]);
 	const [showIndex, setShowIndex] = useState(0);
@@ -12,41 +17,22 @@ const CarouselArea = () => {
 	const [backArrowFill, setBackArrowFill] = useState('#108ee9');
 	const [forArrowFill, setForwordArrowFill] = useState("#108ee9");
 	useEffect(() => {
-		setTimeout(() => {
-			setData([
-				{
+		apiIndex.fetchImage().then(result => {
+			let resData = result.data[0].content.map(items => {
+				return {
 					tag: "产品推荐",
-					title: "威程884",
-					content: "威程884是一款USB外置、应用广泛的旗舰型万能控制器，采用单一FPGA芯片同时实现PCI-E总线协议和数据信号处理。采用4路24位高精度的A/D转换器。多功能脉冲调制器能够适配伺服电机、比例伺服系统、变频器等工业作动器，数字颤振的DA信号改善了电液伺服系统的控制表现。",
-					img: "1800.jpg"
-				},
-				{
-					tag: "产品推荐",
-					title: "威程884",
-					content: "威程884是一款USB外置、应用广泛的旗舰型万能控制器，采用单一FPGA芯片同时实现PCI-E总线协议和数据信号处理。采用4路24位高精度的A/D转换器。多功能脉冲调制器能够适配伺服电机、比例伺服系统、变频器等工业作动器，数字颤振的DA信号改善了电液伺服系统的控制表现。",
-					img: "1801.jpg"
-				},
-				{
-					tag: "产品推荐",
-					title: "威程884",
-					content: "威程884是一款USB外置、应用广泛的旗舰型万能控制器，采用单一FPGA芯片同时实现PCI-E总线协议和数据信号处理。采用4路24位高精度的A/D转换器。多功能脉冲调制器能够适配伺服电机、比例伺服系统、变频器等工业作动器，数字颤振的DA信号改善了电液伺服系统的控制表现。",
-					img: "1802.jpg"
-				},
-				{
-					tag: "产品推荐",
-					title: "威程884",
-					content: "威程884是一款USB外置、应用广泛的旗舰型万能控制器，采用单一FPGA芯片同时实现PCI-E总线协议和数据信号处理。采用4路24位高精度的A/D转换器。多功能脉冲调制器能够适配伺服电机、比例伺服系统、变频器等工业作动器，数字颤振的DA信号改善了电液伺服系统的控制表现。",
-					img: "1802.jpg"
-				},
-				{
-					tag: "产品推荐",
-					title: "威程884",
-					content: "威程884是一款USB外置、应用广泛的旗舰型万能控制器，采用单一FPGA芯片同时实现PCI-E总线协议和数据信号处理。采用4路24位高精度的A/D转换器。多功能脉冲调制器能够适配伺服电机、比例伺服系统、变频器等工业作动器，数字颤振的DA信号改善了电液伺服系统的控制表现。",
-					img: "1802.jpg"
-				}
-			])
-			// setData(['1800.jpg', '1801.jpg', '1802.jpg']);
-		}, 500);
+					title: items[2],
+					content: items[3],
+					img: items[0],
+					href: items[4],
+				};
+			});
+			resData.shift();
+			resData.forEach((items, index) => {
+				resData[index].img = '/gallery/' + Common.transToView(items.img).value;
+			});
+			setData(resData);
+		});
 		window.addEventListener('resize', resize);
 		return window.removeEventListener('resize', resize);
 	}, []);
@@ -110,6 +96,13 @@ const CarouselArea = () => {
             window.document.getElementById("nextArrow").style.display = "block"
         }
 	}
+
+	const linkToInfo = href => {
+		history.push({
+            pathname: href,
+        });
+	}
+
 	return (
 		<div>
 			<div style={{ background: '#444' }}>
@@ -129,7 +122,7 @@ const CarouselArea = () => {
 									<div style={{ margin: "0 40px 0 40px" }}>
 										<h2 style={{ color: "#fff" }}>{val.title}</h2>
 										<p style={{ color: "#fff", fontSize : isPc ? "16px" : "14px", fontWeight: 400, lineHeight: 1.4 }}>{val.content}</p>
-										<Button variant="outlined" color="inherit" style={{ color: "#fff" }} href="">查看产品详情</Button>
+										<Button variant="outlined" color="inherit" style={{ color: "#fff" }} onClick={() => linkToInfo(val.href)}>查看产品详情</Button>
 									</div>
 								</div>
 								<img src={CONFIG.url(`/img/${val.img}`)} alt={val.img} style={{ height: isPc ? 350 : 200, width: isPc ? "50%" : "" }} onLoad={() => { window.dispatchEvent(new Event('resize')) }} />
@@ -190,7 +183,4 @@ const CarouselArea = () => {
 	);
 }
 
-
-
-
-export default CarouselArea
+export default withRouter(CarouselArea)

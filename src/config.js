@@ -55,7 +55,7 @@ const CONFIG = {
                     supId: -1,
                     text: '推荐阅读',
                     type: 'home',
-                    pathname: '/home/wxPublicPlat', 
+                    pathname: '/home/recommendReading', 
                     component: WxPublicPlat,                   
                     auth: false,
                 },

@@ -72,6 +72,46 @@ const Common = {
         }
         return true;
     },
+
+    // 根据知识库的内容转换成前端
+    transToView: str => {
+        if (str.indexOf('"class":"picture"') !== -1) {
+            const objType = JSON.parse(str);
+            let arr = [], value;
+            if (objType instanceof Array) {
+                value = objType[0].name;
+                objType.forEach(items => arr.push(items.name));
+            } else {
+                value = objType.name;
+                arr.push(value);
+            }
+            return {
+                type: 'picture',
+                value,
+                valueArr: arr,
+            };
+        } else if (str.indexOf('"class":"video"') !== -1) {
+            const objType = JSON.parse(str);
+            let arr = [], value;
+            if (objType instanceof Array) {
+                value = objType[0].name;
+                objType.forEach(items => arr.push(items.name));
+            } else {
+                value = objType.name;
+                arr.push(value);
+            }
+            return {
+                type: 'video',
+                value,
+                valueArr: arr,
+            };
+        } else {
+            return {
+                type: 'text',
+                value: str,
+            };
+        }
+    }
 };
 
 export default Common

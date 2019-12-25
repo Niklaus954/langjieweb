@@ -8,6 +8,30 @@ const fetchBasicInfo = async params => {
     return result;
 }
 
+// 推荐阅读
+const fetchRecommendReading = async params => {
+    const result = await api({
+        url: '/open/knowledge/recommendReading',
+        queryData: {
+            page: params.page ? Number(params.page) : 1,
+            pageSize: params.pageSize ? Number(params.pageSize) : 30,
+        },
+    });
+    return result;
+}
+
+// 近期活动
+const fetchRecentActivity = async params => {
+    const result = await api({
+        url: '/open/knowledge/recentActivity',
+        queryData: {
+            page: params.page ? Number(params.page) : 1,
+            pageSize: params.pageSize ? Number(params.pageSize) : 30,
+        },
+    });
+    return result;
+}
+
 // 大事记
 const fetchEventRecord = async params => {
     const result = await api({
@@ -26,6 +50,8 @@ const fetchContactUs = async params => {
 
 export default {
     fetchBasicInfo,
+    fetchRecommendReading,
+    fetchRecentActivity,
     fetchEventRecord,
     fetchContactUs,
 };
