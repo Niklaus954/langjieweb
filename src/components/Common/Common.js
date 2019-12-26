@@ -75,41 +75,66 @@ const Common = {
 
     // 根据知识库的内容转换成前端
     transToView: str => {
-        if (str.indexOf('"class":"picture"') !== -1) {
-            const objType = JSON.parse(str);
-            let arr = [], value;
-            if (objType instanceof Array) {
-                value = objType[0].name;
-                objType.forEach(items => arr.push(items.name));
+        if (typeof str === 'string') {
+            if (str.indexOf('"class":"picture"') !== -1) {
+                let objType;
+                try {
+                    objType = JSON.parse(str);
+                } catch (e) {
+                    str = str.match(/{(\S*)}/ig)[0];
+                    objType = JSON.parse(str);
+                }
+                return {
+                    type: 'picture',
+                    value: objType.name,
+                    valueArr: [objType.name],
+                };
+            } else if (str.indexOf('"class":"video"') !== -1) {
+                let objType;
+                try {
+                    objType = JSON.parse(str);
+                } catch (e) {
+                    str = str.match(/{(\S*)}/ig)[0];
+                    objType = JSON.parse(str);
+                }
+                return {
+                    type: 'video',
+                    value: objType.name,
+                    valueArr: [objType.name],
+                };
             } else {
-                value = objType.name;
-                arr.push(value);
+                return {
+                    type: 'text',
+                    value: str,
+                    valueArr: [ str ],
+                };
             }
-            return {
-                type: 'picture',
-                value,
-                valueArr: arr,
-            };
-        } else if (str.indexOf('"class":"video"') !== -1) {
-            const objType = JSON.parse(str);
-            let arr = [], value;
-            if (objType instanceof Array) {
-                value = objType[0].name;
-                objType.forEach(items => arr.push(items.name));
-            } else {
-                value = objType.name;
-                arr.push(value);
-            }
-            return {
-                type: 'video',
-                value,
-                valueArr: arr,
-            };
         } else {
-            return {
-                type: 'text',
-                value: str,
-            };
+            if (str[0].indexOf('"class":"picture"') !== -1) {
+                const valueArr = str.map(items => {
+                    return JSON.parse(items).name;
+                });
+                return {
+                    type: 'picture',
+                    value: valueArr[0],
+                    valueArr,
+                };
+            } else if (str[0].indexOf('"class":"video"') !== -1) {
+                const valueArr = str.map(items => {
+                    return JSON.parse(items).name;
+                });
+                return {
+                    type: 'video',
+                    value: valueArr[0],
+                    valueArr,
+                };
+            } else {
+                return {
+                    type: 'text',
+                    value: str[0],
+                    valueArr: str,
+                };
+            }
         }
     }
 };
