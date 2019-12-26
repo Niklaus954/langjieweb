@@ -45,7 +45,8 @@ const SuggestReading = ({ history }) => {
                 {
                     data.map((val ,index) => (
                         <div key={index} style={{ display: "flex", flexDirection: "row", padding: "40px"}}>
-                            <div style={{ maxWidth: 500, overflow: 'hidden', display: "flex", alignItems: "center"}}><img src={val.img} alt="" width="100%"  ></img></div>
+                            {/*<div style={{ maxWidth: 500, overflow: 'hidden', display: "flex", alignItems: "center"}}><img src={val.img} alt="" width="100%"  ></img></div>*/}
+                            <div style={{backgroundImage: `url(${val.img})`, backgroundRepeat: "no-repeat", backgroundSize: "100% 100%", width: 400, height: 240, backgroundPosition: "center"}}></div>
                             <div style={{paddingLeft: 40, width: "70%"}}>
                                 <div><h3>{val.title}</h3></div>
                                 <Divider/>
@@ -64,7 +65,8 @@ const SuggestReading = ({ history }) => {
             <div style={{maxWidth: CONFIG.indexPageMaxWidth, width: isPc ? "100%" : "", margin: "auto"}}>
                 {data.map((val, index) => (
                     <div key={index} style={{ display: "flex", flexDirection: "column"}}>
-                        <div style={{margin: "20px 40px 0 40px", maxWidth: "500px", overflow: 'hidden'}}><img src={val.img} alt="" width="100%" ></img></div>
+                        {/*<div style={{margin: "20px 40px 0 40px", maxWidth: "500px", overflow: 'hidden'}}><img src={val.img} alt="" width="100%" ></img></div>*/}
+                        <div style={{backgroundImage: `url(${val.img})`, backgroundRepeat: "no-repeat", backgroundSize: "100% 100%", maxWidth: 300, height: 240, margin: "20px 40px 0 40px", backgroundPosition: "center"}}></div>
                         <div style={{padding: "20px 40px"}}>
                             <div><h3>{val.title}</h3></div>
                             <Divider/>

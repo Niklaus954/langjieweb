@@ -84,6 +84,7 @@ const CarouselArea = ({history}) => {
 		}
 	}
 	const slickCarouselItem = (e) => {
+		console.log(e)
         setShowIndex(e)
         if(e === data.length-1) {
             window.document.getElementById("nextArrow").style.display = "none"
