@@ -127,10 +127,11 @@ const Common = {
                     valueArr: [objType.name],
                 };
             } else {
+                str = Common.keywordsLink(str, existKeyPool);
                 return {
                     type: 'text',
-                    value: Common.keywordsLink(str, existKeyPool),
-                    valueArr: [ Common.keywordsLink(str, existKeyPool) ],
+                    value: str,
+                    valueArr: [ str ],
                 };
             }
         } else {
