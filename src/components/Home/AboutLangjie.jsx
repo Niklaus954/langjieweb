@@ -3,6 +3,7 @@ import apiAboutLangjie from '../../api/apiAboutLangjie';
 import  ParagraphStyles from '../Common/ParagraphStyles';
 import CONFIG from '../../config';
 import useMediaQuery from '@material-ui/core/useMediaQuery'
+import Common from '../Common/Common';
 
 
 const AboutLangjie = () => {
@@ -19,22 +20,15 @@ const AboutLangjie = () => {
     const renderParagraph = () => {
         if(data.length === 0) return
         const obj = data[0].content
-        let resArr = []
-        for (let key in obj) {
-            let textArr = [];
-            if (typeof obj[key] === 'object') {
-                try {
-                    textArr = obj[key].map((items, index) => <p key={key + '-' + index}>{items}</p>);
-                } catch (error) {
-                    textArr = obj[key];
-                }
-            } else {
-                textArr = obj[key];
+        let resArr = [];
+        const transArr = Common.transToViewAll(obj);
+        transArr.forEach((items, index) => {
+            if (items.type === 'text') {
+                items.valueArr.forEach((it, ind) => {
+                    resArr.push(<p key={index + '-' + ind}>{it}</p>);
+                });
             }
-            resArr.push(<div key={key}>
-                <p>{textArr}</p>
-            </div>)
-        }
+        });
         return resArr
     }
     return(

@@ -1,4 +1,12 @@
+import React from 'react';
+import { Link } from 'react-router-dom'
 import CONFIG from '../../config'
+
+const keywordsPool = {
+    '10月27日': { weight: 1, href: '/home/eventRecord' },
+    '在济南舜和国际酒店隆重召开': { weight: 1, href: '/home/contactUs' },
+    '朗杰': { weight: 1, href: '/home/aboutLangjie' },
+};
 
 const Common = {
     // 跳转到首页
@@ -73,8 +81,24 @@ const Common = {
         return true;
     },
 
+    // 关键字超链接
+    keywordsLink: (str, existKeyPool) => {
+        for (const keywords in keywordsPool) {
+            const index = str.indexOf(keywords);
+            if (index !== -1 && existKeyPool.indexOf(keywords) === -1) {
+                existKeyPool.push(keywords);
+                const firstBlock = str.slice(0, index);
+                const linkBlock = <Link to={keywordsPool[keywords].href}>{keywords}</Link>;
+                const endBlock = str.slice(index + keywords.length, str.length);
+                return <span>{firstBlock}{linkBlock}{endBlock}</span>;
+            }
+        }
+        return str;
+    },
+
     // 根据知识库的内容转换成前端
-    transToView: str => {
+    transToView: (str, existKeyPool) => {
+        existKeyPool = existKeyPool === undefined ? [] : existKeyPool;
         if (typeof str === 'string') {
             if (str.indexOf('"class":"picture"') !== -1) {
                 let objType;
@@ -105,8 +129,8 @@ const Common = {
             } else {
                 return {
                     type: 'text',
-                    value: str,
-                    valueArr: [ str ],
+                    value: Common.keywordsLink(str, existKeyPool),
+                    valueArr: [ Common.keywordsLink(str, existKeyPool) ],
                 };
             }
         } else {
@@ -129,6 +153,7 @@ const Common = {
                     valueArr,
                 };
             } else {
+                str = str.map(items => Common.keywordsLink(items, existKeyPool));
                 return {
                     type: 'text',
                     value: str[0],
@@ -136,7 +161,17 @@ const Common = {
                 };
             }
         }
-    }
+    },
+
+    // 根据知识库的内容转换成前端（整篇）
+    transToViewAll: contentObj => {
+        const existKeyPool = [];
+        const resArr = [];
+        for (const key in contentObj) {
+            resArr.push(Common.transToView(contentObj[key], existKeyPool));
+        }
+        return resArr;
+    },
 };
 
 export default Common
