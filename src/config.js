@@ -25,6 +25,7 @@ import Contract from './components/Service/Contract'
 
 const CONFIG = {
     // url: pathname => 'http://192.168.50.231:8090' + pathname,
+    // url: pathname => 'https://os.langjie.com' + pathname,
     url: pathname => 'http://os.langjie.com:8090' + pathname,
     wxLoginAppid: 'wx1dbbbe221c943cd9',
     minDeviceWidthNum: 800,
