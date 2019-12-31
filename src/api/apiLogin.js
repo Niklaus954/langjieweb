@@ -1,12 +1,19 @@
 import api from './api'
+import request from 'superagent';
+import { Toast } from 'antd-mobile'
 
 const fetchVerCode = async params => {
     const { formData } = params;
-    const result = await api({
-        url: 'https://api.langjie.com/login/getVerCode',
-        method: 'POST',
-        formData,
-        reloadUrl: true,
+    const result = await new Promise(resolve => {
+        request.post('https://api.langjie.com/login/getVerCode')
+            .send(formData)
+            .end((err, res) => {
+                if (err) {
+                    Toast.info(err.message);
+                    return false;
+                }
+                resolve(res.body);
+            });
     });
     return result;
 }
@@ -23,9 +30,15 @@ const checkVerCode = async params => {
 
 const fetchMemberInfo = async params => {
     const { unionid } = params;
-    const result = await api({
-        url: 'https://api.langjie.com/member/info/' + unionid,
-        reloadUrl: true,
+    const result = await new Promise(resolve => {
+        request.get('https://api.langjie.com/member/info/' + unionid)
+            .end((err, res) => {
+                if (err) {
+                    Toast.info(err.message);
+                    return false;
+                }
+                resolve(res.body);
+            });
     });
     return result;
 }
@@ -33,7 +46,7 @@ const fetchMemberInfo = async params => {
 const checkWxCode = async params => {
     const { formData } = params;
     const result = await api({
-        url: 'https://os.langjie.com/open/login/scanCode',
+        url: 'https://www.langjie.com/open/login/scanCode',
         method: 'POST',
         reloadUrl: true,
         formData,

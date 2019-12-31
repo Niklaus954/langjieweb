@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom'
 import CONFIG from '../../config'
 
 const keywordsPool = {
-    '10月27日': { weight: 1, href: '/home/eventRecord' },
-    '在济南舜和国际酒店隆重召开': { weight: 1, href: '/home/contactUs' },
-    '朗杰': { weight: 1, href: '/home/aboutLangjie' },
+    // '10月27日': { weight: 1, href: '/home/eventRecord' },
+    // '在济南舜和国际酒店隆重召开': { weight: 1, href: '/home/contactUs' },
+    // '朗杰': { weight: 1, href: '/home/aboutLangjie' },
 };
 
 const Common = {
