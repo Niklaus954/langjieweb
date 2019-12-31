@@ -34,7 +34,6 @@ const EventRecord = () => {
         }
         return resArr;
     }
-
     return (
         <FadeTransitions>
             <Steps size="middle" current={100}>

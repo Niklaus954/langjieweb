@@ -24,6 +24,7 @@ const CarouselArea = ({history}) => {
 					title: items[2],
 					content: items[3],
 					img: items[0],
+
 					href: items[4],
 				};
 			});
