@@ -111,7 +111,7 @@ const Login = ({ location, history, updateSelectedSideName, updateMemberInfo }) 
                 key={'loginIframe'}
                 title={'loginIframe'}
                 style={{width: '100%', height: 420, border: 'none', marginTop: 112}} 
-                src={'https://open.weixin.qq.com/connect/qrconnect?appid='+CONFIG.wxLoginAppid+'&redirect_uri=' + encodeURIComponent('https://www.langjie.com/web/#checkLogin?redirectUrl=' + redirectUrl) + '&response_type=code&scope=snsapi_login#wechat_redirect'} 
+                src={'https://open.weixin.qq.com/connect/qrconnect?appid='+CONFIG.wxLoginAppid+'&redirect_uri=' + encodeURIComponent('https://www.langjie.com/#checkLogin?redirectUrl=' + redirectUrl) + '&response_type=code&scope=snsapi_login#wechat_redirect'} 
             frameBorder="0" /> }
             { !isPc && <div className={classes.wrap}>
                 <Grid className={classes.item} container alignItems="flex-end">
