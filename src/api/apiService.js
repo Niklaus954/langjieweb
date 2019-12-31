@@ -1,5 +1,12 @@
 import api from './api'
 
+const getTicket = async params => {
+    const result = await api({
+        url: '/open/getTicket',
+    });
+    return result;
+}
+
 // 维修列表
 const fetchRepair = async params => {
     const result = await api({
@@ -43,6 +50,7 @@ const fetchVirCardInfo = async params => {
 }
 
 export default {
+    getTicket,
     fetchRepair,
     fetchRepairInfo,
     fetchVirCard,

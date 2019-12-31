@@ -3,6 +3,8 @@ import { Toast } from 'antd-mobile'
 import CONFIG from '../config'
 import Common from '../components/Common/Common'
 
+axios.defaults.withCredentials = true;
+
 const api = async params => {
     const method = params.method ? params.method : 'get';
     const { url, queryData, formData, reloadUrl } = params;

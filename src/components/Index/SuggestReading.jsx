@@ -36,6 +36,9 @@ const SuggestReading = ({ history }) => {
     const goToInfo = item => {
         history.push({
             pathname: item.href,
+            state: {
+                aaa: 123
+            },
         });
     }
 

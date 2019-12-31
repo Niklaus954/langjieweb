@@ -1,4 +1,7 @@
 import React, {useEffect, useState} from 'react';
+import {
+    Link,
+} from 'react-router-dom'
 import CONFIG from '../../config';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Divider from '@material-ui/core/Divider';
@@ -11,7 +14,7 @@ const HotInfoAction = () => {
             setData([{
                 tag: "安可迅平台",
                 title: "Action工具助您轻松开发",
-                content: "配合Action工具箱，让您快速开发出属于自己的应用程序,配合Action工具箱，让您快速开发出属于自己的应用程序配合Action工具箱，让您快速开发出属于自己的应用程序配合Action工具箱，让您快速开发出属于自己的应用程序配合Action工具箱，让您快速开发出属于自己的应用程序"
+                content: "配合Action工具箱，让您快速开发出属于自己的应用程序。"
             }])
         },500)
     },[])
@@ -32,7 +35,9 @@ const HotInfoAction = () => {
                                 <div>
                                 <p style={{lineHeight: 1.4, fontSize: 16, fontWeight: 400, color: "#333"}}>{val.content}</p>
                                 </div>
-                                <Button color="primary" variant="outlined" href="">获取Action</Button>
+                                <Link to={'/solution/actionPlat'}>
+                                    <Button color="primary" variant="outlined">获取Action</Button>
+                                </Link>
                             </div>
                         </div>
                     ))
@@ -48,7 +53,9 @@ const HotInfoAction = () => {
                     <Divider/>
                     <h3>{val.title}</h3>
                     <p style={{lineHight: 1.4, fontSize: 14, fontWeight: 400, color: "#333"}}>{val.content}</p>
-                    <Button color="primary" variant="outlined" href="">获取Action</Button>
+                    <Link to={'/solution/actionPlat'}>
+                        <Button color="primary" variant="outlined">获取Action</Button>
+                    </Link>
                 </div>
             ))
         )

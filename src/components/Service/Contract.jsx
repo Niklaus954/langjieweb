@@ -12,10 +12,10 @@ class Contract extends Component {
         selectedItem: [],
     };
 
-    backSelectedItem(data) {
-        console.log(data);
+    async backSelectedItem(item) {
+        const result = await apiService.fetchVirCardInfo(item);
         this.setState({
-            selectedItem: data,
+            selectedItem: result.data,
         });
     }
 
@@ -32,7 +32,12 @@ class Contract extends Component {
         return (
             <div style={{ width: '100%', height: '100%', display: 'flex' }}>
                 <div style={{ width: 400, overflow: 'auto' }}>
-                    <ItemList fetchList={apiService.fetchVirCard} fetchItem={apiService.fetchVirCardInfo} backSelectedItem={this.backSelectedItem} renderList={this.renderList}></ItemList>
+                    <ItemList
+                        fetchList={apiService.fetchVirCard}
+                        renderAlbum={false}
+                        backSelectedItem={this.backSelectedItem}
+                        renderList={this.renderList}
+                    ></ItemList>
                 </div>
                 <div style={{ flex: 1 }}>
 

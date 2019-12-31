@@ -130,7 +130,7 @@ const Home = ({updateSideMenuList, updateSelectedSideMenu, sideBarExpand, update
         return menuArr.map(items => {
             const token = Common.getAuthToken();
             return <Route key={items.id} path={items.pathname} render={() => 
-                (!items.auth ? (<items.component />) : (token ? <items.component /> : <Redirect to={{
+                (!items.auth ? (<items.component parentLocation={location} />) : (token ? <items.component parentLocation={location} /> : <Redirect to={{
                     pathname: '/login?path=' + items.pathname,
                 }} />)
             )} />

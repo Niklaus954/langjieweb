@@ -25,8 +25,7 @@ import Contract from './components/Service/Contract'
 
 const CONFIG = {
     // url: pathname => 'http://192.168.50.231:8090' + pathname,
-    // url: pathname => 'https://os.langjie.com' + pathname,
-    url: pathname => 'http://os.langjie.com:8090' + pathname,
+    url: pathname => 'https://os.langjie.com' + pathname,
     wxLoginAppid: 'wx1dbbbe221c943cd9',
     minDeviceWidthNum: 800,
     minDeviceWidth: '(min-width:800px)',
@@ -268,15 +267,15 @@ const CONFIG = {
                     auth: true,
                     type: 'service',
                 },
-                {
-                    id: 23,
-                    supId: -3,
-                    text: '合同查询',
-                    pathname: '/service/contract',  
-                    component: Contract,                          
-                    auth: true,
-                    type: 'service',
-                },
+                // {
+                //     id: 23,
+                //     supId: -3,
+                //     text: '合同查询',
+                //     pathname: '/service/contract',  
+                //     component: Contract,                          
+                //     auth: true,
+                //     type: 'service',
+                // },
             ],
         },
     ]

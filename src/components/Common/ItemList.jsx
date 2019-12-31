@@ -46,11 +46,6 @@ class ItemList extends Component {
         });
     }
 
-    async fetchInfo(item) {
-        const result = await this.props.fetchItem(item);
-        this.props.backSelectedItem(result.data);
-    }
-
     itemSelected(item, index) {
         const len = document.getElementsByClassName('hoverItem').length;
         for (let i = 0; i < len; i++) {
@@ -58,7 +53,7 @@ class ItemList extends Component {
         }
         try {
             document.getElementsByClassName('hoverItem')[index].style.background = '#eee';
-            this.fetchInfo(item);
+            this.props.backSelectedItem(item);
         } catch (e) {
             
         }
@@ -66,7 +61,7 @@ class ItemList extends Component {
 
     render() {
         const { list, scroll } = this.state;
-        const notAlbum = this.props.notAlbum ? true : false;
+        const renderAlbum = this.props.renderAlbum ? true : false;
         return (
             <InfiniteScroll
                 initialLoad={false}
@@ -81,7 +76,7 @@ class ItemList extends Component {
                     list.map((items, index) => (
                         <div key={items.id} className={"hoverItem"} onClick={() => this.itemSelected(items, index)}>
                             <div style={{ display: 'flex', padding: 8 }}>
-                                { notAlbum && <div style={{ width: 112, backgroundImage: 'url(' + items.album + ')', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundSize: 'cover' }}></div> }
+                                { renderAlbum && <div style={{ width: 112, backgroundImage: 'url(' + items.album + ')', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundSize: 'contain' }}></div> }
                                 { this.props.renderList(items) }
                             </div>
                         </div>

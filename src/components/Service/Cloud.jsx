@@ -8,7 +8,7 @@ class Cloud extends Component {
 
     render() {
         return (
-            <div>云服务</div>
+            <div>提供了日常所需的查询，下载，管理，备份等服务</div>
         )
     }
 }
