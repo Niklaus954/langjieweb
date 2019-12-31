@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import CONFIG from '../../config'
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import InfiniteScroller from 'react-infinite-scroller'
+import InfiniteScroller from 'react-infinite-scroller';
+
 const ContentStyles = (props) => {
     const isPc = useMediaQuery(CONFIG.minDeviceWidth)
     return(
