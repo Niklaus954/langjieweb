@@ -2,7 +2,7 @@ import React, { Component, useEffect, useState } from 'react';
 import apiSolution from '../../api/apiSolution';
 import ParagraphStyles from '../Common/ParagraphStyles'
 import Common from '../Common/Common'
-const ActionPlat = () => {
+const ToolBox = () => {
     const [data, setData] = useState([])
     useEffect(() => {
         const fetch = async() => {
@@ -40,4 +40,4 @@ const ActionPlat = () => {
     )
 }
 
-export default ActionPlat;
+export default ToolBox;

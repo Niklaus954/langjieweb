@@ -20,6 +20,13 @@ const fetchRecommendReading = async params => {
     return result;
 }
 
+const fetchRecommendReadingById = async params => {
+    const result = await api({
+        url: `/open/knowledge/${params.contentId}`
+    })
+    return result
+}
+
 // 近期活动
 const fetchRecentActivity = async params => {
     const result = await api({
@@ -30,6 +37,13 @@ const fetchRecentActivity = async params => {
         },
     });
     return result;
+}
+
+const fetchRecentActivityById = async params => {
+    const result = await api({
+        url:  `/open/knowledge/${params.activityId}`
+    })
+    return result
 }
 
 // 大事记
@@ -51,7 +65,9 @@ const fetchContactUs = async params => {
 export default {
     fetchBasicInfo,
     fetchRecommendReading,
+    fetchRecommendReadingById,
     fetchRecentActivity,
+    fetchRecentActivityById,
     fetchEventRecord,
     fetchContactUs,
 };

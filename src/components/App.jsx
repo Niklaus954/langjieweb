@@ -57,7 +57,7 @@ const App = ({ selectedSideMenu }) => {
                         }
                         <Switch>
                             <Route path="/home*" component={LazyHome} />
-                            <Route path="/home/activityDetails" component={ActivityDetails}/>
+                            <Route path="/activityDetails" component={ActivityDetails}/>
                             <Route path="/recommendReadingDetails" component={SuggestReadingDetails}/>
                             <Route path="/solution*" component={LazyHome} />
                             <Route path="/service*" component={LazyHome} />
