@@ -1,16 +1,40 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect, useState } from 'react';
+import apiSolution from '../../api/apiSolution';
+import ParagraphStyles from '../Common/ParagraphStyles'
+import Common from '../Common/Common'
+const ActionTeam = () => {
+    const [data, setData] = useState([])
+    useEffect(() => {
+        const fetch = async() => {
+            const result = await apiSolution.fetchActionTeam()
+            console.log(result)
+            if(result.code === 200) setData(result.data)
+        }
+        fetch()
+    },[])
 
-class ServerTeam extends Component {
-
-    componentWillMount() {
-        
+    const renderContent = () => {
+        const resArr = []
+        if(data.length === 0) return
+        const content = data[0].content
+        for(let key in content) {
+            Common.transToView(content[key]).valueArr.map((item, index) => {
+                resArr.push(<div key={index}>{item}</div>)
+            })
+        }
+        return resArr
     }
-
-    render() {
-        return (
-            <div>服务团队</div>
-        )
+    const title = () => {
+        if(data.length === 0) return
+        const name = data[0].name
+        return(<h3>{name}</h3>)
     }
+    return(
+        <div>
+            <div>{title()}</div>
+            <div>{ParagraphStyles.ContentStyles(renderContent())}</div>
+        </div>
+    )
 }
 
-export default ServerTeam;
+export default ActionTeam;

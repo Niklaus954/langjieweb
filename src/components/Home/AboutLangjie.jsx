@@ -22,6 +22,7 @@ const AboutLangjie = () => {
         const obj = data[0].content
         let resArr = [];
         const transArr = Common.transToViewAll(obj);
+        console.log(transArr)
         transArr.forEach((items, index) => {
             if (items.type === 'text') {
                 items.valueArr.forEach((it, ind) => {
@@ -35,66 +36,11 @@ const AboutLangjie = () => {
         <div style={{ margin: isPc ? 40 : 20 }}>
             <div><h3>公司简介</h3></div>
             <div>
-                {ParagraphStyles(renderParagraph())}
+                {ParagraphStyles.ContentStyles(renderParagraph())}
             </div>
         </div>
     )
 }
 
-//
-// class AboutLangjie1 extends Component {
-//     constructor(props){
-//         super(props)
-//         this.state = {
-//             dataSource:{},
-//         }
-//         const useStyles = makeStyles(theme => ({
-//
-//         }))
-//     }
-//     async componentWillMount() {
-//
-//         const result = await apiAboutLangjie.fetchBasicInfo();
-//         if(result.code == 200) {
-//             this.setState({
-//                 dataSource: result.data[0]
-//             })
-//         }
-//     }
-//
-//      Render = () => {
-//          const { dataSource } = this.state;
-//          if(Object.keys(dataSource).length === 0) return;
-//          const resArr = [];
-//          let rendItem = [];
-//          for(let i in dataSource.content) {
-//              resArr.push({
-//                  contentItem: dataSource.content[i],
-//
-//              })
-//          }
-//          resArr.forEach((item, index) => {
-//              rendItem.push(
-//                  <div key={index}>
-//                      <div style={{display: "flex", flexDirection: index%2 == 0 ? "row": "row-reverse"}}>
-//                          <div style={{display: "flex", alignItems: "flex-end"}}>{ParagraphStyles(item.contentItem)}</div>
-//                          <div><img src={item.imgSrc} alt=""/></div>
-//                      </div>
-//                  </div>
-//              )
-//          })
-//          return rendItem
-//     }
-//
-//     render() {
-//         return(
-//             <div>
-//                 {
-//                     this.Render()
-//                 }
-//             </div>
-//         )
-//     }
-// }
 
 export default AboutLangjie;
