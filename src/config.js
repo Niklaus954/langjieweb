@@ -25,13 +25,10 @@ import Repair from './components/Service/Repair'
 import Contract from './components/Service/Contract'
 
 const CONFIG = {
-<<<<<<< HEAD
     // url: pathname => 'http://192.168.50.231:8090' + pathname,
     url: pathname => 'https://www.langjie.com' + pathname,
-=======
     //url: pathname => 'http://192.168.50.231:8090' + pathname,
-    url: pathname => 'http://os.langjie.com:8090' + pathname,
->>>>>>> suggestReading
+    //url: pathname => 'http://os.langjie.com:8090' + pathname,
     wxLoginAppid: 'wx1dbbbe221c943cd9',
     minDeviceWidthNum: 800,
     minDeviceWidth: '(min-width:800px)',
