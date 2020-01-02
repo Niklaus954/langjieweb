@@ -49,10 +49,33 @@ const fetchVirCardInfo = async params => {
     return result;
 }
 
+// 合同列表
+const fetchContract = async params => {
+    const result = await api({
+        url: '/open/service/getContract',
+        queryData: {
+            page: params.page ? Number(params.page) : 1,
+            pageSize: params.pageSize ? Number(params.pageSize) : 10,
+            keywords: params.keywords ? params.keywords : '',
+        },
+    });
+    return result;
+}
+
+// 合同详情
+const getContractInfo = async params => {
+    const result = await api({
+        url: '/open/service/getContract/' + params.contract_no,
+    });
+    return result;
+}
+
 export default {
     getTicket,
     fetchRepair,
     fetchRepairInfo,
     fetchVirCard,
     fetchVirCardInfo,
+    fetchContract,
+    getContractInfo,
 };

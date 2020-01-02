@@ -40,7 +40,7 @@ class ItemList extends Component {
             list: [...list, ...result.data],
             scroll,
         }, () => {
-            if (scroll.page === 2 && result.data.length !== 0) {
+            if (scroll.page === 2 && result.data.length !== 0 && this.props.isPc) {
                 this.itemSelected(result.data[0], 0);
             }
         });
@@ -74,7 +74,7 @@ class ItemList extends Component {
             >
                 {
                     list.map((items, index) => (
-                        <div key={items.id} className={"hoverItem"} onClick={() => this.itemSelected(items, index)}>
+                        <div key={items.id + '_' + index} className={"hoverItem"} onClick={() => this.itemSelected(items, index)}>
                             <div style={{ display: 'flex', padding: 8 }}>
                                 { renderAlbum && <div style={{ width: 112, backgroundImage: 'url(' + items.album + ')', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundSize: 'contain' }}></div> }
                                 { this.props.renderList(items) }
