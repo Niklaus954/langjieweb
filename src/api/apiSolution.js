@@ -1,5 +1,26 @@
 import api from './api'
 
+const fetchActionPlat = async() => {
+    const result = await api({
+        url: '/open/knowledge/87'
+    })
+    return result
+}
+
+const fetchCtrlProducts = async() => {
+    const result = await api({
+        url: '/open/knowledge/88'
+    })
+    return result
+}
+
+const fetchApplication = async() => {
+    const result = await api({
+        url: '/open/knowledge/89'
+    })
+    return result
+}
+
 const fetchActionTool = async() => {
     const result = await api({
         url: '/open/knowledge/81'
@@ -50,6 +71,9 @@ const fetchDynaTest = async() => {
 }
 
 export default {
+    fetchActionPlat,
+    fetchApplication,
+    fetchCtrlProducts,
     fetchActionTool,
     fetchActionCloud,
     fetchActionTeam,

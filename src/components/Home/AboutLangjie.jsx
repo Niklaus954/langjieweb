@@ -4,7 +4,7 @@ import  ParagraphStyles from '../Common/ParagraphStyles';
 import CONFIG from '../../config';
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import Common from '../Common/Common';
-
+import FadeTransitions from '../Common/FadeTransitions'
 
 const AboutLangjie = () => {
     const isPc = useMediaQuery(CONFIG.minDeviceWidth)
@@ -22,7 +22,6 @@ const AboutLangjie = () => {
         const obj = data[0].content
         let resArr = [];
         const transArr = Common.transToViewAll(obj);
-        console.log(transArr)
         transArr.forEach((items, index) => {
             if (items.type === 'text') {
                 items.valueArr.forEach((it, ind) => {
@@ -33,12 +32,14 @@ const AboutLangjie = () => {
         return resArr
     }
     return(
-        <div style={{ margin: isPc ? 40 : 20 }}>
-            <div><h3>公司简介</h3></div>
-            <div>
-                {ParagraphStyles.ContentStyles(renderParagraph())}
+        <FadeTransitions>
+            <div style={{ margin: isPc ? 40 : 20 }}>
+                <div><h3>公司简介</h3></div>
+                <div>
+                    {ParagraphStyles.ContentStyles(renderParagraph())}
+                </div>
             </div>
-        </div>
+        </FadeTransitions>
     )
 }
 

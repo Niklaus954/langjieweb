@@ -5,11 +5,9 @@ import apiAboutLangjie from '../../api/apiAboutLangjie';
 import CONFIG from '../../config';
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import FadeTransitions from "../Common/FadeTransitions";
-import InfiniteScroller from 'react-infinite-scroller';
 import { Link } from 'react-router-dom'
 import { hasHistory} from 'react-router'
-import { List } from 'antd-mobile';
-import ParagraphStyles from '../Common/ParagraphStyles';
+import { List, PullToRefresh, Icon, Button as MoButton } from 'antd-mobile';
 import { ButtonGroup, Button } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 const Item = List.Item;
@@ -19,8 +17,9 @@ const Brief = Item.Brief;
 const WxPublicPlat = ({history}) => {
     const isPc = useMediaQuery(CONFIG.minDeviceWidth);
     const [data, setData] = useState([]);
-    const [hasMore, setHasMore] = useState(true)
     const [page, setPage] = useState(1)
+    const [refreshing, setRefreshing] = useState(true)
+    const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
         fetch()
@@ -30,7 +29,6 @@ const WxPublicPlat = ({history}) => {
             page: page,
             pageSize: 20
         })
-        console.log(result)
         if(result.code === 200) setData(result.data)
     }
 
@@ -48,10 +46,6 @@ const WxPublicPlat = ({history}) => {
                 <Divider/>
             </div>)
         })
-        // resArr.push(<ButtonGroup color="primary" aria-label="outlined primary button group">
-        //     <Button>上一页</Button>
-        //     <Button>下一页</Button>
-        // </ButtonGroup>)
         return resArr
     }
 
@@ -60,6 +54,24 @@ const WxPublicPlat = ({history}) => {
         history.push({
             pathname: `/recommendReadingDetails?contentId=${e.id}`,
         })
+    }
+
+    const MobilePagination = () => {
+        const prevPage = (page) => {
+            setPage(page)
+            Fetch(page)
+        }
+        const nextPage = (page) => {
+            setPage(page)
+            Fetch(page)
+        }
+        return(
+            <div style={{display: "flex", justifyContent: "space-between", margin: "20px 40px"}}>
+                <MoButton disabled={ page <= 1 ? true : false} type="default" inline size="small" onClick={() => {prevPage(page-1)}}>上一页</MoButton>
+                <MoButton disabled={true} type="default" inline size="small">{page}</MoButton>
+                <MoButton type="default" inline size="small" onClick={() => {nextPage(page + 1)}}>下一页</MoButton>
+            </div>
+        )
     }
 
     const MobileView = () => {
@@ -87,7 +99,7 @@ const WxPublicPlat = ({history}) => {
         })
         if(result.code === 200) setData(result.data)
     }
-    const Pagination = () => {
+    const PcPagination = () => {
         const prevPage = (page) => {
             setPage(page)
             Fetch(page)
@@ -111,8 +123,11 @@ const WxPublicPlat = ({history}) => {
             <div>
                 { isPc ? <div>
                     <div >{PcView()}</div>
-                    <Pagination/>
-                </div> : MobileView() }
+                    <PcPagination/>
+                </div> : <div>
+                    <div>{MobileView()}</div>
+                    <MobilePagination/>
+                </div> }
             </div>
         </FadeTransitions>
     )

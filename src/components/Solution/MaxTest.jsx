@@ -1,13 +1,14 @@
 import React, { Component, useEffect, useState } from 'react';
 import apiSolution from '../../api/apiSolution';
-import ParagraphStyles from '../Common/ParagraphStyles'
-import Common from '../Common/Common'
+import ParagraphStyles from '../Common/ParagraphStyles';
+import Common from '../Common/Common';
+import FadeTransitions from '../Common/FadeTransitions';
+
 const MaxTest = () => {
     const [data, setData] = useState([])
     useEffect(() => {
         const fetch = async() => {
             const result = await apiSolution.fetchMaxTest()
-            console.log(result)
             if(result.code === 200) setData(result.data)
         }
         fetch()
@@ -33,10 +34,12 @@ const MaxTest = () => {
         return(<h3>{name}</h3>)
     }
     return(
-        <div>
-            <div>{title()}</div>
-            <div>{ParagraphStyles.ContentStyles(renderContent())}</div>
-        </div>
+        <FadeTransitions>
+            <div>
+                <div>{title()}</div>
+                <div>{ParagraphStyles.ContentStyles(renderContent())}</div>
+            </div>
+        </FadeTransitions>
     )
 }
 

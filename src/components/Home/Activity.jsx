@@ -7,7 +7,7 @@ import Divider from '@material-ui/core/Divider';
 import { Button, ButtonGroup } from '@material-ui/core';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import CONFIG from '../../config'
-import { List } from 'antd-mobile';
+import { List, Button as MoButton } from 'antd-mobile';
 const Item = List.Item;
 const Brief = Item.Brief;
 
@@ -17,10 +17,10 @@ const Activity = ({history}) => {
     var [page, setPage] = useState(1)
     const [hasMore, SetHasMore] = useState(true)
     useEffect(() => {
-        Fetch()
+        fetch()
     }, [])
 
-    const Fetch = async () => {
+    const fetch = async () => {
         const result = await apiAboutLangjie.fetchRecentActivity({
             page: page,
             pageSize: 20
@@ -28,7 +28,35 @@ const Activity = ({history}) => {
         if(result.code === 200) setData(result.data)
     }
 
+    const Fetch = async(page) => {
+        const result = await apiAboutLangjie.fetchRecommendReading({
+            page: page,
+            pageSize: 20
+        })
+        if(result.code === 200) setData(result.data)
+    }
     //Pc-View
+
+    const PcPagination = () => {
+        const prevPage = (page) => {
+            setPage(page)
+            Fetch(page)
+        }
+        const nextPage = (page) => {
+            setPage(page)
+            Fetch(page)
+        }
+        return(
+            <div>
+                <div style={{margin: isPc ? "20px 40px" : "20px", display: 'flex', justifyContent: 'flex-end'}}><ButtonGroup color="primary" aria-label="outlined primary button group">
+                    <Button disabled={page <= 1 ? true : false} onClick={() =>{prevPage(page-1)}}>上一页</Button>
+                    <Button disabled={true} >{page}</Button>
+                    <Button onClick={() => {nextPage(page+1)}}>下一页</Button>
+                </ButtonGroup></div>
+            </div>
+        )
+    }
+
     const PcView = () => {
         const resArr = []
         data.forEach((item, index) => {
@@ -46,6 +74,26 @@ const Activity = ({history}) => {
     }
 
     //Mobile-View
+
+    const MobilePagination = () => {
+        const prevPage = (page) => {
+            setPage(page)
+            Fetch(page)
+        }
+        const nextPage = (page) => {
+            setPage(page)
+            Fetch(page)
+        }
+        return(
+            <div style={{display: "flex", justifyContent: "space-between", margin: "20px 40px"}}>
+                <MoButton disabled={ page <= 1 ? true : false} type="default" inline size="small" onClick={() => {prevPage(page-1)}}>上一页</MoButton>
+                <MoButton disabled={true} type="default" inline size="small">{page}</MoButton>
+                <MoButton type="default" inline size="small" onClick={() => {nextPage(page + 1)}}>下一页</MoButton>
+            </div>
+        )
+    }
+
+
     const RenderMobileView = () => {
         if(data.length === 0) return;
         const resArr = []
@@ -66,41 +114,17 @@ const Activity = ({history}) => {
         return resArr
     }
 
-    const fetch = async(page) => {
-        const result = await apiAboutLangjie.fetchRecommendReading({
-            page: page,
-            pageSize: 20
-        })
-        if(result.code === 200) setData(result.data)
-    }
-    const Pagination = () => {
-        const prevPage = (page) => {
-            setPage(page)
-            fetch(page)
-        }
-        const nextPage = (page) => {
-            setPage(page)
-            fetch(page)
-        }
-        return(
-            <div>
-                <div style={{margin: isPc ? "20px 40px" : "20px", display: 'flex', justifyContent: 'flex-end'}}><ButtonGroup color="primary" aria-label="outlined primary button group">
-                    <Button disabled={page <= 1 ? true : false} onClick={() =>{prevPage(page-1)}}>上一页</Button>
-                    <Button disabled={true} >{page}</Button>
-                    <Button onClick={() => {nextPage(page+1)}}>下一页</Button>
-                </ButtonGroup></div>
-            </div>
-        )
-    }
-
     return(
         <FadeTransitions>
             <div>
                 {isPc ?
                     <div>
                         <div>{PcView()}</div>
-                        <div><Pagination/></div>
-                    </div> : RenderMobileView()}
+                        <div><PcPagination/></div>
+                    </div> : <div>
+                        <div>{RenderMobileView()}</div>
+                        <div><MobilePagination/></div>
+                    </div>}
             </div>
         </FadeTransitions>
     )

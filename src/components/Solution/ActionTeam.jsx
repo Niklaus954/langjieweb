@@ -1,14 +1,15 @@
 import React, { Component, useEffect, useState } from 'react';
 import apiSolution from '../../api/apiSolution';
-import ParagraphStyles from '../Common/ParagraphStyles';
-import Common from '../Common/Common';
+import ParagraphStyles from '../Common/ParagraphStyles'
+import Common from '../Common/Common'
 import FadeTransitions from '../Common/FadeTransitions'
 
-const Vir = () => {
+
+const ActionTeam = () => {
     const [data, setData] = useState([])
     useEffect(() => {
         const fetch = async() => {
-            const result = await apiSolution.fetchVir()
+            const result = await apiSolution.fetchActionTeam()
             if(result.code === 200) setData(result.data)
         }
         fetch()
@@ -18,14 +19,11 @@ const Vir = () => {
         const resArr = []
         if(data.length === 0) return
         const content = data[0].content
-        const transContent = Common.transToViewAll(content)
-        transContent.forEach((item, index) => {
-            if(item.type == 'text'){
-                item.valueArr.forEach((ite, ind) => {
-                    resArr.push(<div key={ index+''+ind }>{ite}</div>)
-                })
-            }
-        })
+        for(let key in content) {
+            Common.transToView(content[key]).valueArr.map((item, index) => {
+                resArr.push(<div key={index}>{item}</div>)
+            })
+        }
         return resArr
     }
     const title = () => {
@@ -43,4 +41,4 @@ const Vir = () => {
     )
 }
 
-export default Vir;
+export default ActionTeam;

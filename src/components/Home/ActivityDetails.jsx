@@ -26,16 +26,17 @@ const ActivityDetails = state => {
         transArr.forEach((item, index) => {
             if(item.type == 'text'){
                 item.valueArr.map((ite, ind) => {
-                    resArr.push(<div key={index+''+ind} style={{fontSize: isPc ? 16 : 14, textIndent: isPc ? 32 : 28, fontWeight: 400, lineHeight: 1.4, color: "#333"}}><p>{ite}</p></div>)
+                    resArr.push(<div key={index+'1'+ind} style={{fontSize: isPc ? 16 : 14, textIndent: isPc ? 32 : 28, fontWeight: 400, lineHeight: 1.4, color: "#333"}}><p>{ite}</p></div>)
                 })
             }else if(item.type == 'picture'){
                 const imgArr = []
                 item.valueArr.map((ite, ind) => {
                     imgArr.push(
-                        <div key={index+''+ind} style={{display: "flex", justifyContent: "center", flexDirection: "column", alignItems:'center'}}>
-                            <img src={CONFIG.url(`/img/gallery/${ite}`)} alt="" width={300} height="160vw"/>
-                            {/*<div style={{backgroundImage: `url(${CONFIG.url(`/img/gallery/${ite}`)})`, width: 160, height: 120, backgroundSize:'contain', backgroundRepeat: "no-repeat", backgroundPosition:"center"}}></div>*/}
-                            <div><p>{ite}</p></div>
+                        <div key={index+'2'+ind} style={{display: "flex", justifyContent: "center", flexDirection: "column", alignItems:'center'}}>
+                            {/*<img src={CONFIG.url(`/img/gallery/${ite}`)} alt="" width={300} height="160vw"/>*/}
+                            <div style={{backgroundImage: `url(${CONFIG.url(`/img/gallery/${ite}`)})`, width: isPc ? 450 : 300, height: isPc ? 350 : 220, backgroundSize:'contain', backgroundRepeat: "no-repeat", backgroundPosition:"center", cursor:"pointer" }} onClick={() => {window.open(CONFIG.url(`/img/gallery/${ite}`))}}></div>
+                            {isPc ? <div></div>: <div>(点击图片查看原图)</div>}
+                            <div><p>{ite.slice(0, ite.indexOf('.'))}</p></div>
                         </div>
                     )
                 })
@@ -43,7 +44,7 @@ const ActivityDetails = state => {
             }else if(item.type == 'video') {
                 item.valueArr.map((ite, ind) => {
                     resArr.push(
-                        <div key={index+''+ind}>
+                        <div key={index+'3'+ind}>
                             <video src={CONFIG.url(`/img/gallery/${ite}`)} controls={true} width="100%"></video>
                         </div>
                     )

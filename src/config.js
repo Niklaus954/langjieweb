@@ -5,8 +5,8 @@ import EventRecord from './components/Home/EventRecord'
 import ContactUs from './components/Home/ContactUs'
 import ToolBox from './components/Solution/ToolBox'
 import CtrlProducts from './components/Solution/CtrlProducts'
-import ServerTeam from './components/Solution/ServerTeam'
-import SecondryDevelop from './components/Solution/SecondryDevelop'
+import ActionTeam from './components/Solution/ActionTeam'
+import ActionCloud from './components/Solution/ActionCloud'
 import Dyna from './components/Solution/Dyna'
 import Vir from './components/Solution/Vir'
 import MaxTest from './components/Solution/MaxTest'
@@ -113,7 +113,7 @@ const CONFIG = {
                             supId: 6,
                             text: '安可迅工具箱',
                             type: 'solution',
-                            pathname: '/solution/toolBox',    
+                            pathname: '/solution/actionToolBox',
                             component: ToolBox,                        
                             auth: false,
                         },
@@ -122,8 +122,8 @@ const CONFIG = {
                             supId: 6,
                             text: '安可迅云',
                             type: 'solution',
-                            pathname: '/solution/serverTeam',
-                            component: ServerTeam,   
+                            pathname: '/solution/actionCloud',
+                            component: ActionCloud,   
                             auth: false,
                         },
                         {
@@ -131,8 +131,8 @@ const CONFIG = {
                             supId: 6,
                             text: '安可迅团队',
                             type: 'solution',
-                            pathname: '/solution/secondryDevelop',
-                            component: SecondryDevelop,   
+                            pathname: '/solution/actionTeam',
+                            component: ActionTeam,   
                             auth: false,
                         },
                     ],

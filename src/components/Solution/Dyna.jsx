@@ -1,13 +1,14 @@
 import React, { Component, useEffect, useState } from 'react';
 import apiSolution from '../../api/apiSolution';
 import ParagraphStyles from '../Common/ParagraphStyles'
-import Common from '../Common/Common'
+import Common from '../Common/Common';
+import FadeTransitions from '../Common/FadeTransitions'
+
 const Dyna = () => {
     const [data, setData] = useState([])
     useEffect(() => {
         const fetch = async() => {
             const result = await apiSolution.fetchDyna()
-            console.log(result)
             if(result.code === 200) setData(result.data)
         }
         fetch()
@@ -21,7 +22,7 @@ const Dyna = () => {
         transContent.forEach((item, index) => {
             if(item.type == 'text'){
                 item.valueArr.forEach((ite, ind) => {
-                    resArr.push(<div key={ind}>{ite}</div>)
+                    resArr.push(<div key={ index+''+ind }>{ite}</div>)
                 })
             }
         })
@@ -33,10 +34,12 @@ const Dyna = () => {
         return(<h3>{name}</h3>)
     }
     return(
-        <div>
-            <div>{title()}</div>
-            <div>{ParagraphStyles.ContentStyles(renderContent())}</div>
-        </div>
+        <FadeTransitions>
+            <div>
+                <div>{title()}</div>
+                <div>{ParagraphStyles.ContentStyles(renderContent())}</div>
+            </div>
+        </FadeTransitions>
     )
 }
 

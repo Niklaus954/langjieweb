@@ -33,9 +33,10 @@ const SuggestReadingDetails = state => {
                 item.valueArr.map((ite, ind) => {
                     imgArr.push(
                         <div key={index+''+ind} style={{display: "flex", justifyContent: "center", flexDirection: "column", alignItems:'center'}}>
-                            <img src={CONFIG.url(`/img/gallery/${ite}`)} alt="" width={300} height="160vw"/>
-                            {/*<div style={{backgroundImage: `url(${CONFIG.url(`/img/gallery/${ite}`)})`, width: 160, height: 120, backgroundSize:'contain', backgroundRepeat: "no-repeat", backgroundPosition:"center"}}></div>*/}
-                            <div><p>{ite}</p></div>
+                            {/*<img src={CONFIG.url(`/img/gallery/${ite}`)} alt="" width={300} height="160vw"/>*/}
+                            <div style={{backgroundImage: `url(${CONFIG.url(`/img/gallery/${ite}`)})`,width: isPc ? 450 : 300, height: isPc ? 350 : 220, backgroundSize:'contain', backgroundRepeat: "no-repeat", backgroundPosition:"center", cursor:"pointer"}} onClick={() => {window.open( CONFIG.url(`/img/gallery/${ite}`))}}></div>
+                            {isPc ? <div></div>: <div>(点击图片查看原图)</div>}
+                            <div><p>{ite.slice(0, ite.indexOf('.'))}</p></div>
                         </div>
                     )
                 })
