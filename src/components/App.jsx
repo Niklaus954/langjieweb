@@ -19,6 +19,10 @@ import LazyIndex from './lazy/LazyIndex'
 import LazyHome from './lazy/LazyHome'
 import ActivityDetails from './Home/ActivityDetails';
 import SuggestReadingDetails from './Home/suggestReadingDetails'
+import RepairInfo from './Service/RepairInfo'
+import ContractInfo from './Service/ContractInfo'
+import VirInfo from './Service/VirInfo'
+import Common from './Common/Common'
 
 const App = ({ selectedSideMenu }) => {
     const isPc = useMediaQuery(CONFIG.minDeviceWidth);
@@ -28,6 +32,7 @@ const App = ({ selectedSideMenu }) => {
         const headerHeight = document.getElementsByClassName('MuiPaper-root')[0].offsetHeight ? document.getElementsByClassName('MuiPaper-root')[0].offsetHeight : 0;
         const barHeight = window.innerHeight - headerHeight;
         setBarHeight(barHeight);
+        Common.refreshSideMenuAuth();
     }, [ window.innerHeight, barHeight ]);
 
     const getStyle = () => {
@@ -63,6 +68,9 @@ const App = ({ selectedSideMenu }) => {
                             <Route path="/service*" component={LazyHome} />
                             <Route path="/login" component={Login} />
                             <Route path="/checkLogin" component={CheckLogin} />
+                            <Route path="/repairInfo" component={RepairInfo}/>
+                            <Route path="/contractInfo" component={ContractInfo}/>
+                            <Route path="/virInfo" component={VirInfo}/>
                             <Redirect from='/' to='/index' />
                         </Switch>
                     </div>

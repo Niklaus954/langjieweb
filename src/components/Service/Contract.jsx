@@ -1,50 +1,88 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import ItemList from '../Common/ItemList';
 import apiService from '../../api/apiService';
+import CONFIG from '../../config';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import FadeTransitions from '../Common/FadeTransitions'
+import { List } from 'antd-mobile';
+import {
+    withRouter,
+} from 'react-router-dom'
+const Item = List.Item;
 
-class Contract extends Component {
-    constructor() {
-        super();
-        this.backSelectedItem = this.backSelectedItem.bind(this);
+const Contract = props => {
+    const [infoList, setInfoList] = useState([]);
+    const isPc = useMediaQuery(CONFIG.minDeviceWidth);
+
+    let delCol = [ 'id', 'snLackNum', 'isdel', 'album', 'madeInApp', 'update_time', 'update_person', 'insert_time', 'insert_person', 'complete'];
+
+    const backSelectedItem = async item => {
+        if (isPc) {
+            const result = await apiService.getContractInfo(item);
+            result.data.comment.forEach((items, index) => {
+                if (items.column_name === 'install') {
+                    items.val = items.val == 0 ? '否' : '是';
+                } else if (items.column_name === 'isFreeze') {
+                    if (items.val == 0) {
+                        delCol.push('freeze_reason');
+                        delCol.push('freeze_start_time');
+                        delCol.push('freeze_time');
+                    }
+                    items.val = items.val == 0 ? '否' : '是';
+                } else if (items.column_name === 'contract_state') {
+                    if (items.val != '关闭') {
+                        delCol.push('close_reason');
+                        delCol.push('close_time');
+                    }
+                }
+            });
+            delCol = [ ...new Set(delCol) ];
+            const renderList = result.data.comment.filter(items => delCol.indexOf(items.column_name) === -1);
+            setInfoList(renderList);
+        } else {
+            props.history.push({
+                pathname: '/contractInfo/' + item.contract_no, 
+            });
+        }
     }
 
-    state = {
-        selectedItem: [],
-    };
-
-    async backSelectedItem(item) {
-        const result = await apiService.fetchVirCardInfo(item);
-        this.setState({
-            selectedItem: result.data,
-        });
-    }
-
-    renderList(items) {
+    const renderList = items => {
         return (
             <div style={{ flex: 1, padding: 4, marginLeft: 4 }}>
-                <p>合同号：{items.serialNo}</p>
-                <p>型号：{items.model}</p>
+                <p>合同编号：{items.contract_no}</p>
+                <p>签订日期：{items.sign_time}</p>
             </div>
         )
     }
 
-    render() {
-        return (
+    return (
+        <FadeTransitions>
             <div style={{ width: '100%', height: '100%', display: 'flex' }}>
-                <div style={{ width: 400, overflow: 'auto' }}>
+                <div style={{ width: isPc ? 400 : '100%', overflow: 'auto' }}>
                     <ItemList
-                        fetchList={apiService.fetchVirCard}
+                        isPc={isPc}
+                        fetchList={apiService.fetchContract}
                         renderAlbum={false}
-                        backSelectedItem={this.backSelectedItem}
-                        renderList={this.renderList}
+                        renderList={renderList}
+                        backSelectedItem={backSelectedItem}
                     ></ItemList>
                 </div>
-                <div style={{ flex: 1 }}>
-
-                </div>
+                { isPc && <div style={{ flex: 1, overflow: 'auto' }} id="grid">
+                    <List renderHeader={() => '明细'}>
+                        {
+                            infoList.map((items, index) => <Item key={items.column_name + index} extra={items.val} wrap={true}>{items.column_comment}</Item>)
+                        }
+                    </List>
+                    {/* 正在开发中。。。 */}
+                    {/* <iframe
+                        title={'repair'}
+                        style={{border: 'none', width: '100%', height: '100%', overflow: 'auto'}}
+                        src={infoSrc}>
+                    </iframe> */}
+                </div> }
             </div>
-        )
-    }
+        </FadeTransitions>
+    )
 }
 
-export default Contract;
+export default withRouter(Contract);

@@ -1,12 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom'
 import CONFIG from '../../config'
+import apiLogin from '../../api/apiLogin'
 
 const keywordsPool = {
     // '10月27日': { weight: 1, href: '/home/eventRecord' },
     // '在济南舜和国际酒店隆重召开': { weight: 1, href: '/home/contactUs' },
     // '朗杰': { weight: 1, href: '/home/aboutLangjie' },
 };
+
+let SIDEMENUIDARR = [];
+let hasRefresh = false;
 
 const Common = {
     // 跳转到首页
@@ -68,12 +72,18 @@ const Common = {
         }
     },
 
+    refreshSideMenuAuth: async () => {
+        const result = await apiLogin.refreshSideMenuAuth();
+        SIDEMENUIDARR = result.data;
+    },
+
     // 客户服务菜单显示权限
     authSideMenuList: node => {
         if (node.auth) {
             if (Common.getAuthToken()) {
                 // 判断该身份是否拥有这些菜单
-                return true;
+                if (SIDEMENUIDARR.indexOf(node.id) !== -1) return true;
+                return false;
             } else {
                 return false;
             }

@@ -54,9 +54,18 @@ const checkWxCode = async params => {
     return result;
 }
 
+const refreshSideMenuAuth = async params => {
+    const result = await api({
+        url: '/open/refreshSideMenuAuth',
+        method: 'POST',
+    });
+    return result;
+}
+
 export default {
     fetchVerCode,
     checkVerCode,
     fetchMemberInfo,
     checkWxCode,
+    refreshSideMenuAuth,
 };
