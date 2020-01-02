@@ -11,24 +11,16 @@ import Dyna from './components/Solution/Dyna'
 import Vir from './components/Solution/Vir'
 import MaxTest from './components/Solution/MaxTest'
 import DynaTest from './components/Solution/DynaTest'
-import FlexuralCompression from './components/Solution/FlexuralCompression'
-import ElectronicUniversal from './components/Solution/ElectronicUniversal'
-import ElectroHydraulicUniversal from './components/Solution/ElectroHydraulicUniversal'
-import DynamicFatigue from './components/Solution/DynamicFatigue'
-import PressShear from './components/Solution/PressShear'
 import ActionPlat from './components/Solution/ActionPlat'
 import Application from './components/Solution/Application'
-import CompleteCtrlSystem from './components/Solution/CompleteCtrlSystem'
 import Cloud from './components/Service/Cloud'
 import VirCard from './components/Service/VirCard'
 import Repair from './components/Service/Repair'
 import Contract from './components/Service/Contract'
 
 const CONFIG = {
-    // url: pathname => 'http://192.168.50.231:8090' + pathname,
+    // url: pathname => 'http://192.168.50.230:8090' + pathname,
     url: pathname => 'https://www.langjie.com' + pathname,
-    //url: pathname => 'http://192.168.50.231:8090' + pathname,
-    //url: pathname => 'http://os.langjie.com:8090' + pathname,
     wxLoginAppid: 'wx1dbbbe221c943cd9',
     minDeviceWidthNum: 800,
     minDeviceWidth: '(min-width:800px)',
@@ -262,6 +254,15 @@ const CONFIG = {
             auth: false,
             subArr: [
                 {
+                    id: 22,
+                    supId: -3,
+                    text: '产品查询',
+                    pathname: '/service/virCard',  
+                    component: VirCard,                          
+                    auth: false,
+                    type: 'service',
+                },
+                {
                     id: 20,
                     supId: -3,
                     text: '维修查询',
@@ -271,23 +272,14 @@ const CONFIG = {
                     type: 'service',
                 },
                 {
-                    id: 22,
+                    id: 23,
                     supId: -3,
-                    text: '产品查询',
-                    pathname: '/service/virCard',  
-                    component: VirCard,                          
+                    text: '合同查询',
+                    pathname: '/service/contract',  
+                    component: Contract,                          
                     auth: true,
                     type: 'service',
                 },
-                // {
-                //     id: 23,
-                //     supId: -3,
-                //     text: '合同查询',
-                //     pathname: '/service/contract',  
-                //     component: Contract,                          
-                //     auth: true,
-                //     type: 'service',
-                // },
             ],
         },
     ]
