@@ -24,7 +24,6 @@ const CarouselArea = ({history}) => {
 					title: items[2],
 					content: items[3],
 					img: items[0],
-
 					href: items[4],
 				};
 			});
@@ -37,7 +36,8 @@ const CarouselArea = ({history}) => {
 		window.addEventListener('resize', resize);
 		return window.removeEventListener('resize', resize);
 	}, []);
-
+	//document.getElementsByClassName('slider-list')[0].style.height = 350
+    console.log(window.document.getElementsByClassName('slider-list')[0])
 	const resize = () => {
 		if(document.getElementsByClassName('slider-list')[0] !== undefined){
             document.getElementsByClassName('slider-list')[0].style.transform = 'translate3d(0px, 0px, 0px)';
@@ -128,6 +128,7 @@ const CarouselArea = ({history}) => {
 									</div>
 								</div>
 								<img src={CONFIG.url(`/img/${val.img}`)} alt={val.img} style={{ height: isPc ? 350 : 200, width: isPc ? "50%" : "" }} onLoad={() => { window.dispatchEvent(new Event('resize')) }} />
+								{/*<div style={{backgroundImage: `url(${CONFIG.url(`/img/${val.img}`)})`, height: isPc ? 350 : 200, width: isPc ? "50%" : "", backgroundPosition: "center", backgroundRepeat: "no-repeat", backgroundSize: "cover"}} onLoad={() => { window.dispatchEvent(new Event('resize')) }}></div>*/}
 							</div>
 						))}
 					</Carousel>
@@ -149,17 +150,19 @@ const CarouselArea = ({history}) => {
 					data.map((item, index) => {
 						if (showIndex === index) {
 							return (
-								<div key={index} style={{ border: "#065fa3 2px solid", width: 120, height: 80, margin: 20, cursor: 'pointer', overflow: 'hidden' }}>
+								<div key={index} style={{  width: 120, height: 84, margin: 20, cursor: 'pointer', overflow: 'hidden' }}>
 									<div>
-										<img src={CONFIG.url(`/img/${item.img}`)} alt="" width='100%' height="80px" />
+										<div style={{backgroundImage:`url(${CONFIG.url(`/img/${item.img}`)})`, height: 80, backgroundSize:"cover", backgroundRepeat: "no-repeat", backgroundPosition:"center", border: "#065fa3 2px solid",}}></div>
+										{/*<img src={CONFIG.url(`/img/${item.img}`)} alt="" width='100%' height="80px" />*/}
 									</div>
 								</div>
 							)
 						} else {
 							return (
-								<div id={index} key={index} style={{ border: "#ccc 2px solid", width: 120, height: 80, margin: 20, cursor: 'pointer', overflow: 'hidden' }} onClick={() => { navImgClick(index) }} onMouseEnter={() => {document.getElementById(index).style.border="#065fa3 2px solid"}} onMouseLeave={() => {document.getElementById(index).style.border="#ccc 2px solid"}}>
+								<div key={index} style={{ width: 120, height: 84, margin: 20, cursor: 'pointer', overflow: 'hidden' }}>
 									<div>
-										<img src={CONFIG.url(`/img/${item.img}`)} alt="" width='100%' height="80px" />
+										{/*<img src={CONFIG.url(`/img/${item.img}`)} alt="" width='100%' height="80px" />*/}
+                                        <div id={index} style={{backgroundImage:`url(${CONFIG.url(`/img/${item.img}`)})`,  height: 80, backgroundSize:"cover", backgroundRepeat: "no-repeat", backgroundPosition:"center", border: "#ccc 2px solid",}}  onClick={() => { navImgClick(index) }} onMouseEnter={() => {document.getElementById(index).style.border="#065fa3 2px solid"}} onMouseLeave={() => {document.getElementById(index).style.border="#ccc 2px solid"}}></div>
 									</div>
 								</div>
 							)

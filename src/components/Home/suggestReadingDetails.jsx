@@ -35,7 +35,7 @@ const SuggestReadingDetails = state => {
                         <div key={index+''+ind} style={{display: "flex", justifyContent: "center", flexDirection: "column", alignItems:'center'}}>
                             {/*<img src={CONFIG.url(`/img/gallery/${ite}`)} alt="" width={300} height="160vw"/>*/}
                             <div style={{backgroundImage: `url(${CONFIG.url(`/img/gallery/${ite}`)})`,width: isPc ? 450 : 300, height: isPc ? 350 : 220, backgroundSize:'contain', backgroundRepeat: "no-repeat", backgroundPosition:"center", cursor:"pointer"}} onClick={() => {window.open( CONFIG.url(`/img/gallery/${ite}`))}}></div>
-                            {isPc ? <div></div>: <div>(点击图片查看原图)</div>}
+                            {isPc ? <div></div>: <p>(点击图片查看原图)</p>}
                             <div><p>{ite.slice(0, ite.indexOf('.'))}</p></div>
                         </div>
                     )
@@ -44,8 +44,8 @@ const SuggestReadingDetails = state => {
             }else if(item.type == 'video') {
                 item.valueArr.map((ite, ind) => {
                     resArr.push(
-                        <div key={index+''+ind}>
-                            <video src={CONFIG.url(`/img/gallery/${ite}`)} controls={true} width="100%"></video>
+                        <div key={index+''+ind} style={{display: "flex", justifyContent: 'center'}}>
+                            <video src={CONFIG.url(`/img/gallery/${ite}`)} controls={true} width={isPc ? 500 : 300}></video>
                         </div>
                     )
                 })
