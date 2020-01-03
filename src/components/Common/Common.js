@@ -10,7 +10,6 @@ const keywordsPool = {
 };
 
 let SIDEMENUIDARR = [];
-let hasRefresh = false;
 
 const Common = {
     // 跳转到首页
@@ -43,19 +42,25 @@ const Common = {
     // 获取get的参数对象
     getLocationParamMapper: search => {
         const query = search.split('?')[1];
-        const param = query.split('&');
-        const hashMapper = {};
-        param.forEach((items, index) => {
-            const key = items.split('=')[0];
-            const value = items.split('=')[1];
-            hashMapper[key] = value;
-        });
-        return hashMapper;
+        try {
+            const param = query.split('&');
+            const hashMapper = {};
+            param.forEach((items, index) => {
+                const key = items.split('=')[0];
+                const value = items.split('=')[1];
+                hashMapper[key] = value;
+            });
+            return hashMapper;
+        } catch (e) {
+            return {
+                path: '/index',
+            };
+        }
     },
 
     // 登陆后的处理
     loginCallBack: async (result, params) => {
-        const { apiLogin, updateMemberInfo, history, redirectUrl } = params;
+        const { apiLogin, updateMemberInfo, history, redirectUrl, location } = params;
         if (result.code === 200) {
             const data = {
                 lj_token: result.data.lj_token,
@@ -69,12 +74,19 @@ const Common = {
             updateMemberInfo(memberInfo.data);
 
             history.push(redirectUrl);
+            Common.refreshSideMenuAuth(history, { pathname: redirectUrl });
         }
     },
 
-    refreshSideMenuAuth: async () => {
-        const result = await apiLogin.refreshSideMenuAuth();
-        SIDEMENUIDARR = result.data;
+    refreshSideMenuAuth: async (history, location) => {
+        if (Common.getAuthToken()) {
+            const result = await apiLogin.refreshSideMenuAuth();
+            SIDEMENUIDARR = result.data;
+            const path = location.pathname === '/' ? '/index' : location.pathname;
+            history.push({
+                pathname: path,
+            });
+        }
     },
 
     // 客户服务菜单显示权限

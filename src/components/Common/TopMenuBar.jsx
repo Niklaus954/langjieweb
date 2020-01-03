@@ -28,6 +28,8 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
+let refreshSideMenuAuthCount = 0;
+
 const TopMenuBar = ({memberInfo, selectedSideMenu, updateSideMenuList, updateSelectedSideMenu, history, sideMenuBar, showSideMenuBar, updateSelectedSideName, selectedSideName, selectedMenu, updateSideBarExpand, updateShowRightSideBar, location}) => {
     const [showPopperList, setShowPopperList] = useState(false);
     const [presentPopper, setPresentPopper] = useState('');
@@ -37,6 +39,12 @@ const TopMenuBar = ({memberInfo, selectedSideMenu, updateSideMenuList, updateSel
     const isIE = !!window.ActiveXObject || "ActiveXObject" in window;
 
     const classes = useStyles();
+
+    // 客户服务边栏显示
+    if (refreshSideMenuAuthCount === 0) {
+        refreshSideMenuAuthCount++;
+        Common.refreshSideMenuAuth(history, location);
+    }
 
     useEffect(() => {
         if (location.pathname === '/index') updateSelectedSideName(CONFIG.defaultIndexTitle);
