@@ -36,8 +36,7 @@ const CarouselArea = ({history}) => {
 		window.addEventListener('resize', resize);
 		return window.removeEventListener('resize', resize);
 	}, []);
-	//document.getElementsByClassName('slider-list')[0].style.height = 350
-    console.log(window.document.getElementsByClassName('slider-list')[0])
+
 	const resize = () => {
 		if(document.getElementsByClassName('slider-list')[0] !== undefined){
             document.getElementsByClassName('slider-list')[0].style.transform = 'translate3d(0px, 0px, 0px)';
@@ -127,8 +126,8 @@ const CarouselArea = ({history}) => {
 										<Button variant="outlined" color="inherit" style={{ color: "#fff" }} onClick={() => linkToInfo(val.href)}>查看产品详情</Button>
 									</div>
 								</div>
-								<img src={CONFIG.url(`/img/${val.img}`)} alt={val.img} style={{ height: isPc ? 350 : 200, width: isPc ? "50%" : "" }} onLoad={() => { window.dispatchEvent(new Event('resize')) }} />
-								{/*<div style={{backgroundImage: `url(${CONFIG.url(`/img/${val.img}`)})`, height: isPc ? 350 : 200, width: isPc ? "50%" : "", backgroundPosition: "center", backgroundRepeat: "no-repeat", backgroundSize: "cover"}} onLoad={() => { window.dispatchEvent(new Event('resize')) }}></div>*/}
+                                <img src={CONFIG.url(`/img/${val.img}`)} alt={val.img} style={{ height: isPc ? 350 : 200, width: isPc ? "50%" : "" }} onLoad={() => { window.dispatchEvent(new Event('resize')) }} />
+                                {/*<div style={{backgroundImage: `url(${CONFIG.url(`/img/${val.img}`)})`, height: isPc ? 350 : 200, width: isPc ? "50%" : "", backgroundPosition: "center", backgroundRepeat: "no-repeat", backgroundSize: "cover"}}></div>*/}
 							</div>
 						))}
 					</Carousel>
