@@ -40,6 +40,7 @@ const CarouselArea = ({history}) => {
 	const resize = () => {
 		if(document.getElementsByClassName('slider-list')[0] !== undefined){
             document.getElementsByClassName('slider-list')[0].style.transform = 'translate3d(0px, 0px, 0px)';
+            document.getElementsByClassName('slider-list')[0].style.height = '350px'
 		}
 		setShowIndex(0);
 		setPrevIndex(0);
