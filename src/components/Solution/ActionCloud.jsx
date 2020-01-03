@@ -34,8 +34,8 @@ const ActionTeam = () => {
     return(
         <FadeTransitions>
             <div>
-                <div>{title()}</div>
-                <div>{ParagraphStyles.ContentStyles(renderContent())}</div>
+                <div>{ParagraphStyles.RenderTitle(data)}</div>
+                <div>{ParagraphStyles.ContentStyles(ParagraphStyles.CommonContentRender(data))}</div>
             </div>
         </FadeTransitions>
     )
