@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import CONFIG from '../../config'
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { Carousel } from 'antd-mobile'
 import Common from "./Common";
 
 const ContentStyles = (props) => {
@@ -55,10 +56,35 @@ const RenderTitle = (data) => {
     return(<h3>{name}</h3>)
 }
 
+//客户服务走马灯图片展示
+
+const RenderServiceCarousel = (album) => {
+    if(album.length === 0) return
+    const albumArr = album[0].val.split(',')
+    return(
+        <div>
+            <div>
+                <Carousel
+                    autoplay={true}
+                    dots={true}
+                    infinite={true}
+
+                >
+                    {albumArr.map((item, index) => (
+                        <div key={index}><div style={{backgroundImage: `url(${CONFIG.url(`/img${item}`)})`, backgroundPosition: "center", backgroundSize: "cover", backgroundRepeat: "no-repeat", height: 170, width: "80%", margin: "20px 40px", cursor: "pointer"}} onClick={() =>{window.open(CONFIG.url(`/img${item}`))}}></div></div>
+                    ))}
+                </Carousel>
+            </div>
+            <div><p style={{textAlign: "center"}}>（点击图片查看原图）</p></div>
+        </div>
+    )
+}
+
 
 
 export default {
     ContentStyles: ContentStyles,
     CommonContentRender: CommonContentRender,
-    RenderTitle: RenderTitle
+    RenderTitle: RenderTitle,
+    RenderServiceCarousel: RenderServiceCarousel
 }

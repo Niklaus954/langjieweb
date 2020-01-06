@@ -18,6 +18,7 @@ const ContractInfo = props => {
 
     const fetch = async contract_no => {
         const result = await apiService.getContractInfo({contract_no});
+        console.log(result)
         let renderList = result.data.comment instanceof Array ? result.data.comment : [];
         renderList.forEach((items, index) => {
             if (items.column_name === 'install') {
