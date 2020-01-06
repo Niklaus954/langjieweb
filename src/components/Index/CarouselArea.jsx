@@ -254,7 +254,7 @@ const  CarouselArea = ({history}) => {
 		data.forEach((item, index) => {
 			resArr.push(<div key={index}>
 				<div style={{ display: "flex", flexDirection: isPc ? "row" : "column-reverse", margin: "auto" }}>
-                    <div style={{ width: isPc ? "50%" : "100%", height: isPc ? 350 : 330, maxHeight: 350 }}>
+                    <div style={{ width: isPc ? "50%" : "100%", height: isPc ? 350 : 240, maxHeight: 350 }}>
                         <div className="" style={{ height: "15%", borderBottom: "#888 1px solid", margin: "0 40px 0 40px" }}>
                             <h3 style={{ color: "#fff" }}>{item.tag}</h3>
                         </div>
