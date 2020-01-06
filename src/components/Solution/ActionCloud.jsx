@@ -15,22 +15,6 @@ const ActionTeam = () => {
         fetch()
     },[])
 
-    const renderContent = () => {
-        const resArr = []
-        if(data.length === 0) return
-        const content = data[0].content
-        for(let key in content) {
-            Common.transToView(content[key]).valueArr.map((item, index) => {
-                resArr.push(<div key={index}>{item}</div>)
-            })
-        }
-        return resArr
-    }
-    const title = () => {
-        if(data.length === 0) return
-        const name = data[0].name
-        return(<h3>{name}</h3>)
-    }
     return(
         <FadeTransitions>
             <div>
