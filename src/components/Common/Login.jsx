@@ -102,6 +102,7 @@ const Login = ({ location, history, updateSelectedSideName, updateMemberInfo }) 
             updateMemberInfo,
             history,
             redirectUrl,
+            location,
         });
     }
 

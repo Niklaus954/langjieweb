@@ -29,6 +29,7 @@ const CheckLogin = ({ location, history, updateMemberInfo }) => {
                 updateMemberInfo,
                 history,
                 redirectUrl,
+                location,
             });
         }
         fetch();

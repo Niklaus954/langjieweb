@@ -259,7 +259,7 @@ const CONFIG = {
                     text: '产品查询',
                     pathname: '/service/virCard',  
                     component: VirCard,                          
-                    auth: false,
+                    auth: true,
                     type: 'service',
                 },
                 {
