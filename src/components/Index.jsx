@@ -4,6 +4,7 @@ import CarouselArea from './Index/CarouselArea.jsx'
 import HotInfoAction from './Index/HotInfoAction.jsx';
 import SuggestReading from './Index/SuggestReading.jsx';
 import Common from './Common/Common';
+import FadeTransitions from "./Common/FadeTransitions";
 
 const Index = props => {
     useEffect(() => {
@@ -12,19 +13,21 @@ const Index = props => {
     }, [ props ]);
 
     return (
-        <div style={{margin: 'auto', width: '100%'}}>
-            <div style={{width: '100%', margin: 'auto'}}>
-                <div >
-                    <CarouselArea />
-                </div>
-                <div style={{width: '100%'}}>
-                    <HotInfoAction/>
-                </div>
-                <div style={{width: "100%", background: "#fff"}}>
-                    <SuggestReading />
+        <FadeTransitions>
+            <div style={{margin: 'auto', width: '100%'}}>
+                <div style={{width: '100%', margin: 'auto'}}>
+                    <div >
+                        <CarouselArea />
+                    </div>
+                    <div style={{width: '100%'}}>
+                        <HotInfoAction/>
+                    </div>
+                    <div style={{width: "100%", background: "#fff"}}>
+                        <SuggestReading />
+                    </div>
                 </div>
             </div>
-        </div>
+        </FadeTransitions>
     )
 }
 
