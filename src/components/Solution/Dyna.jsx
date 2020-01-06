@@ -14,30 +14,11 @@ const Dyna = () => {
         fetch()
     },[])
 
-    const renderContent = () => {
-        const resArr = []
-        if(data.length === 0) return
-        const content = data[0].content
-        const transContent = Common.transToViewAll(content)
-        transContent.forEach((item, index) => {
-            if(item.type == 'text'){
-                item.valueArr.forEach((ite, ind) => {
-                    resArr.push(<div key={ index+''+ind }>{ite}</div>)
-                })
-            }
-        })
-        return resArr
-    }
-    const title = () => {
-        if(data.length === 0) return
-        const name = data[0].name
-        return(<h3>{name}</h3>)
-    }
     return(
         <FadeTransitions>
             <div>
-                <div>{title()}</div>
-                <div>{ParagraphStyles.ContentStyles(renderContent())}</div>
+                <div>{ParagraphStyles.RenderTitle(data)}</div>
+                <div>{ParagraphStyles.ContentStyles(ParagraphStyles.CommonContentRender(data))}</div>
             </div>
         </FadeTransitions>
     )

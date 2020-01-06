@@ -7,7 +7,7 @@ import Divider from '@material-ui/core/Divider';
 import { Button, ButtonGroup } from '@material-ui/core';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import CONFIG from '../../config'
-import { List, Button as MoButton } from 'antd-mobile';
+import { List, Button as MoButton, Toast } from 'antd-mobile';
 const Item = List.Item;
 const Brief = Item.Brief;
 
@@ -15,7 +15,6 @@ const Activity = ({history}) => {
     const isPc = useMediaQuery(CONFIG.minDeviceWidth);
     const [data, setData] = useState([])
     var [page, setPage] = useState(1)
-    const [hasMore, SetHasMore] = useState(true)
     useEffect(() => {
         fetch()
     }, [])
@@ -29,11 +28,12 @@ const Activity = ({history}) => {
     }
 
     const Fetch = async(page) => {
-        const result = await apiAboutLangjie.fetchRecommendReading({
+        const result = await apiAboutLangjie.fetchRecentActivity({
             page: page,
             pageSize: 20
         })
         if(result.code === 200) setData(result.data)
+        if(result.data.length === 0) Toast.info('暂无更多活动！！！',2)
     }
     //Pc-View
 
@@ -58,6 +58,7 @@ const Activity = ({history}) => {
     }
 
     const PcView = () => {
+        if(data.length === 0) return
         const resArr = []
         data.forEach((item, index) => {
             resArr.push(<div key={index}>
@@ -95,7 +96,7 @@ const Activity = ({history}) => {
 
 
     const RenderMobileView = () => {
-        if(data.length === 0) return;
+        if(data.length === 0) return ;
         const resArr = []
         data.forEach((item, index) => {
             resArr.push(<div key={index}>

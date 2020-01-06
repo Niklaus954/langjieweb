@@ -11,23 +11,13 @@ const CtrlProducts = () => {
             if(result.code === 200) setData(result.data)
         })
     },[])
-    const Render = () => {
-        if(data.length === 0) return
-        const resArr = []
-        const title = data[0].name;
-        const content = data[0].content;
-        resArr.push(<div key={title}><h3>{title}</h3></div>)
-        for(let key in content){
-            Common.transToView(content[key]).valueArr.forEach((item, index) => {
-                resArr.push(<div key={index}>{item}</div>)
-            })
-        }
-        return resArr
-    }
     return(
-        <div>
-            {ParagraphStyles.ContentStyles(Render())}
-        </div>
+        <FadeTransitions>
+            <div>
+                <div>{ParagraphStyles.RenderTitle(data)}</div>
+                <div>{ParagraphStyles.ContentStyles(ParagraphStyles.CommonContentRender(data))}</div>
+            </div>
+        </FadeTransitions>
     )
 }
 

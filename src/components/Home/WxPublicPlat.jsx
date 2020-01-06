@@ -7,7 +7,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery'
 import FadeTransitions from "../Common/FadeTransitions";
 import { Link } from 'react-router-dom'
 import { hasHistory} from 'react-router'
-import { List, PullToRefresh, Icon, Button as MoButton } from 'antd-mobile';
+import { List, Toast, Button as MoButton } from 'antd-mobile';
 import { ButtonGroup, Button } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 const Item = List.Item;
@@ -18,8 +18,6 @@ const WxPublicPlat = ({history}) => {
     const isPc = useMediaQuery(CONFIG.minDeviceWidth);
     const [data, setData] = useState([]);
     const [page, setPage] = useState(1)
-    const [refreshing, setRefreshing] = useState(true)
-    const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
         fetch()
@@ -41,7 +39,7 @@ const WxPublicPlat = ({history}) => {
                     <Link style={{color: "#3f51b5"}} to={{pathname: `/recommendReadingDetails?contentId=${item.id}`}}><h3>{item.title}</h3></Link>
                 </div>
                 <div className="content">
-                    <p>{item.content['段落1']}</p>
+                    <p>{item.content['段落1']}...</p>
                 </div>
                 <Divider/>
             </div>)
@@ -50,7 +48,6 @@ const WxPublicPlat = ({history}) => {
     }
 
     const DirectSuggestReading = (e) => {
-        console.log(e)
         history.push({
             pathname: `/recommendReadingDetails?contentId=${e.id}`,
         })
@@ -98,6 +95,7 @@ const WxPublicPlat = ({history}) => {
             pageSize: 20
         })
         if(result.code === 200) setData(result.data)
+        if(result.data.length === 0) Toast.info('暂无更多文章！！！', 2)
     }
     const PcPagination = () => {
         const prevPage = (page) => {

@@ -4,7 +4,7 @@ import  ParagraphStyles from '../Common/ParagraphStyles';
 import CONFIG from '../../config';
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import Common from '../Common/Common';
-import FadeTransitions from '../Common/FadeTransitions'
+import FadeTransitions from '../Common/FadeTransitions';
 
 const AboutLangjie = () => {
     const isPc = useMediaQuery(CONFIG.minDeviceWidth)
