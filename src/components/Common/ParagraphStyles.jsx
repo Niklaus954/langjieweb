@@ -62,16 +62,26 @@ const RenderServiceCarousel = (album) => {
     let albumArr = []
     let type
     if(album.length === 0) return;
+    console.log()
+    const val = window.location.hash.indexOf('contract')
     const typeArr = ['contract'];
     try {
         if(album[0].val == ""){
-            albumArr = ['/controller_system.png']
+            if(val === -1){
+                albumArr = ['/no_img.png']
+            }else {
+                albumArr = ['/controller_system.png']
+            }
         }else {
             albumArr = album[0].val.split(',');
         }
         type = album[0].val.indexOf(typeArr[0]);
     }catch (e) {
-        albumArr = ['/controller_system.png']
+        if(val === -1){
+            albumArr = ['/no_img.png']
+        }else {
+            albumArr = ['/controller_system.png']
+        }
     }
     return(
         <div>
