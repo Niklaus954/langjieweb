@@ -64,10 +64,14 @@ const RenderServiceCarousel = (album) => {
     if(album.length === 0) return;
     const typeArr = ['contract'];
     try {
-        albumArr = album[0].val.split(',');
+        if(album[0].val == ""){
+            albumArr = ['/controller_system.png']
+        }else {
+            albumArr = album[0].val.split(',');
+        }
         type = album[0].val.indexOf(typeArr[0]);
     }catch (e) {
-        albumArr = ['/no_img_small.png']
+        albumArr = ['/controller_system.png']
     }
     return(
         <div>
