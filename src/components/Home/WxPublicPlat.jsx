@@ -36,7 +36,7 @@ const WxPublicPlat = ({history}) => {
         data.forEach((item, index) => {
             resArr.push(<div key={index}>
                 <div className="title">
-                    <Link style={{color: "#3f51b5"}} to={{pathname: `/recommendReadingDetails?contentId=${item.id}`}}><h3>{item.title}</h3></Link>
+                    <Link style={{color: "#3f51b5"}} to={{pathname: `/readingContent/${item.id}`}}><h3>{item.title}</h3></Link>
                 </div>
                 <div className="content">
                     <p>{item.content['段落1']}...</p>
@@ -47,9 +47,9 @@ const WxPublicPlat = ({history}) => {
         return resArr
     }
 
-    const DirectSuggestReading = (e) => {
+    const DirectSuggestReadingContent = (e) => {
         history.push({
-            pathname: `/recommendReadingDetails?contentId=${e.id}`,
+            pathname: `/readingContent/${e.id}`,
         })
     }
 
@@ -79,7 +79,7 @@ const WxPublicPlat = ({history}) => {
                     <Item
                         arrow="horizontal"
                         multipleLine
-                        onClick={() => { DirectSuggestReading(item)}}
+                        onClick={() => { DirectSuggestReadingContent(item)}}
                         wrap={true}
                     >
                        {item.title}<Brief>{item.content['段落1']}</Brief>

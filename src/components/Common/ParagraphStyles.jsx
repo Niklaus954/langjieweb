@@ -30,9 +30,9 @@ const CommonContentRender = (data) => {
                 imgArr.push(
                     <div key={index+'2'+ind} style={{display: "flex", justifyContent: "center", flexDirection: "column", alignItems:'center'}}>
                         {/*<img src={CONFIG.url(`/img/gallery/${ite}`)} alt="" width={300} height="160vw"/>*/}
-                        <div style={{backgroundImage: `url(${CONFIG.url(`/img/gallery/${ite}`)})`, width: isPc ? 450 : 300, height: isPc ? 350 : 220, backgroundSize:'contain', backgroundRepeat: "no-repeat", backgroundPosition:"center", cursor:"pointer" }} onClick={() => {window.open(CONFIG.url(`/img/gallery/${ite}`))}}></div>
-                        {isPc ? '': <p>(点击图片查看原图)</p>}
-                        <div><p>{ite.slice(0, ite.indexOf('.'))}</p></div>
+                        <div style={{backgroundImage: `url(${CONFIG.url(`/img/gallery/${ite}`)})`, width: isPc ? (item.valueArr.length > 1 ? 300 : 450)  : 300, height: isPc ? (item.valueArr.length > 1 ? 220 : 300) : 220, backgroundSize:'contain', backgroundRepeat: "no-repeat", backgroundPosition:"center", cursor:"pointer" }} onClick={() => {window.open(CONFIG.url(`/img/gallery/${ite}`))}}></div>
+                        {/*{isPc ? <div></div>: <div><p>(点击图片查看原图)</p></div>}*/}
+                        <div style={{textIndent: 0}}><p>{ite.slice(0, ite.indexOf('.'))}</p></div>
                     </div>
                 )
             })
@@ -59,19 +59,26 @@ const RenderTitle = (data) => {
 //客户服务走马灯图片展示
 
 const RenderServiceCarousel = (album) => {
-    if(album.length === 0) return
-    const albumArr = album[0].val.split(',')
+    let albumArr = []
+    let type
+    if(album.length === 0) return;
+    const typeArr = ['contract'];
+    try {
+        albumArr = album[0].val.split(',');
+        type = album[0].val.indexOf(typeArr[0]);
+    }catch (e) {
+        albumArr = ['/no_img_small.png']
+    }
     return(
         <div>
             <div>
                 <Carousel
                     autoplay={true}
-                    dots={true}
+                    dots={type === -1 ? true : false }
                     infinite={true}
-
                 >
                     {albumArr.map((item, index) => (
-                        <div key={index}><div style={{backgroundImage: `url(${CONFIG.url(`/img${item}`)})`, backgroundPosition: "center", backgroundSize: "cover", backgroundRepeat: "no-repeat", height: 170, width: "80%", margin: "20px 40px", cursor: "pointer"}} onClick={() =>{window.open(CONFIG.url(`/img${item}`))}}></div></div>
+                        <div key={index} style={{margin: 20}}><div style={{backgroundImage: `url(${CONFIG.url(`/img${item}`)})`, backgroundPosition: "center", backgroundSize: type === -1 ? "cover" : "contain", backgroundRepeat: "no-repeat", height:  200, width: "80%", margin: "auto", cursor: "pointer"}} onClick={() =>{window.open(CONFIG.url(`/img${item}`))}}></div></div>
                     ))}
                 </Carousel>
             </div>

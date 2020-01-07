@@ -5,10 +5,13 @@ import {
 import apiService from '../../api/apiService';
 import FadeTransitions from '../Common/FadeTransitions'
 import { List } from 'antd-mobile';
+import ParagraphStyles from "../Common/ParagraphStyles";
+import { Paper } from "@material-ui/core"
 const Item = List.Item;
 
 const ContractInfo = props => {
     const [infoList, setInfoList] = useState([]);
+    const [album, setAlbum] = useState([])
     useEffect(() => {
         const contract_no = props.location.pathname.split('/contractInfo/')[1];
         fetch(contract_no);
@@ -18,7 +21,8 @@ const ContractInfo = props => {
 
     const fetch = async contract_no => {
         const result = await apiService.getContractInfo({contract_no});
-        console.log(result)
+        const resAlbum = result.data.comment.filter(item => item.column_name === "album");
+        setAlbum(resAlbum)
         let renderList = result.data.comment instanceof Array ? result.data.comment : [];
         renderList.forEach((items, index) => {
             if (items.column_name === 'install') {
@@ -44,13 +48,18 @@ const ContractInfo = props => {
 
     return (
         <FadeTransitions>
-            <div style={{ width: '100%', height: '100%', display: 'flex', borderRight: '1px solid #eee' }}>
+            <div style={{ width: '96%', height: '100%', display: 'flex', borderRight: '1px solid #eee', margin: "auto" }}>
                 <div style={{ flex: 1, overflow: 'auto' }} id="grid">
-                    <List renderHeader={() => '明细'}>
-                        {
-                            infoList.map((items, index) => <Item key={items.column_name + index} extra={items.val} wrap={true}>{items.column_comment}</Item>)
-                        }
-                    </List>
+                    <div>{ParagraphStyles.RenderServiceCarousel(album)}</div>
+                    <div style={{ margin: 5}}>
+                        <Paper elevation={3}>
+                            <List renderHeader={() => '明细'}>
+                                {
+                                    infoList.map((items, index) => <Item key={items.column_name + index} extra={items.val} wrap={true}>{items.column_comment}</Item>)
+                                }
+                            </List>
+                        </Paper>
+                    </div>
                 </div>
             </div>
         </FadeTransitions>

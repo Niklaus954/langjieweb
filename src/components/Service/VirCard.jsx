@@ -8,6 +8,7 @@ import {
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import FadeTransitions from '../Common/FadeTransitions'
 import { List } from 'antd-mobile';
+import { Paper } from '@material-ui/core'
 const Item = List.Item;
 
 const VirCard = props => {
@@ -71,7 +72,7 @@ const VirCard = props => {
 
     return (
         <FadeTransitions>
-            <div style={{ width: '100%', height: '100%', display: 'flex' }}>
+            <div style={{ width: '96%', height: '100%', display: 'flex', margin: "auto" }}>
                 <div style={{ width: isPc ? 400 : '100%', overflow: 'auto' }}>
                     <ItemList
                         isPc={isPc}
@@ -82,11 +83,15 @@ const VirCard = props => {
                     ></ItemList>
                 </div>
                 { isPc && <div style={{ flex: 1, overflow: 'auto' }} id="grid">
-                    <List renderHeader={() => '明细'}>
-                        {
-                            infoList.map((items, index) => <Item key={items.column_name + index} extra={items.val} wrap={true}>{items.column_comment}</Item>)
-                        }
-                    </List>
+                    <div style={{margin: 5}}>
+                        <Paper elevation={3}>
+                            <List renderHeader={() => '明细'}>
+                                {
+                                    infoList.map((items, index) => <Item key={items.column_name + index} extra={items.val} wrap={true}>{items.column_comment}</Item>)
+                                }
+                            </List>
+                        </Paper>
+                    </div>
                 </div> }
             </div>
         </FadeTransitions>

@@ -63,7 +63,7 @@ const Activity = ({history}) => {
         data.forEach((item, index) => {
             resArr.push(<div key={index}>
                 <div className="title">
-                    <Link style={{color: "#3f51b5"}} to={`/activityDetails?activityId=${item.id}`}><h3>{item.title}</h3></Link>
+                    <Link style={{color: "#3f51b5"}} to={`/activityContent/${item.id}`}><h3>{item.title}</h3></Link>
                 </div>
                 <div className="content">
                     <p>{item.content['段落1']}</p>
@@ -104,7 +104,7 @@ const Activity = ({history}) => {
                     <Item
                         arrow="horizontal"
                         multipleLine
-                        onClick={() => {history.push(`/activityDetails?activityId=${item.id}`)}}
+                        onClick={() => {history.push(`/activityContent/${item.id}`)}}
                         wrap={true}
                     >
                         {item.title}<Brief>{item.content['段落1']}</Brief>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
+import { ListView } from 'antd-mobile'
 import '../../public/css/hoverStyle.css';
 
 class ItemList extends Component {
@@ -49,10 +50,11 @@ class ItemList extends Component {
     itemSelected(item, index) {
         const len = document.getElementsByClassName('hoverItem').length;
         for (let i = 0; i < len; i++) {
-            document.getElementsByClassName('hoverItem')[i].style.background = '#f5f5f9';
+            document.getElementsByClassName('hoverItem')[i].style.background = '#fff';
         }
         try {
-            document.getElementsByClassName('hoverItem')[index].style.background = '#eee';
+            document.getElementsByClassName('hoverItem')[index].style.background = '#f5f5f9';
+           // document.getElementsByClassName("hoverItem")[index].style.background = "#eee"
             this.props.backSelectedItem(item);
         } catch (e) {
             
@@ -72,16 +74,23 @@ class ItemList extends Component {
                 useWindow={false}
                 threshold={1}
             >
-                {
-                    list.map((items, index) => (
-                        <div key={items.id + '_' + index} className={"hoverItem"} onClick={() => this.itemSelected(items, index)}>
-                            <div style={{ display: 'flex', padding: 8 }}>
-                                { renderAlbum && <div style={{ width: 112, backgroundImage: 'url(' + items.album + ')', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundSize: 'contain' }}></div> }
-                                { this.props.renderList(items) }
+                <div style={{background: "#eee", color: "#333"}}>
+                    {
+                        list.map((items, index) => (
+                            <div key={items.id + '_' + index} >
+                                <div style={{ display: 'flex', padding: 8, marginBottom: 4, background: "#fff" }} className={"hoverItem"}
+                                   //  onMouseEnter={() =>{document.getElementsByClassName("hoverItem")[index].style.background = "#f5f5f9"}}
+                                   //  onMouseLeave={() => {document.getElementsByClassName("hoverItem")[index].style.background = "#fff"}}
+                                   //  onMouseDown={() => {this.itemSelected(items, index)}}
+                                     onClick={() => this.itemSelected(items, index)}
+                                >
+                                    { renderAlbum && <div style={{ width: 112, backgroundImage: 'url(' + items.album + ')', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundSize: 'contain' }}></div> }
+                                    { this.props.renderList(items) }
+                                </div>
                             </div>
-                        </div>
-                    ))
-                }
+                        ))
+                    }
+                </div>
             </InfiniteScroll>
         )
     }

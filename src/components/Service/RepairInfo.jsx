@@ -4,7 +4,8 @@ import {
 } from 'react-router-dom'
 import apiService from '../../api/apiService';
 import FadeTransitions from '../Common/FadeTransitions'
-import { List, Carousel } from 'antd-mobile';
+import { List } from 'antd-mobile';
+import { Paper } from '@material-ui/core'
 import CONFIG from '../../config'
 import ParagraphStyles from "../Common/ParagraphStyles";
 const Item = List.Item;
@@ -32,13 +33,17 @@ const RepairInfo = props => {
         <FadeTransitions>
             <div style={{width: '100%'}}>
                 <div>{ParagraphStyles.RenderServiceCarousel(album)}</div>
-                <div style={{ width: '93%', display: 'flex', borderRight: '1px solid #eee', margin: "auto" }}>
+                <div style={{ width: '96%', display: 'flex', borderRight: '1px solid #eee', margin: "auto" }}>
                     <div style={{ flex: 1, overflow: 'auto' }} id="grid">
-                        <List renderHeader={() => '明细'}>
-                            {
-                                infoList.map((items, index) => <Item key={items.column_name + index} extra={items.val} wrap={true}>{items.column_comment}</Item>)
-                            }
-                        </List>
+                        <div style={{margin: 5}}>
+                            <Paper elevation={3}>
+                                <List renderHeader={() => '明细'}>
+                                    {
+                                        infoList.map((items, index) => <Item key={items.column_name + index} extra={items.val} wrap={true}>{items.column_comment}</Item>)
+                                    }
+                                </List>
+                            </Paper>
+                        </div>
                     </div>
                 </div>
             </div>

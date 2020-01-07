@@ -7,7 +7,8 @@ import {
 } from 'react-router-dom'
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import FadeTransitions from '../Common/FadeTransitions'
-import { List } from 'antd-mobile';
+import { List, ListView } from 'antd-mobile';
+import { Paper } from '@material-ui/core'
 import ParagraphStyles from "../Common/ParagraphStyles";
 const Item = List.Item;
 
@@ -56,11 +57,15 @@ const Repair = props => {
                 </div>
                 { isPc &&  <div style={{ flex: 1, overflow: 'auto' }} id="grid">
                     <div style={{width: "80%", margin: 'auto'}}>{ParagraphStyles.RenderServiceCarousel(album)}</div>
-                    <List renderHeader={() => '明细'}>
-                        {
-                            infoList.map((items, index) => <Item key={items.column_name + index} extra={items.val} wrap={true}>{items.column_comment}</Item>)
-                        }
-                    </List>
+                    <div style={{margin: 20}}>
+                        <Paper elevation={3}>
+                            <List renderHeader={() => '明细'}>
+                                {
+                                    infoList.map((items, index) => <Item key={items.column_name + index} extra={items.val} wrap={true}>{items.column_comment}</Item>)
+                                }
+                            </List>
+                        </Paper>
+                    </div>
                 </div>}
             </div>
         </FadeTransitions>

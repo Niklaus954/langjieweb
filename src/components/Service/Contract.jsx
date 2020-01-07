@@ -5,13 +5,16 @@ import CONFIG from '../../config';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import FadeTransitions from '../Common/FadeTransitions'
 import { List } from 'antd-mobile';
+import { Paper } from '@material-ui/core'
 import {
     withRouter,
 } from 'react-router-dom'
+import ParagraphStyles from "../Common/ParagraphStyles";
 const Item = List.Item;
 
 const Contract = props => {
     const [infoList, setInfoList] = useState([]);
+    const [album, setAlbum] = useState([]);
     const isPc = useMediaQuery(CONFIG.minDeviceWidth);
 
     let delCol = [ 'id', 'snLackNum', 'isdel', 'album', 'madeInApp', 'update_time', 'update_person', 'insert_time', 'insert_person', 'complete'];
@@ -19,6 +22,8 @@ const Contract = props => {
     const backSelectedItem = async item => {
         if (isPc) {
             const result = await apiService.getContractInfo(item);
+            const resAlbum = result.data.comment.filter(item => item.column_name === 'album')
+            setAlbum(resAlbum)
             result.data.comment.forEach((items, index) => {
                 if (items.column_name === 'install') {
                     items.val = items.val == 0 ? '否' : '是';
@@ -68,11 +73,16 @@ const Contract = props => {
                     ></ItemList>
                 </div>
                 { isPc && <div style={{ flex: 1, overflow: 'auto' }} id="grid">
-                    <List renderHeader={() => '明细'}>
-                        {
-                            infoList.map((items, index) => <Item key={items.column_name + index} extra={items.val} wrap={true}>{items.column_comment}</Item>)
-                        }
-                    </List>
+                    <div>{ParagraphStyles.RenderServiceCarousel(album)}</div>
+                    <div style={{margin: 20}}>
+                        <Paper elevation={3}>
+                            <List renderHeader={() => '明细'}>
+                                {
+                                    infoList.map((items, index) => <Item key={items.column_name + index} extra={items.val} wrap={true}>{items.column_comment}</Item>)
+                                }
+                            </List>
+                        </Paper>
+                    </div>
                     {/* 正在开发中。。。 */}
                     {/* <iframe
                         title={'repair'}

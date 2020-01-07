@@ -6,19 +6,20 @@ import apiAboutLangjie from '../../api/apiAboutLangjie';
 import FadeTransitions from '../Common/FadeTransitions'
 import ParagraphStyles from "../Common/ParagraphStyles";
 
-const SuggestReadingDetails = state => {
+const ActivityContent = state => {
     const isPc = useMediaQuery(CONFIG.minDeviceWidth)
-    const contentId = state.location.search.split('=')[state.location.search.split('=').length - 1]
+    const activityId = state.location.pathname.split('/')[state.location.pathname.split('/').length - 1]
     const [data, setData] = useState([])
     useEffect(() => {
         const fetch = async() => {
-            const result = await apiAboutLangjie.fetchRecommendReadingById({
-                contentId: contentId
+            const result = await apiAboutLangjie.fetchRecentActivityById({
+                activityId: activityId
             })
             if(result.code === 200) setData(result.data)
         }
         fetch()
     },[])
+
     return(
         <FadeTransitions>
             <div style={{margin: isPc ? "20px 40px" : "20px", overflow:'auto'}}>
@@ -30,4 +31,4 @@ const SuggestReadingDetails = state => {
 }
 
 
-export default SuggestReadingDetails
+export default ActivityContent
