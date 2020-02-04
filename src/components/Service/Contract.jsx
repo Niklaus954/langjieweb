@@ -83,12 +83,6 @@ const Contract = props => {
                             </List>
                         </Paper>
                     </div>
-                    {/* 正在开发中。。。 */}
-                    {/* <iframe
-                        title={'repair'}
-                        style={{border: 'none', width: '100%', height: '100%', overflow: 'auto'}}
-                        src={infoSrc}>
-                    </iframe> */}
                 </div> }
             </div>
         </FadeTransitions>

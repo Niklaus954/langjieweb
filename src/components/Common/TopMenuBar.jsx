@@ -134,10 +134,10 @@ const TopMenuBar = ({memberInfo, selectedSideMenu, updateSideMenuList, updateSel
                 <MenuIcon onClick={() => {sideBarClick()}} />
                 <p>{selectedSideName}</p>
                 {
-                    !memberInfo.name && <AccountCircle onClick={() => {showMobileRightSide()}} />
+                    !Common.getAuthToken() && <AccountCircle onClick={() => {showMobileRightSide()}} />
                 }
                 {
-                    memberInfo.name && <img style={{width: 30, height: 30, borderRadius: '50%'}} src={memberInfo.portrait} alt={'头像'} onClick={() => {showMobileRightSide()}}/>
+                    Common.getAuthToken() && <img style={{width: 30, height: 30, borderRadius: '50%'}} src={memberInfo.portrait} alt={'头像'} onClick={() => {showMobileRightSide()}}/>
                 }
             </div>
         );
@@ -152,7 +152,7 @@ const TopMenuBar = ({memberInfo, selectedSideMenu, updateSideMenuList, updateSel
     }
 
     const renderAccountMenuItem = () => {
-        if (memberInfo.name) {
+        if (memberInfo.name && Common.getAuthToken()) {
             let timeGreet;
             const nowHours = new Date().getHours();
             if (nowHours > 3 && nowHours <= 11) {
@@ -220,10 +220,10 @@ const TopMenuBar = ({memberInfo, selectedSideMenu, updateSideMenuList, updateSel
                                 <Search style={{position: 'relative', top: 8, left: -30, color: '#3f51b5', cursor: 'pointer'}} />
                             </div>
                             {
-                                !memberInfo.name && <AccountCircle aria-controls="simple-menu" aria-haspopup="true" onClick={handleMemberClick} style={{ fontSize: 38, marginRight: 40, cursor: 'pointer' }} />
+                                !Common.getAuthToken() && <AccountCircle aria-controls="simple-menu" aria-haspopup="true" onClick={handleMemberClick} style={{ fontSize: 38, marginRight: 40, cursor: 'pointer' }} />
                             }
                             {
-                                memberInfo.name && <img aria-controls="simple-menu" aria-haspopup="true" onClick={handleMemberClick} style={{width: 38, height: 38, borderRadius: '50%', cursor: 'pointer', marginRight: 40, fontSize: 38}} src={memberInfo.portrait} alt={'头像'} />
+                                Common.getAuthToken() && <img aria-controls="simple-menu" aria-haspopup="true" onClick={handleMemberClick} style={{width: 38, height: 38, borderRadius: '50%', cursor: 'pointer', marginRight: 40, fontSize: 38}} src={memberInfo.portrait} alt={'头像'} />
                             }
                             <Menu
                                 style={{marginTop: 40}}
