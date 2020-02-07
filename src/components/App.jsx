@@ -17,8 +17,10 @@ import 'antd-mobile/dist/antd-mobile.css';
 import About from './Index/About.jsx'
 import LazyIndex from './lazy/LazyIndex'
 import LazyHome from './lazy/LazyHome'
-import ActivityContent from './Home/ActivityContent';
-import ReadingContent from './Home/ReadingContent'
+// import ActivityContent from './Home/ActivityContent';
+import ActivityContentContainer from '../containers/ActivityContentContainer';
+import ReadingContentContainer from '../containers/ReadingContentContainer';
+// import ReadingContent from './Home/ReadingContent'
 import RepairInfo from './Service/RepairInfo'
 import ContractInfo from './Service/ContractInfo'
 import VirInfo from './Service/VirInfo'
@@ -60,8 +62,8 @@ const App = ({ selectedSideMenu }) => {
                         }
                         <Switch>
                             <Route path="/home*" component={LazyHome} />
-                            <Route path="/activityContent" component={ActivityContent}/>
-                            <Route path="/readingContent" component={ReadingContent}/>
+                            <Route path="/activityContent" component={ActivityContentContainer}/>
+                            <Route path="/readingContent" component={ReadingContentContainer}/>
                             <Route path="/solution*" component={LazyHome} />
                             <Route path="/service*" component={LazyHome} />
                             <Route path="/login" component={Login} />
