@@ -3,6 +3,9 @@ import CONFIG from '../../config'
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Carousel } from 'antd-mobile'
 import Common from "./Common";
+import Slider from 'react-slick';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const ContentStyles = (props) => {
     const isPc = useMediaQuery(CONFIG.minDeviceWidth)
@@ -62,9 +65,16 @@ const RenderServiceCarousel = (album) => {
     let albumArr = []
     let type
     if(album.length === 0) return;
-    console.log()
     const val = window.location.hash.indexOf('contract')
     const typeArr = ['contract'];
+    const settings = {
+        dots: true,
+        dotsClass: "slick-dots slick-thumb",
+        infinite: false,
+        speed: 500,
+        autoplay: true,
+        arrows: false
+    }
     try {
         if(album[0].val == ""){
             if(val === -1){
@@ -83,20 +93,30 @@ const RenderServiceCarousel = (album) => {
             albumArr = ['/controller_system.png']
         }
     }
+    // return(
+    //     <div>
+    //         <div>
+    //             <Carousel
+    //                 autoplay={true}
+    //                 dots={type === -1 ? true : false }
+    //                 infinite={true}
+    //             >
+    //                 {albumArr.map((item, index) => (
+    //                     <div key={index} style={{margin: 20}}><div style={{backgroundImage: `url(${CONFIG.url(`/img${item}`)})`, backgroundPosition: "center", backgroundSize: type === -1 ? "cover" : "contain", backgroundRepeat: "no-repeat", height:  200, width: "80%", margin: "auto", cursor: "pointer"}} onClick={() =>{window.open(CONFIG.url(`/img${item}`))}}></div></div>
+    //                 ))}
+    //             </Carousel>
+    //         </div>
+    //         {/*<div><p style={{textAlign: "center"}}>（点击图片查看原图）</p></div>*/}
+    //     </div>
+    // )
+
     return(
-        <div>
-            <div>
-                <Carousel
-                    autoplay={true}
-                    dots={type === -1 ? true : false }
-                    infinite={true}
-                >
-                    {albumArr.map((item, index) => (
-                        <div key={index} style={{margin: 20}}><div style={{backgroundImage: `url(${CONFIG.url(`/img${item}`)})`, backgroundPosition: "center", backgroundSize: type === -1 ? "cover" : "contain", backgroundRepeat: "no-repeat", height:  200, width: "80%", margin: "auto", cursor: "pointer"}} onClick={() =>{window.open(CONFIG.url(`/img${item}`))}}></div></div>
-                    ))}
-                </Carousel>
-            </div>
-            <div><p style={{textAlign: "center"}}>（点击图片查看原图）</p></div>
+        <div style={{paddingBottom: 20}}>
+            <Slider {...settings}>
+                {albumArr.map((item, index) => (
+                    <div key={index}><div style={{backgroundImage: `url(${CONFIG.url(`/img${item}`)})`, backgroundPosition: "center", backgroundSize: type === -1 ? "cover" : "contain", backgroundRepeat: "no-repeat", height:  200, width: "80%", margin: "auto", cursor: "pointer"}} onClick={() =>{window.open(CONFIG.url(`/img${item}`))}}></div></div>
+                ))}
+            </Slider>
         </div>
     )
 }

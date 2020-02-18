@@ -56,6 +56,14 @@ const fetchDyna = async() => {
     return result
 }
 
+const fetchVirInfo = async params => {
+    console.log(params)
+    const result = await api({
+        url: `/open/knowledge/${params.virProId.virProId}`
+    })
+    return result
+}
+
 const fetchMaxTest = async() => {
     const result = await api({
         url: '/open/knowledge/85'
@@ -79,6 +87,7 @@ export default {
     fetchActionTeam,
     fetchDyna,
     fetchVir,
+    fetchVirInfo,
     fetchDynaTest,
     fetchMaxTest
 }

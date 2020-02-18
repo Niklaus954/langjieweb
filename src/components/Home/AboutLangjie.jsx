@@ -31,16 +31,14 @@ const AboutLangjie = () => {
         });
         return resArr
     }
-    return(
-        <FadeTransitions>
-            <div style={{ margin: isPc ? 40 : 20 }}>
-                <div><h3>公司简介</h3></div>
-                <div>
-                    {ParagraphStyles.ContentStyles(renderParagraph())}
-                </div>
+    return <FadeTransitions>
+        <div style={{margin: isPc ? 40 : 20}}>
+            <div><h3>公司简介</h3></div>
+            <div>
+                {ParagraphStyles.ContentStyles(renderParagraph())}
             </div>
-        </FadeTransitions>
-    )
+        </div>
+    </FadeTransitions>
 }
 
 

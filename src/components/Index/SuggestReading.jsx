@@ -43,7 +43,8 @@ const SuggestReading = ({ history }) => {
         });
     }
 
-    if(isPc){
+    //PC端
+    const PcView = () => {
         return(
             <div style={{maxWidth: CONFIG.indexPageMaxWidth, width: isPc ? "100%" : "", margin: "auto"}}>
                 {
@@ -55,7 +56,7 @@ const SuggestReading = ({ history }) => {
                                 <div><h3>{val.title}</h3></div>
                                 <Divider/>
                                 <div>
-                                <p style={{lineHeight: 1.4, fontWeight: 400, color: "#333", fontSize: "16px"}}>{val.content}</p>
+                                    <p style={{lineHeight: 1.4, fontWeight: 400, color: "#333", fontSize: "16px"}}>{val.content}</p>
                                     <Button color="primary" variant="outlined" onClick={() => goToInfo(val)}>了解详情</Button>
                                 </div>
                             </div>
@@ -64,7 +65,10 @@ const SuggestReading = ({ history }) => {
                 }
             </div>
         )
-    }else{
+    }
+
+    //手机端
+    const MobileView = () => {
         return(
             <div style={{maxWidth: CONFIG.indexPageMaxWidth, width: isPc ? "100%" : "", margin: "auto"}}>
                 {data.map((val, index) => (
@@ -75,15 +79,21 @@ const SuggestReading = ({ history }) => {
                             <div><h3>{val.title}</h3></div>
                             <Divider/>
                             <div>
-                            <p style={{lineHeight: "20px"}}>{val.content}</p>
+                                <p style={{lineHeight: "20px"}}>{val.content}</p>
                                 <Button color="primary" variant="outlined" onClick={() => goToInfo(val)}>了解详情</Button>
                             </div>
                         </div>
                     </div>
                 ))}
-        </div>
+            </div>
         )
     }
+
+    return(
+        <div>
+            {isPc ? <div><PcView/></div> : <div><MobileView/></div>}
+        </div>
+    )
 }
 
 export default withRouter(SuggestReading);

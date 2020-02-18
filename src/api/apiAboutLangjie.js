@@ -5,7 +5,7 @@ const fetchBasicInfo = async params => {
     const result = await api({
         url: '/open/knowledge/56',
     });
-    return result;
+    return result
 }
 
 // 推荐阅读

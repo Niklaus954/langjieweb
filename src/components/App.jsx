@@ -22,6 +22,9 @@ import ReadingContent from './Home/ReadingContent'
 import RepairInfo from './Service/RepairInfo'
 import ContractInfo from './Service/ContractInfo'
 import VirInfo from './Service/VirInfo'
+import VirProInfo from './Solution/VirProInfo';
+import DynaProInfo from './Solution/DynaProInfo';
+
 
 const App = ({ selectedSideMenu }) => {
     const isPc = useMediaQuery(CONFIG.minDeviceWidth);
@@ -69,6 +72,8 @@ const App = ({ selectedSideMenu }) => {
                             <Route path="/repairInfo" component={RepairInfo}/>
                             <Route path="/contractInfo" component={ContractInfo}/>
                             <Route path="/virInfo" component={VirInfo}/>
+                            <Route path="/virProInfo" component={VirProInfo}/>
+                            <Route  path="/dynaProInfo" component={DynaProInfo}/>
                             <Redirect from='/' to='/index' />
                         </Switch>
                     </div>

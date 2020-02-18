@@ -323,7 +323,7 @@ const  CarouselArea = ({history}) => {
 	}
 
 	return(
-		<div style={{background: "#fff"}}>
+		<div style={{background: "#fff", paddingBottom: isPc ? 0 : 40}}>
             <div style={{background: "#444"}}>
                 <div style={{ width: isPc ? "100%" : "", margin: "auto", maxWidth: CONFIG.indexPageMaxWidth }}>
                     <Slider ref={slider => (_this.slider = slider)} {...sliderSettings}>
