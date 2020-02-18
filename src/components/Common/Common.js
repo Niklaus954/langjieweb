@@ -195,6 +195,21 @@ const Common = {
         }
         return resArr;
     },
+
+    // 单页恢复侧边栏显示
+    getSelectMenuInfo: (arr, menuId) => {
+        for (let i = 0; i < arr.length; i++) {
+            if (arr[i].id === menuId) {
+                return {
+                    item: arr[i],
+                    menuList: arr,
+                };
+            }
+            if (arr[i].subArr) {
+                return Common.getSelectMenuInfo(arr[i].subArr, menuId);
+            }
+        }
+    }
 };
 
 export default Common

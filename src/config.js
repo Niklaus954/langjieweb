@@ -282,7 +282,17 @@ const CONFIG = {
                 },
             ],
         },
-    ]
+    ],
+    singlePage: [
+        {
+            pathname: '/readingContent',
+            menuId: 2,
+        },
+        {
+            pathname: '/activityContent',
+            menuId: 3,
+        },
+    ],
 };
 
 export default CONFIG;

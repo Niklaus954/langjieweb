@@ -18,7 +18,28 @@ const ActivityContent = state => {
             if(result.code === 200) setData(result.data)
         }
         fetch()
+        updateSideMenu();
     },[])
+
+    // 恢复侧边栏的显示
+    const updateSideMenu = () => {
+        const pagePath = state.location.pathname;
+        let menuId;
+        CONFIG.singlePage.forEach(items => {
+            if (pagePath.indexOf(items.pathname) !== -1) {
+                menuId = items.menuId;
+            }
+        });
+        const { updateSideMenuList, updateSelectedSideMenu, updateSelectedSideName } = state;
+        try {
+            const result = Common.getSelectMenuInfo(CONFIG.menu, menuId);
+            updateSideMenuList(result.menuList);
+            updateSelectedSideMenu(result.item.pathname);
+            updateSelectedSideName(result.item.text);
+        } catch (e) {
+            
+        }
+    }
 
     return(
         <FadeTransitions>
