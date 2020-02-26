@@ -34,7 +34,7 @@ const SuggestReading = ({ history }) => {
     const isPc = useMediaQuery(CONFIG.minDeviceWidth);
 
     const goToInfo = item => {
-        console.log(item)
+       // console.log(item)
         history.push({
             pathname: item.href,
             state: {

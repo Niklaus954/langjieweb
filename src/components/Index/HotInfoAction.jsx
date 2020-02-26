@@ -6,6 +6,7 @@ import CONFIG from '../../config';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
+import CloudDownLoadIcon from '@material-ui/icons/CloudDownload'
 const HotInfoAction = () => {
     const isPc = useMediaQuery(CONFIG.minDeviceWidth);
     const [data, setData] = useState([])
@@ -36,7 +37,7 @@ const HotInfoAction = () => {
                                 <p style={{lineHeight: 1.4, fontSize: 16, fontWeight: 400, color: "#333"}}>{val.content}</p>
                                 </div>
                                 <Link to={'/solution/actionPlat'}>
-                                    <Button color="primary" variant="outlined">获取Action</Button>
+                                    <Button color="primary" variant="outlined" startIcon={<CloudDownLoadIcon/>}>获取Action</Button>
                                 </Link>
                             </div>
                         </div>

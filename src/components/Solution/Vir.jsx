@@ -6,16 +6,15 @@ import FadeTransitions from '../Common/FadeTransitions'
 import CONFIG from "../../config";
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { withRouter } from 'react-router-dom';
-import {  Histiry } from 'react-router'
+import Divider from '@material-ui/core/Divider'
 
-const Vir = ({history,}) => {
-    console.log()
+
+const Vir = ({history}) => {
     const isPc = useMediaQuery(CONFIG.minDeviceWidth)
     const [data, setData] = useState([])
     useEffect(() => {
         const fetch = async() => {
             const result = await apiSolution.fetchVir()
-            console.log(result)
             if(result.code === 200) setData(result.data)
         }
         fetch()
@@ -23,27 +22,44 @@ const Vir = ({history,}) => {
 
     const Render = () => {
         const resArr = []
+        const orderArr = []
         if(data.length === 0) return
-        const content = data[0].content
-        const transObj = Common.transToViewAll(content)
-        transObj.forEach((item, index) => {
-            if(item.type == 'picture') {
-                item.valueArr.map((ite, ind) => {
-                    resArr.push(<div key={ind} style={{width: "100%"}} parentState={{state: 123}} onClick={() => {history.push({pathname: `/virProInfo/${ite.split('.')[0]}`, state: "111"})}}>
-                        <div style={{backgroundImage: `url(${CONFIG.url(`/img/gallery/${ite}`)})`, width: isPc ? 200 : "100%", height: 200,  backgroundSize:'contain', backgroundRepeat: "no-repeat", backgroundPosition:"center", cursor:"pointer" }}></div>
-                        <div style={{textAlign: "center", color: "#3498db", cursor:'pointer',fontSize: 18, fontWeight: 600}}><p>{ite.split('.')[0]}</p></div>
-                    </div>)
+        data.forEach((items, index) => {
+            if(data[0]['link'].indexOf(items['id'].toString() != -1)){
+                const transArr = Common.transToViewAll(items['content'])
+                transArr.forEach((ite, ind) => {
+                    if(ite['type'] === 'picture') {
+                        orderArr.push({
+                            value: ite.value,
+                            id: items.id
+                        })
+                    }
                 })
             }
         })
+        orderArr.sort().forEach((items, index) => {
+            resArr.push(<div key={index} style={{width: '100%'}} onClick={() => {history.push({pathname: `/virProInfo/${items[`id`]}`})}}>
+                            <div style={{width: "100%", display:'flex', flexDirection: 'column', alignItems: 'center'}}>
+                                <div style={{backgroundImage: `url(${CONFIG.url(`/img/gallery/${items['value']}`)})`, width: isPc ? 180 : "60%", height: 180,  backgroundSize:'contain', backgroundRepeat: "no-repeat", backgroundPosition:"center", cursor:"pointer" }}></div>
+                                <div style={{textAlign: "center", color: "#3498db", cursor:'pointer',fontSize: 18, fontWeight: 600}}><p>{items['value'].split('.')[0]}</p></div>
+                            </div>
+                            <Divider style={{display: isPc ? "none" : "block"}} variant="middle"/>
+                        </div>)
+        })
         return resArr
     }
+    const title = () => {
+        if(data.length === 0) return
+        const name = data[0]['name']
+        return name
+    }
     return(
-       <div >
+       <div>
            <FadeTransitions>
              <div>
-                 <div style={{display: isPc ? "block" : "none"}}>{ParagraphStyles.RenderTitle(data)}</div>
-                 <div style={{display: "flex", justifyContent: "space-around", flexDirection: isPc ? "row" : "column", alignItems:"center", paddingTop: isPc ? 100 : 0 }}>{Render()}</div>
+                 {/* <div style={{display: isPc ? "block" : "none"}}>{ParagraphStyles.RenderTitle(data)}</div> */}
+                <div style={{display: isPc ? 'block' : 'none', marginTop: 50}}><div style={{height: 40, margin: '0 40px', display: 'flex', justifyContent:'center', alignItems: 'center', background: '#ddd'}}><h3>{title()}</h3></div></div>
+                <div style={{display: "flex", justifyContent: "space-around", flexDirection: isPc ? "row" : "column", alignItems:"center", paddingTop: isPc ? 100 : 0 }}>{Render()}</div>
              </div>
            </FadeTransitions>
        </div>

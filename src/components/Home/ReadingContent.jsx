@@ -44,7 +44,7 @@ const ReadingContent = state => {
 
     return(
         <FadeTransitions>
-            <div style={{margin: isPc ? "20px 40px" : "20px", overflow:'auto'}}>
+            <div style={{padding: isPc ? "20px 40px" : "20px", overflow:'auto', background: '#fff'}}>
                 <div>{ParagraphStyles.RenderTitle(data)}</div>
                 <div>{ParagraphStyles.ContentStyles(ParagraphStyles.CommonContentRender(data))}</div>
             </div>

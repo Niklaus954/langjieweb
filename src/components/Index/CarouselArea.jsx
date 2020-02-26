@@ -289,7 +289,7 @@ const  CarouselArea = ({history}) => {
             }
 		}
 		const resArr = []
-        resArr.push(<div key="preArrow" style={{width: 50, height: 60, display: "flex", alignItems: "center"}}>
+        resArr.push(<div key="preArrow" style={{width: 50, height: 60, display: "flex", alignItems: "center", justifyContent: 'center'}}>
             <svg id="preArrow" style={{display: "none", cursor: "pointer"}} onMouseEnter={() =>
             {setBackArrowFill("#065fa3")}}
                  onMouseLeave={() =>
@@ -305,7 +305,7 @@ const  CarouselArea = ({history}) => {
                 ? resArr.push(<div key={index} style={{padding: "0 20px"}}><div style={{border: `2px solid #3498db`, cursor: "pointer"}}><div style={{backgroundImage: `url(${CONFIG.url(`/img/${item.img}`)})`, backgroundSize: "cover", backgroundPosition: "center", width: 110, height: 70, backgroundRepeat: "no-repeat"}}></div></div></div>)
                 : resArr.push(<div key={index} style={{padding: "0 20px"}}><div id={index} style={{border: `2px solid #ccc`, cursor: "pointer"}} onClick={() => {handleClickNav(index)}} onMouseEnter={() => {document.getElementById(index).style.border = "2px solid #3498db"}} onMouseLeave={() =>{document.getElementById(index).style.border = "2px solid #ccc"}}><div style={{backgroundImage: `url(${CONFIG.url(`/img/${item.img}`)})`, backgroundSize: "cover", backgroundPosition: "center", width: 110, height: 70, backgroundRepeat: "no-repeat"}}></div></div></div>)
         })
-        resArr.push(<div key="nextArrow" style={{width: 50, display: "flex", alignItems: "center"}}>
+        resArr.push(<div key="nextArrow" style={{width: 50, height: 60, display: "flex", alignItems: "center", justifyContent: "center"}}>
             <svg id="nextArrow" style={{display: "block", cursor: "pointer"}} t="1577072358360" onMouseEnter={() => {
                 setForwordArrowFill("#065fa3")
             }} onMouseLeave={() => {

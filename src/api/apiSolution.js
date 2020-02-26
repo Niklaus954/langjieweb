@@ -44,26 +44,31 @@ const fetchActionTeam = async() => {
 
 const fetchVir = async() => {
     const result = await api({
-        url: '/open/knowledge/84'
+        url: '/open/knowledge/91'
     })
     return result
 }
 
 const fetchDyna = async() => {
     const result = await api({
-        url: '/open/knowledge/83'
+        url: '/open/knowledge/92'
     })
     return result
 }
 
 const fetchVirInfo = async params => {
-    console.log(params)
     const result = await api({
-        url: `/open/knowledge/${params.virProId.virProId}`
+        url: `/open/knowledge/${params.virProId}`
     })
     return result
 }
 
+const fetchDynaInfo = async params => {
+    const result = await api({
+        url: `/open/knowledge/${params.dynaProId}`
+    })
+    return result
+}
 const fetchMaxTest = async() => {
     const result = await api({
         url: '/open/knowledge/85'
@@ -86,6 +91,7 @@ export default {
     fetchActionCloud,
     fetchActionTeam,
     fetchDyna,
+    fetchDynaInfo,
     fetchVir,
     fetchVirInfo,
     fetchDynaTest,

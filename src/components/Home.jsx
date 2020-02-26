@@ -139,7 +139,7 @@ const Home = ({updateSideMenuList, updateSelectedSideMenu, sideBarExpand, update
 
     return (
         <Router>
-            <div style={{width: '100%', padding: 10, overflow: 'auto', WebkitOverflowScrolling: 'touch', wordBreak: 'break-all', whiteSpace: 'preWrap'}}>
+            <div style={{width: '100%', padding: 10, overflow: 'auto', WebkitOverflowScrolling: 'touch', wordBreak: 'break-all', whiteSpace: 'preWrap', background: "#fff"}}>
                 { initRouteArr() }
             </div>
         </Router>
