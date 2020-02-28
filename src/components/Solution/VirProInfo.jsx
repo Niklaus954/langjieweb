@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import apiSolution from '../../api/apiSolution';
 import FadeTransitions from '../Common/FadeTransitions';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
