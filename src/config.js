@@ -292,6 +292,16 @@ const CONFIG = {
             pathname: '/activityContent',
             menuId: 3,
         },
+        {
+            pathname: '/virProInfo',
+            menuId: 24,
+            rootId: -2 
+        },
+        {
+            pathname: '/dynaProInfo',
+            menuId: 21,
+            rootId: -2
+        },
     ],
 };
 

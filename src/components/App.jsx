@@ -24,8 +24,8 @@ import ReadingContentContainer from '../containers/ReadingContentContainer';
 import RepairInfo from './Service/RepairInfo'
 import ContractInfo from './Service/ContractInfo'
 import VirInfo from './Service/VirInfo'
-import VirProInfo from './Solution/VirProInfo';
-import DynaProInfo from './Solution/DynaProInfo';
+import VirProInfo from '../containers/VirProInfoContainer';
+import DynaProInfo from '../containers/DynaProInfoContainer';
 
 
 const App = ({ selectedSideMenu }) => {
@@ -75,7 +75,7 @@ const App = ({ selectedSideMenu }) => {
                             <Route path="/contractInfo" component={ContractInfo}/>
                             <Route path="/virInfo" component={VirInfo}/>
                             <Route path="/virProInfo" component={VirProInfo}/>
-                            <Route  path="/dynaProInfo" component={DynaProInfo}/>
+                            <Route path="/dynaProInfo" component={DynaProInfo}/>
                             <Redirect from='/' to='/index' />
                         </Switch>
                     </div>

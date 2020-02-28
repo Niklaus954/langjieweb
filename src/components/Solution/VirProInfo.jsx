@@ -2,12 +2,13 @@ import React, { Component, useEffect, useState } from 'react';
 import apiSolution from '../../api/apiSolution';
 import FadeTransitions from '../Common/FadeTransitions';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import CONFIG from '../../config'
+import CONFIG from '../../config';
+import Common from '../Common/Common'
 
-const VirProInfo = props => {
+const VirProInfo = state => {
     const isPc = useMediaQuery(CONFIG.minDeviceWidth)
     const [data, setData] = useState([])
-    const virProType = props.location.pathname.split('/')[props.location.pathname.split('/').length - 1]
+    const virProType = state.location.pathname.split('/')[state.location.pathname.split('/').length - 1]
     useEffect(() => {
         const fetch = async() => {
             const result = await apiSolution.fetchVir()
@@ -20,11 +21,33 @@ const VirProInfo = props => {
             }
         }
         fetch()
-    }, [])
+        updateSideMenu()
+    }, [virProType])
+
+    // 恢复侧边栏的显示
+    const updateSideMenu = () => {
+        //console.log(state)
+        const pagePath = state.location.pathname;
+        let menuId, rootId;
+        CONFIG.singlePage.forEach(items => {
+            if (pagePath.indexOf(items.pathname) !== -1) {
+                menuId = items.menuId;
+                rootId = items.rootId;
+            }
+        });
+        const { updateSideMenuList, updateSelectedSideMenu, updateSelectedSideName } = state;
+        try {
+            const result = Common.getSelectMenuInfo(CONFIG.menu, menuId, rootId);
+            updateSideMenuList(result.menuList);
+            updateSelectedSideMenu(result.item.pathname);
+            updateSelectedSideName(result.item.text);
+        } catch (e) {
+            
+        }
+    }
     const Render = () => {
 
         if(data.length === 0) return
-        console.log(data)
         const content = data.content;
         const resArr = []
         for(let key in content) {

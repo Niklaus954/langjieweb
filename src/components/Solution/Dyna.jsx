@@ -27,23 +27,41 @@ const Dyna = ({history}) => {
         if(data.length === 0) return
         data.forEach((items, index) => {
             if(data[0]['link'].indexOf(items['id'].toString()) != -1){
+                const content = items['content']['介绍'][0].split('。')[0]
                 const transArr = Common.transToViewAll(items['content'])
                 transArr.forEach((ite, ind) => {
                     if(ite['type'] === 'picture') {
                         orderArr.push({
                             value: ite.value,
                             id: items['id'],
+                            content
                         })
                     }
                 })
             }
         })
+        
+        const addAnimation = (index) => {
+            const appendId = document.getElementById(index)
+            appendId.style.boxShadow = '5px 5px 5px 5px #ccc';
+            appendId.firstChild.style.background = '#eee'
+
+        }
+
+        const removeAnimation =(index) => {
+            const appendId = document.getElementById(index)
+            appendId.style.boxShadow = 'none'
+            appendId.firstChild.style.background = 'none'
+
+        }
+
         orderArr.sort().forEach((items, index) => {
-            resArr.push(<div key={index} style={{width: '100%'}} onClick={() => {history.push({pathname: `/dynaProInfo/${items[`id`]}`})}}>
-                <div style={{width: "100%", display:'flex', flexDirection: 'column', alignItems: 'center'}}>
+            resArr.push(<div id={index} key={index} style={{padding: "20px", }} onClick={() => {history.push({pathname: `/dynaProInfo/${items[`id`]}`})}} onMouseEnter={() => {addAnimation(index)}} onMouseLeave={() => {removeAnimation(index)}}>
+                <div style={{ display:'flex', flexDirection: 'column', alignItems: 'center'}}>
                     <div style={{backgroundImage: `url(${CONFIG.url(`/img/gallery/${items['value']}`)})`, width: isPc ? 180 : "60%", height: 180,  backgroundSize:'contain', backgroundRepeat: "no-repeat", backgroundPosition:"center", cursor:"pointer" }}></div>
                     <div style={{textAlign: "center", color: "#3498db", cursor:'pointer',fontSize: 18, fontWeight: 600}}><p>{items['value'].split('.')[0]}</p></div>
                 </div>
+                <p style={{fontSize: isPc ? 15 : 14, textIndent: isPc ? 30 : 28, lineHeight: 1.4, fontWeight: 400, color: '#333'}}>{items.content}</p>
                 <Divider style={{display: isPc ? "none" : "block"}} variant="middle"/>
             </div>)
         })
@@ -51,18 +69,19 @@ const Dyna = ({history}) => {
         
     }
 
-    const title = () => {
+    const RenderIntroduce = () => {
         if(data.length === 0) return
-        const name = data[0]['name']
-        return name
+        const introduce = Common.transToViewAll(data[0]['content'])
+        return introduce[0].valueArr[0]
     }
     return(
        <div>
            <FadeTransitions>
              <div>
-                 {/* <div style={{display: isPc ? "block" : "none"}}>{ParagraphStyles.RenderTitle(data)}</div> */}
-                <div style={{display: isPc ? 'block' : 'none', marginTop: 50}}><div style={{height: 40, margin: '0 40px', display: 'flex', justifyContent:'center', alignItems: 'center', background: '#ddd'}}><h3>{title()}</h3></div></div>
-                <div style={{display: "flex", justifyContent: "space-around", flexDirection: isPc ? "row" : "column", alignItems:"center", paddingTop: isPc ? 100 : 0 }}>{Render()}</div>
+                <div style={{display: isPc ? "block" : "none"}}>{ParagraphStyles.RenderTitle(data)}</div>
+                <div><p style={{fontSize: isPc ? 15 : 14, textIndent: isPc ? 30 : 28, lineHeight: 1.4, fontWeight: 400, color: '#333'}}>{RenderIntroduce()}</p></div>
+                {/* <div style={{display: isPc ? 'block' : 'none', marginTop: 50}}><div style={{height: 40, margin: '0 40px', display: 'flex', justifyContent:'center', alignItems: 'center', background: '#eee'}}><h3>{title()}</h3></div></div> */}
+                <div style={{display: "flex", justifyContent: "space-around", flexDirection: isPc ? "row" : "column", flexWrap: isPc ? 'nowrap' : 'wrap' , alignItems:"center", paddingTop: isPc ? 100 : 0 }}>{Render()}</div>
              </div>
            </FadeTransitions>
        </div>

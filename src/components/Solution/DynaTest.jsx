@@ -1,10 +1,12 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import apiSolution from '../../api/apiSolution';
 import ParagraphStyles from '../Common/ParagraphStyles'
-import Common from '../Common/Common'
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import CONFIG from '../../config';
 import FadeTransitions from '../Common/FadeTransitions'
 
 const DynaTest = () => {
+    const isPc = useMediaQuery(CONFIG.minDeviceWidth)
     const [data, setData] = useState([])
     useEffect(() => {
         const fetch = async() => {
@@ -17,7 +19,7 @@ const DynaTest = () => {
     return(
         <FadeTransitions>
             <div>
-                <div>{ParagraphStyles.RenderTitle(data)}</div>
+                <div style={{display: isPc ? 'block' : 'none'}}>{ParagraphStyles.RenderTitle(data)}</div>
                 <div>{ParagraphStyles.ContentStyles(ParagraphStyles.CommonContentRender(data))}</div>
             </div>
         </FadeTransitions>

@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react';
 import apiSolution from '../../api/apiSolution';
 import FadeTransitions from '../Common/FadeTransitions';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import CONFIG from '../../config'
+import CONFIG from '../../config';
+import Common from '../Common/Common';
 
-const DynaProInfo = props => {
+const DynaProInfo = state => {
     const isPc = useMediaQuery(CONFIG.minDeviceWidth)
     const [data, setData] = useState([])
-    const DynaProType = props.location.pathname.split('/')[props.location.pathname.split('/').length - 1]
+    const DynaProType = state.location.pathname.split('/')[state.location.pathname.split('/').length - 1]
     useEffect(() => {
         const fetch = async() => {
             const result = await apiSolution.fetchDyna()
@@ -20,13 +21,38 @@ const DynaProInfo = props => {
             }
         }
         fetch()
-    }, [DynaProType])
+        updateSideMenu()
+    }, [])
+
+    // 恢复侧边栏的显示
+    const updateSideMenu = () => {
+        const pagePath = state.location.pathname;
+        let menuId, rootId;
+        CONFIG.singlePage.forEach(items => {
+            if (pagePath.indexOf(items.pathname) !== -1) {
+                menuId = items.menuId;
+                rootId = items.rootId
+            }
+        });
+        const { updateSideMenuList, updateSelectedSideMenu, updateSelectedSideName } = state;
+        try {
+            const result = Common.getSelectMenuInfo(CONFIG.menu, menuId, rootId);
+            updateSideMenuList(result.menuList);
+            updateSelectedSideMenu(result.item.pathname);
+            updateSelectedSideName(result.item.text);
+        } catch (e) {
+            
+        }
+    }
+
 
     const Render = () => {
         if(data.length === 0) return
         const content = data.content;
         const resArr = []
+        // console.log(Common.transToViewAll(content))
         for(let key in content) {
+            //console.log(typeof content[key])
             const arr = []
             if(typeof content[key] === 'string') {
                 key = JSON.parse(content[key])

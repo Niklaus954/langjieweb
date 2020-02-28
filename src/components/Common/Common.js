@@ -197,16 +197,32 @@ const Common = {
     },
 
     // 单页恢复侧边栏显示
-    getSelectMenuInfo: (arr, menuId) => {
+    getSelectMenuInfo: (arr, menuId, rootId) => {
+        // console.log(arr)
+        // console.log(111)
+        // //console.log(menuId)
+        // for (let i = 0; i < arr.length; i++) {
+        //     if (arr[i].id === menuId) {
+        //         return {
+        //             item: arr[i],
+        //             menuList: arr,
+        //         };
+        //     }
+        //     if (arr[i].subArr) {
+        //         const r = Common.getSelectMenuInfo(arr[i].subArr, menuId);
+        //         if (r) return r;
+        //     }
+        // }
         for (let i = 0; i < arr.length; i++) {
             if (arr[i].id === menuId) {
                 return {
                     item: arr[i],
-                    menuList: arr,
+                    menuList: rootId ? CONFIG.menu.filter(items => items.id === rootId)[0].subArr : arr,
                 };
             }
             if (arr[i].subArr) {
-                return Common.getSelectMenuInfo(arr[i].subArr, menuId);
+                const r = Common.getSelectMenuInfo(arr[i].subArr, menuId, rootId);
+                if (r) return r;
             }
         }
     }
