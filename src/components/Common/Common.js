@@ -9,6 +9,8 @@ const keywordsPool = {
     // '朗杰': { weight: 1, href: '/home/aboutLangjie' },
 };
 
+const translateKeywords = ["安可迅"];
+
 let SIDEMENUIDARR = [];
 
 const Common = {
@@ -224,6 +226,41 @@ const Common = {
                 const r = Common.getSelectMenuInfo(arr[i].subArr, menuId, rootId);
                 if (r) return r;
             }
+        }
+    },
+
+    //关键字中英文翻译处理
+    transKeyword: (content) => {
+        translateKeywords.map((keyword, wordIndex) => {
+            if(content.indexOf(keyword) !== -1){
+                //关键字翻译所需
+                let dom = <div style={{display: 'flex'}}><div>{keyword}</div><div>{content.split(keyword)[content.split(keyword).length - 1]}</div></div>;
+                this.transSpecialCode(dom)
+                
+                //return (<div style={{display: 'flex'}}><div>{keyword}</div><div>{content.split(keyword)[content.split(keyword).length - 1]}</div></div>)
+            }else{
+                this.transSpecialCode(content)
+                //return content
+            }
+        })
+    },
+
+    //处理特殊字符®
+    transSpecialCode: (specialWord) => {
+        
+        // try{
+        //     console.log(specialWord)
+        // }catch(e){
+        //     console.log(e)
+        // }
+        let dom = specialWord
+        let transDom = JSON.stringify(dom)
+        if(transDom.indexOf('®') !== -1) {
+            return(
+                <div style={{display: 'flex'}}><div>{specialWord.split('®')[0]}</div><div><sup>®</sup></div><div>{specialWord.split('®')[specialWord.split('®').length - 1]}</div></div>
+            )
+        }else{
+            return specialWord
         }
     }
 };

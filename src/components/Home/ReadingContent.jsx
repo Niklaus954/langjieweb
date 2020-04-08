@@ -5,6 +5,8 @@ import CONFIG from '../../config';
 import apiAboutLangjie from '../../api/apiAboutLangjie';
 import FadeTransitions from '../Common/FadeTransitions'
 import ParagraphStyles from "../Common/ParagraphStyles";
+import Button from '@material-ui/core/Button';
+import FormatListNumberedIcon from '@material-ui/icons/FormatListNumbered';
 
 const ReadingContent = state => {
     const isPc = useMediaQuery(CONFIG.minDeviceWidth)
@@ -47,6 +49,7 @@ const ReadingContent = state => {
             <div style={{padding: isPc ? "20px 40px" : "20px", overflow:'auto', background: '#fff'}}>
                 <div>{ParagraphStyles.RenderTitle(data)}</div>
                 <div>{ParagraphStyles.ContentStyles(ParagraphStyles.CommonContentRender(data))}</div>
+                <div style={{height: 60, display: 'flex', justifyContent: 'center', alignItems: 'center'}}><Button variant="outlined" color='primary' startIcon={<FormatListNumberedIcon/>} onClick={() => {console.log(state.history.goBack())}}>返回列表</Button></div>
             </div>
         </FadeTransitions>
     )

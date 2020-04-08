@@ -51,13 +51,33 @@ const SideBar = ({sideMenuList, selectedSideMenu, updateSelectedSideName, update
             </div>
         );
 
+        //sideBar转换特殊字符®和关键字翻译
+        function transSpecialCode(param){
+            const keyWordArr = ['安可迅'];
+            if(param.indexOf('®') !== -1) {
+                if(param.indexOf(keyWordArr[0]) !== -1) {
+                    return(<div style={{display: 'flex'}}><div>{param.split('®')[0]}</div><div><sup>®</sup></div><div>{param.split('®')[1]}</div></div>)
+                }else{
+                    return(<div style={{display: 'flex'}}><div>{param.split('®')[0]}</div><div><sup>®</sup></div><div>{param.split('®')[1]}</div></div>)
+                }
+            }else{
+                if(param.indexOf(keyWordArr[0]) !== -1) {
+                    return(<div style={{display: 'flex'}}><div>{keyWordArr[0]}</div><div>{param.split(keyWordArr[0])[1]}</div></div>)
+                }else{
+                    return param
+                }
+            }
+        }
+
+
         // 身份权限判断
         function renderList(node, num) {
-            if (!Common.authSideMenuList(node)) return;
+            if (!Common.authSideMenuList(node)) return;   
             return (
                 <div key={node.id}>
                     <ListItem button selected={node.pathname === selectedSideMenu && node.id > 0} onClick={() => { toggleMenu(node) }} style={{ paddingLeft: 16 * num }}>
-                        <ListItemText primary={node.text} />
+                        {/* 这里有问题须改进 */}
+                        <ListItemText primary={transSpecialCode(node.text)} />
                         {node.subArr && (
                             sideBarExpand.indexOf(node.id) !== -1 ? <ExpandLess /> : <ExpandMore />
                         )}

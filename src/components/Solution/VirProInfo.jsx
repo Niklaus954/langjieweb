@@ -45,8 +45,8 @@ const VirProInfo = state => {
             
         }
     }
-    const Render = () => {
 
+    const RenderContent = () => {
         if(data.length === 0) return
         const content = data.content;
         const resArr = []
@@ -70,7 +70,7 @@ const VirProInfo = state => {
     return(
         <FadeTransitions>
             <div style={{padding: isPc ? "20px 40px" : "20px", overflow:'auto', background: "#fff"}}>
-                <div>{Render()}</div>
+                <div>{RenderContent()}</div>
             </div>
         </FadeTransitions>
     )

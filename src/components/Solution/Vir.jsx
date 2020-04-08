@@ -7,6 +7,7 @@ import CONFIG from "../../config";
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { withRouter } from 'react-router-dom';
 import Divider from '@material-ui/core/Divider'
+import Paper from '@material-ui/core/Paper'
 
 
 const Vir = ({history}) => {
@@ -40,23 +41,9 @@ const Vir = ({history}) => {
                 })
             }
         })
-        
-        const addAnimation = (index) => {
-            const appendId = document.getElementById(index)
-            appendId.style.boxShadow = '5px 5px 5px 5px #ccc';
-            appendId.firstChild.style.background = '#eee'
-
-        }
-
-        const removeAnimation =(index) => {
-            const appendId = document.getElementById(index)
-            appendId.style.boxShadow = 'none'
-            appendId.firstChild.style.background = 'none'
-
-        }
 
         orderArr.sort().forEach((items, index) => {
-            resArr.push(<div id={index} key={index} style={{padding: "20px", }} onClick={() => {history.push({pathname: `/virProInfo/${items[`id`]}`})}} onMouseEnter={() => {addAnimation(index)}} onMouseLeave={() => {removeAnimation(index)}}>
+            resArr.push(<div id={index} key={index} style={{padding: "20px", }} onClick={() => {history.push({pathname: `/virProInfo/${items[`id`]}`})}} >
                 <div style={{ display:'flex', flexDirection: 'column', alignItems: 'center'}}>
                     <div style={{backgroundImage: `url(${CONFIG.url(`/img/gallery/${items['value']}`)})`, width: isPc ? 180 : "60%", height: 180,  backgroundSize:'contain', backgroundRepeat: "no-repeat", backgroundPosition:"center", cursor:"pointer" }}></div>
                     <div style={{textAlign: "center", color: "#3498db", cursor:'pointer',fontSize: 18, fontWeight: 600}}><p>{items['value'].split('.')[0]}</p></div>

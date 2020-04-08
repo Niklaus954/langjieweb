@@ -200,6 +200,7 @@ const  CarouselArea = ({history}) => {
     const [forArrowFill, setForwordArrowFill] = useState("#108ee9");
 	useEffect(() => {
 		apiIndex.fetchImage().then(result => {
+            //console.log(result)
 			let resData = result.data[0].content.map(items => {
 				return{
 					tag: '产品推荐',
@@ -227,20 +228,23 @@ const  CarouselArea = ({history}) => {
 		arrows: false,
         afterChange: (e) => {
            // setNavIndex(e)
-        },
-        beforeChange: (current, next) => {
-            setSliderIndex(next)
-            setNavIndex(next)
-            if(next === data.length-1) {
+           //console.log(e)
+            setSliderIndex(e)
+            setNavIndex(e)
+            if(e === data.length-1) {
                 window.document.getElementById("nextArrow").style.display = "none"
                 window.document.getElementById("preArrow").style.display = "block";
-            }else if(next === 0){
+            }else if(e === 0){
                 window.document.getElementById("preArrow").style.display = "none";
                 window.document.getElementById("nextArrow").style.display = "block"
             }else {
                 window.document.getElementById("preArrow").style.display = "block";
                 window.document.getElementById("nextArrow").style.display = "block"
             }
+        },
+        beforeChange: (current, next) => {
+            //console.log(next)
+            
         }
 	}
     const linkToInfo = href => {
@@ -275,6 +279,8 @@ const  CarouselArea = ({history}) => {
 
 	const SlickNavImg = () => {
     	const handleClickNav = (index) => {
+            //let valid = false
+            //console.log(index)
             _this.slider.slickGoTo(index)
             setNavIndex(index)
             if(index === data.length-1) {
@@ -293,7 +299,7 @@ const  CarouselArea = ({history}) => {
             <svg id="preArrow" style={{display: "none", cursor: "pointer"}} onMouseEnter={() =>
             {setBackArrowFill("#065fa3")}}
                  onMouseLeave={() =>
-                 {setBackArrowFill("#108ee9")}
+                    {setBackArrowFill("#108ee9")}
                  }
                  onClick={() => {handleClickNav(navIndex - 1)}}
                  t="1577072722766" className="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="11354" width="40" height="40">

@@ -16,6 +16,7 @@ const ContentStyles = (props) => {
     )
 }
 
+
 const CommonContentRender = (data) => {
     const isPc = useMediaQuery(CONFIG.minDeviceWidth)
     if(data.length === 0) return
@@ -25,6 +26,11 @@ const CommonContentRender = (data) => {
     transArr.forEach((item, index) => {
         if(item.type == 'text'){
             item.valueArr.map((ite, ind) => {
+                // if(ite.indexOf('®') !== -1) {
+                //     //ite.split('®')
+                // resArr.push(<div key={index+''+ind} style={{display: 'flex'}}><div>{ite.split('®')[0]}</div><sup>®</sup><div>{ite.split('®')[ite.split('®').length - 1]}</div></div>)
+                // }
+                // console.log(ite)
                 resArr.push(<div key={index+'1'+ind} ><p>{ite}</p></div>)
             })
         }else if(item.type == 'picture'){
@@ -50,13 +56,25 @@ const CommonContentRender = (data) => {
             })
         }
     })
-    return  resArr
+    return resArr
 }
 
 const RenderTitle = (data) => {
+    const keyWord = "安可迅"
     if(data.length === 0) return
     const name = data[0].name
-    return(<h3>{name}</h3>)
+    if(name.indexOf('®') !== -1) {
+        return(
+            <h3 style={{display: 'flex'}}><div>{name.split('®')[0]}</div><div><sup>®</sup></div><div>{name.split('®')[name.split('®').length - 1]}</div></h3>
+        )
+    }else{
+        //console.log(name)
+        if(name.indexOf(keyWord) !== -1){
+            return(<h3 style={{display: 'flex'}}><div>{keyWord}</div><div>{name.split(keyWord)[name.split(keyWord).length - 1]}</div></h3>)
+        }else{
+            return(<h3>{name}</h3>)
+        }
+    }
 }
 
 //客户服务走马灯图片展示
