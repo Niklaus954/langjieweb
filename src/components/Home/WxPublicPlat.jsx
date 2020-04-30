@@ -32,6 +32,7 @@ const WxPublicPlat = ({history}) => {
 
     //pc端
     const PcView = () => {
+        if(data.length === 0) return
         const resArr = []
         data.forEach((item, index) => {
             resArr.push(<div key={index}>
@@ -39,7 +40,7 @@ const WxPublicPlat = ({history}) => {
                     <Link style={{color: "#3f51b5"}} to={{pathname: `/readingContent/${item.id}`}}><h3>{item.title}</h3></Link>
                 </div>
                 <div className="content">
-                    <p>{item.content['段落1']}...</p>
+                    <p>{item.content[Object.keys(item.content)[0]]}...</p>
                 </div>
                 <Divider/>
             </div>)
@@ -72,6 +73,7 @@ const WxPublicPlat = ({history}) => {
     }
 
     const MobileView = () => {
+        if(data.length === 0) return
         const resArr = []
         data.forEach((item, index) => {
             resArr.push(<div key={index}>
@@ -82,7 +84,7 @@ const WxPublicPlat = ({history}) => {
                         onClick={() => { DirectSuggestReadingContent(item)}}
                         wrap={true}
                     >
-                       {item.title}<Brief>{item.content['段落1']}</Brief>
+                       {item.title}<Brief>{item.content[Object.keys(item.content)[0]]}</Brief>
                     </Item>
                 </List>
             </div>)
