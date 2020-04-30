@@ -7,7 +7,7 @@ axios.defaults.withCredentials = true;
 
 const api = async params => {
     const method = params.method ? params.method : 'get';
-    const { url, queryData, formData, reloadUrl } = params;
+    const { url, queryData, formData, reloadUrl, header } = params;
     const lj_token = Common.getAuthToken();
     try {
         const result = await axios({
@@ -15,7 +15,7 @@ const api = async params => {
             url: reloadUrl ? url : CONFIG.url(url),
             data: formData,
             params: queryData,
-            headers: { lj_token },
+            headers: header ? header : { lj_token },
         });
         if (result.data.code !== 200) Toast.info(result.data.msg);
         return result.data;

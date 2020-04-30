@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom'
 import CONFIG from '../../config'
 import apiLogin from '../../api/apiLogin'
+import apiShop from '../../api/apiShop'
 
 const keywordsPool = {
     // '10月27日': { weight: 1, href: '/home/eventRecord' },
@@ -74,6 +75,9 @@ const Common = {
             const memberInfo = await apiLogin.fetchMemberInfo({ unionid: result.data.unionid });
             localStorage.setItem('lj_member_info', JSON.stringify(memberInfo.data));
             updateMemberInfo(memberInfo.data);
+            // 预登陆商城系统
+            const shopLoginInfo = await apiShop.loginShop(result.data.unionid);
+            localStorage.setItem('shop_access_token', shopLoginInfo.data.access_token);
 
             history.push(redirectUrl);
             Common.refreshSideMenuAuth(history, { pathname: redirectUrl });

@@ -38,6 +38,12 @@ const RightSideBar = ({ showRightSideBar, updateShowRightSideBar, selectedSideMe
                 Common.getAuthToken() && (
                     <div>
                         <div style={{textAlign: 'center', marginTop: 16}}>{memberInfo.name}</div>
+                        <div>
+                            <Button variant="outlined" style={{width: 150, margin: '20px 20px 0px 20px'}} onClick={() => history.push('/shop/cart')}>购物车</Button>
+                        </div>
+                        <div>
+                            <Button variant="outlined" style={{width: 150, margin: '20px 20px 0px 20px'}} onClick={() => history.push('/shop/myOrder')}>订单</Button>
+                        </div>
                         <Button variant="outlined" style={{width: 150, margin: 20}} onClick={() => logout()}>注销</Button>
                     </div>
                 )

@@ -17,10 +17,12 @@ import Cloud from './components/Service/Cloud'
 import VirCard from './components/Service/VirCard'
 import Repair from './components/Service/Repair'
 import Contract from './components/Service/Contract'
+import GoodsList from './components/Shop/GoodsList'
 
 const CONFIG = {
     // url: pathname => 'http://192.168.50.230:8090' + pathname,
     url: pathname => 'https://www.langjie.com' + pathname,
+    shopUrl: 'http://192.168.50.230:3002',
     wxLoginAppid: 'wx1dbbbe221c943cd9',
     minDeviceWidthNum: 800,
     minDeviceWidth: '(min-width:800px)',
@@ -281,6 +283,14 @@ const CONFIG = {
                     type: 'service',
                 },
             ],
+        },
+        {
+            id: -4,
+            text: '商城',
+            type: 'shop',
+            pathname: '/shop/goodsList',
+            component: GoodsList,
+            auth: false,
         },
     ],
     singlePage: [
