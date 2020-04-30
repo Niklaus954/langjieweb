@@ -37,6 +37,9 @@ const SideBar = ({sideMenuList, selectedSideMenu, updateSelectedSideName, update
 
     // 节点递归渲染
     const renderSideList = () => {
+        if (sideMenuList.length === 0) {
+            return;
+        }
         return (
             <div style={{ width: 200, minWidth: 200, borderRight: '1px solid #eee', overflow: 'auto' }}>
                 <List style={{ padding: 0 }}>
@@ -75,7 +78,7 @@ const SideBar = ({sideMenuList, selectedSideMenu, updateSelectedSideName, update
             if (!Common.authSideMenuList(node)) return;   
             return (
                 <div key={node.id}>
-                    <ListItem button selected={node.pathname === selectedSideMenu && node.id > 0} onClick={() => { toggleMenu(node) }} style={{ paddingLeft: 16 * num }}>
+                    <ListItem button selected={node.pathname === selectedSideMenu} onClick={() => { toggleMenu(node) }} style={{ paddingLeft: 16 * num }}>
                         {/* 这里有问题须改进 */}
                         <ListItemText primary={transSpecialCode(node.text)} />
                         {node.subArr && (

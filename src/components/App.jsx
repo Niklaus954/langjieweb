@@ -17,6 +17,7 @@ import 'antd-mobile/dist/antd-mobile.css';
 import About from './Index/About.jsx'
 import LazyIndex from './lazy/LazyIndex'
 import LazyHome from './lazy/LazyHome'
+import LazyShop from './lazy/LazyShop'
 // import ActivityContent from './Home/ActivityContent';
 import ActivityContentContainer from '../containers/ActivityContentContainer';
 import ReadingContentContainer from '../containers/ReadingContentContainer';
@@ -76,6 +77,7 @@ const App = ({ selectedSideMenu }) => {
                             <Route path="/virInfo" component={VirInfo}/>
                             <Route path="/virProInfo" component={VirProInfo}/>
                             <Route path="/dynaProInfo" component={DynaProInfo}/>
+                            <Route path="/shop*" component={LazyShop}/>
                             <Redirect from='/' to='/index' />
                         </Switch>
                     </div>
