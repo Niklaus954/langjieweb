@@ -4,9 +4,16 @@ import {
 } from 'react-router-dom'
 import apiService from '../../api/apiService';
 import FadeTransitions from '../Common/FadeTransitions'
-import { List } from 'antd-mobile';
+import { List, Tabs } from 'antd-mobile';
 import { Paper } from '@material-ui/core'
 const Item = List.Item;
+
+const tabs = [
+    {title: "生产信息", sub: "1"},
+    {title: "销售信息", sub: "2"},
+    {title: "注册历史", sub: "3"},
+    {title: "保修单", sub: "4"}
+]
 
 const VirInfo = props => {
     const [infoList, setInfoList] = useState([]);
