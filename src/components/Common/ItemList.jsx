@@ -79,9 +79,6 @@ class ItemList extends Component {
                         list.map((items, index) => (
                             <div key={items.id + '_' + index} >
                                 <div style={{ display: 'flex', padding: 8, marginBottom: 4, background: "#fff" }} className={"hoverItem"}
-                                   //  onMouseEnter={() =>{document.getElementsByClassName("hoverItem")[index].style.background = "#f5f5f9"}}
-                                   //  onMouseLeave={() => {document.getElementsByClassName("hoverItem")[index].style.background = "#fff"}}
-                                   //  onMouseDown={() => {this.itemSelected(items, index)}}
                                      onClick={() => this.itemSelected(items, index)}
                                 >
                                     { renderAlbum && <div style={{ width: 112, backgroundImage: 'url(' + items.album + ')', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundSize: 'contain' }}></div> }

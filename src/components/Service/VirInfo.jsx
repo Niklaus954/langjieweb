@@ -5,7 +5,8 @@ import {
 import apiService from '../../api/apiService';
 import FadeTransitions from '../Common/FadeTransitions'
 import { List, Tabs } from 'antd-mobile';
-import { Paper } from '@material-ui/core'
+import { Paper } from '@material-ui/core';
+import PropTypes from 'prop-types'
 const Item = List.Item;
 
 const tabs = [
@@ -14,6 +15,29 @@ const tabs = [
     {title: "注册历史", sub: "3"},
     {title: "保修单", sub: "4"}
 ]
+
+
+function TabsComponent(props) {
+    let { infoList } = props
+    return(
+        <div style={{width: "100%"}}>
+            <div style={{display: 'flex', justifyContent: 'center', padding: 10}}><img src="http://iph.href.lu/240x160" alt=""/></div>
+            <Tabs tabs={tabs}
+            initialPage={0}
+            tabBarPosition="top"
+            renderTab={tab => <span>{tab.title}</span>}
+            >
+                {tabs.map((tab, index) => (
+                    <div key={index} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '150px', }}>{tab.title}</div>
+                ))}
+            </Tabs>
+        </div>
+    )
+}
+
+TabsComponent.prototype = {
+    infoList: PropTypes.array,
+}
 
 const VirInfo = props => {
     const [infoList, setInfoList] = useState([]);
@@ -29,7 +53,8 @@ const VirInfo = props => {
 
     return (
         <FadeTransitions>
-            <div style={{ width: '96%', height: '100%', display: 'flex', borderRight: '1px solid #eee', margin: "auto" }}>
+            <TabsComponent infoList={infoList}/>
+            {/* <div style={{ width: '96%', height: '100%', display: 'flex', borderRight: '1px solid #eee', margin: "auto" }}>
                 <div style={{ flex: 1, overflow: 'auto' }} id="grid">
                     <div style={{margin: 5}}>
                         <Paper elevation={3}>
@@ -41,7 +66,7 @@ const VirInfo = props => {
                         </Paper>
                     </div>
                 </div>
-            </div>
+            </div> */}
         </FadeTransitions>
     )
 }

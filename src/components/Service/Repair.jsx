@@ -10,7 +10,9 @@ import FadeTransitions from '../Common/FadeTransitions'
 import { List, ListView } from 'antd-mobile';
 import { Paper } from '@material-ui/core'
 import ParagraphStyles from "../Common/ParagraphStyles";
+import Common from '../Common/Common';
 const Item = List.Item;
+const SearchBarComponent = Common.SearchBarComponent
 
 const Repair = props => {
     const [infoList, setInfoList] = useState([]);
@@ -46,14 +48,17 @@ const Repair = props => {
     return (
         <FadeTransitions>
             <div style={{ width: '100%', height: '100%', display: 'flex', borderRight: '1px solid #eee' }}>
-                <div style={{ width: isPc ? 400 : '100%', overflow: 'auto' }}>
-                    <ItemList
-                        isPc={isPc}
-                        fetchList={apiService.fetchRepair}
-                        renderAlbum={true}
-                        renderList={renderList}
-                        backSelectedItem={backSelectedItem}
-                    ></ItemList>
+            <div style={{display: 'flex', flexDirection:'column',  width: isPc ? 400 : '100%', background: "#f5f5f5"}}>
+                    <SearchBarComponent searchFetch={apiService.fetchRepair} serviceType="Repair"/>
+                    <div style={{ overflow: 'auto' }}>
+                        <ItemList
+                            isPc={isPc}
+                            fetchList={apiService.fetchRepair}
+                            renderAlbum={true}
+                            renderList={renderList}
+                            backSelectedItem={backSelectedItem}
+                        ></ItemList>
+                    </div>
                 </div>
                 { isPc &&  <div style={{ flex: 1, overflow: 'auto' }} id="grid">
                     <div style={{width: "80%", margin: 'auto'}}>{ParagraphStyles.RenderServiceCarousel(album)}</div>

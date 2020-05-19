@@ -10,7 +10,9 @@ import {
     withRouter,
 } from 'react-router-dom'
 import ParagraphStyles from "../Common/ParagraphStyles";
+import Common from '../Common/Common';
 const Item = List.Item;
+const SearchBarComponent = Common.SearchBarComponent
 
 const Contract = props => {
     const [infoList, setInfoList] = useState([]);
@@ -140,14 +142,17 @@ const Contract = props => {
     return (
         <FadeTransitions>
             <div style={{ width: '100%', height: '100%', display: 'flex' }}>
-                <div style={{ width: isPc ? 400 : '100%', overflow: 'auto' }}>
-                    <ItemList
-                        isPc={isPc}
-                        fetchList={apiService.fetchContract}
-                        renderAlbum={false}
-                        renderList={renderList}
-                        backSelectedItem={backSelectedItem}
-                    ></ItemList>
+            <div style={{display: 'flex', flexDirection:'column',  width: isPc ? 400 : '100%', background: "#f5f5f5"}}>
+                    <SearchBarComponent searchFetch={apiService.fetchContract} serviceType="Contract"/>
+                    <div style={{ overflow: 'auto' }}>
+                        <ItemList
+                            isPc={isPc}
+                            fetchList={apiService.fetchContract}
+                            renderAlbum={false}
+                            renderList={renderList}
+                            backSelectedItem={backSelectedItem}
+                        ></ItemList>
+                    </div>
                 </div>
                 { isPc && <div style={{ flex: 1, overflow: 'auto' }} id="grid">
                     <div>{ParagraphStyles.RenderServiceCarousel(album)}</div>

@@ -16,6 +16,8 @@ import Box from '@material-ui/core/Box';
 import SwipeableViews from 'react-swipeable-views';
 import PropTypes from 'prop-types'
 import { useTheme, makeStyles } from '@material-ui/core/styles';
+import Common from '../Common/Common';
+const SearchBarComponent = Common.SearchBarComponent
 
 const Item = List.Item;
 const tabArr = ['生产信息', '销售信息', '注册历史', '保修单']
@@ -70,7 +72,6 @@ const VirCard = props => {
     const backSelectedItem = async item => {
         if (isPc) {
             const result = await apiService.fetchVirCardInfo(item)
-            console.log(result)
             setInfoList(result.data)
         } else {
             props.history.push({
@@ -95,24 +96,28 @@ const VirCard = props => {
       };
     
       const handleChangeIndex = (index) => {
+          console.log(index)
         setValue(index);
       };
 
     return (
         <FadeTransitions>
-            <div style={{ width: '100%', height: '100%', display: 'flex', borderRight: '1px solid #eee' }}>
-                <div style={{ width: isPc ? 400 : '100%', overflow: 'auto' }}>
-                    <ItemList
-                        isPc={isPc}
-                        fetchList={apiService.fetchVirCard}
-                        renderAlbum={true}
-                        renderList={renderList}
-                        backSelectedItem={backSelectedItem}
-                    ></ItemList>
+            <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'row', borderRight: '1px solid #eee' }}>
+                <div style={{display: 'flex', flexDirection:'column',  width: isPc ? 400 : '100%', background: "#f5f5f5"}}>
+                    <SearchBarComponent searchFetch={apiService.fetchVirCard} serviceType="VirCard"/>
+                    <div style={{ overflow: 'auto' }}>
+                        <ItemList
+                            isPc={isPc}
+                            fetchList={apiService.fetchVirCard}
+                            renderAlbum={true}
+                            renderList={renderList}
+                            backSelectedItem={backSelectedItem}
+                        ></ItemList>
+                    </div>
                 </div>
-                {isPc ? <div style={{margin: '0 auto'}}>
+                {isPc && <div style={{margin: '0 auto'}}>
                     <div className="img" style={{display: 'flex', justifyContent: 'center', margin: '20px 0'}}>
-                        <img src="http://iph.href.lu/240x160?text=产品图片" alt=""/>
+                        <img style={{cursor: 'pointer'}} src="http://iph.href.lu/240x160?text=产品图片" alt="产品图片"/>
                     </div>
                     <div className={classes.root}>
                         <AppBar position="static" color="default">
@@ -139,7 +144,7 @@ const VirCard = props => {
                             ))}
                         </SwipeableViews>
                     </div>
-                </div> : <div></div>}
+                </div>}
             </div>
         </FadeTransitions>
     )

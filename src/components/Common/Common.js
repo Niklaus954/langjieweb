@@ -1,7 +1,11 @@
-import React from 'react';
-import { Link } from 'react-router-dom'
-import CONFIG from '../../config'
-import apiLogin from '../../api/apiLogin'
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import CONFIG from '../../config';
+import apiLogin from '../../api/apiLogin';
+import { makeStyles } from '@material-ui/core/styles';
+import { Paper, InputBase, IconButton, useMediaQuery } from '@material-ui/core';
+import { Menu as MenuIcon, Search as SearchIcon } from '@material-ui/icons';
+
 
 const keywordsPool = {
     // '10月27日': { weight: 1, href: '/home/eventRecord' },
@@ -236,23 +240,15 @@ const Common = {
                 //关键字翻译所需
                 let dom = <div style={{display: 'flex'}}><div>{keyword}</div><div>{content.split(keyword)[content.split(keyword).length - 1]}</div></div>;
                 this.transSpecialCode(dom)
-                
-                //return (<div style={{display: 'flex'}}><div>{keyword}</div><div>{content.split(keyword)[content.split(keyword).length - 1]}</div></div>)
             }else{
                 this.transSpecialCode(content)
-                //return content
             }
         })
     },
 
     //处理特殊字符®
     transSpecialCode: (specialWord) => {
-        
-        // try{
-        //     console.log(specialWord)
-        // }catch(e){
-        //     console.log(e)
-        // }
+    
         let dom = specialWord
         let transDom = JSON.stringify(dom)
         if(transDom.indexOf('®') !== -1) {
@@ -262,7 +258,77 @@ const Common = {
         }else{
             return specialWord
         }
+    },
+
+    //朗杰服务 产品、维修、合同搜索框
+    SearchBarComponent:(children) =>{
+        
+        const useStyles = makeStyles(theme => ({
+            root: {
+                padding: "2px 4px",
+                display: 'flex',
+                alignItems: 'center',
+                border: "#3F51B5 1px solid"
+            },
+            container: {
+                maxHeight: 540,
+            },
+            input: {
+                marginLeft: theme.spacing(1),
+                flex: 1
+            },
+            IconButton: {
+                padding: 10
+            },
+            divider: {
+                height: 28, 
+                margin: 4
+            }
+        }))
+        const classes = useStyles()
+        const isPc = useMediaQuery(CONFIG.minDeviceWidth)
+        const [inputVal, setInputVal] = useState()
+
+        const fetch = async () => {
+            const result = await children.searchFetch({
+                keywords: inputVal
+            })
+
+            console.log(result)
+        }
+        const searchFetch = () => {
+            fetch()
+            //产品、 维修、 合同查询搜索接口
+        }
+
+        const type = (child) =>{
+            if(child.serviceType === 'VirCard') {
+                return ("请输入产品序列号、型号")
+            }else if(child.serviceType === 'Repair') {
+                return ('请输入维修单号')
+            }else if(child.serviceType === 'Contract'){
+                return ('请输入合同编号')
+            }
+        }
+
+        return(
+            <div>
+                <Paper component="form" className={classes.root} style={{margin: isPc ? "30px 20px": "10px"}}>
+                    {/* <IconButton className={classes.IconButton} aria-label="menu">
+                        <MenuIcon/>
+                    </IconButton> */}
+                    <InputBase
+                    className={classes.input}
+                    placeholder={type(children)}
+                    onChange={ e => setInputVal(e.target.value)}
+                    />
+                    <IconButton type="submit" className={classes.IconButton} aria-label="search" onClick={searchFetch}><SearchIcon/></IconButton>
+                </Paper>
+            </div>
+        )
     }
 };
+
+
 
 export default Common
