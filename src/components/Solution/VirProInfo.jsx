@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import apiSolution from '../../api/apiSolution';
 import FadeTransitions from '../Common/FadeTransitions';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { useMediaQuery, Button, ButtonGroup } from '@material-ui/core';
 import CONFIG from '../../config';
-import Common from '../Common/Common'
+import Common from '../Common/Common';
 
 const VirProInfo = state => {
     const isPc = useMediaQuery(CONFIG.minDeviceWidth)
@@ -54,7 +54,15 @@ const VirProInfo = state => {
             const arr = []
             if(typeof content[key] === 'string') {
                 key = JSON.parse(content[key])
-                resArr.push(<div key={key} style={{backgroundImage: `url(${CONFIG.url(`/img/gallery/${key['name']}`)})`, width:  "100%", height: 200,  backgroundSize:'contain', backgroundRepeat: "no-repeat", backgroundPosition:"center", cursor:"pointer" }} onLoad={() => {console.log(111)}}></div>)
+                resArr.push(<div key={key} style={{display: 'flex', justifyContent:'space-around'}}>
+                    <div style={{backgroundImage: `url(${CONFIG.url(`/img/gallery/${key['name']}`)})`, width:  "45%", height: 200,  backgroundSize:'contain', backgroundRepeat: "no-repeat", backgroundPosition:"center", cursor:"pointer" }} onLoad={() => {console.log(111)}}></div>
+                    {/* <div style={{alignSelf: 'flex-end'}}>
+                        <ButtonGroup orientation="vertical" color="primary" size="small">
+                            <Button>正面图</Button>
+                            <Button>背面图</Button>
+                        </ButtonGroup>
+                    </div> */}
+                </div>)
             }else{
                 resArr.push(<div key={key}><h3>{key}</h3></div>)
                 content[key].forEach((item, index) => {

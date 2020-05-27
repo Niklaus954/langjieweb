@@ -21,6 +21,9 @@ const Contract = props => {
         if (isPc) {
             const result = await apiService.getContractInfo(item);
             const resAlbum = result.data.comment.filter(item => item.column_name === 'album')
+            if(!resAlbum[0].val){
+                resAlbum[0].val = '/controller_system.png'
+            }
             setAlbum(resAlbum)
             const labelObj = {
                 contract_no: {
@@ -140,14 +143,18 @@ const Contract = props => {
     return (
         <FadeTransitions>
             <div style={{ width: '100%', height: '100%', display: 'flex' }}>
-                <div style={{ width: isPc ? 400 : '100%', overflow: 'auto' }}>
-                    <ItemList
-                        isPc={isPc}
-                        fetchList={apiService.fetchContract}
-                        renderAlbum={false}
-                        renderList={renderList}
-                        backSelectedItem={backSelectedItem}
-                    ></ItemList>
+            <div style={{display: 'flex', flexDirection:'column',  width: isPc ? 400 : '100%', background: "#f5f5f5"}}>
+                    {/* <SearchBarComponent searchFetch={apiService.fetchContract} serviceType="Contract"/> */}
+                    <div style={{ overflow: 'auto' }}>
+                        <ItemList
+                            isPc={isPc}
+                            fetchList={apiService.fetchContract}
+                            renderAlbum={false}
+                            renderList={renderList}
+                            backSelectedItem={backSelectedItem}
+                            serviceType="Contract"
+                        ></ItemList>
+                    </div>
                 </div>
                 { isPc && <div style={{ flex: 1, overflow: 'auto' }} id="grid">
                     <div>{ParagraphStyles.RenderServiceCarousel(album)}</div>

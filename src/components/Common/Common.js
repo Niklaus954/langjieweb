@@ -1,7 +1,10 @@
-import React from 'react';
-import { Link } from 'react-router-dom'
-import CONFIG from '../../config'
-import apiLogin from '../../api/apiLogin'
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import CONFIG from '../../config';
+import apiLogin from '../../api/apiLogin';
+import { makeStyles } from '@material-ui/core/styles';
+import { Paper, InputBase, IconButton, useMediaQuery } from '@material-ui/core';
+import { Menu as MenuIcon, Search as SearchIcon } from '@material-ui/icons';
 import apiShop from '../../api/apiShop'
 
 const keywordsPool = {
@@ -240,23 +243,15 @@ const Common = {
                 //关键字翻译所需
                 let dom = <div style={{display: 'flex'}}><div>{keyword}</div><div>{content.split(keyword)[content.split(keyword).length - 1]}</div></div>;
                 this.transSpecialCode(dom)
-                
-                //return (<div style={{display: 'flex'}}><div>{keyword}</div><div>{content.split(keyword)[content.split(keyword).length - 1]}</div></div>)
             }else{
                 this.transSpecialCode(content)
-                //return content
             }
         })
     },
 
     //处理特殊字符®
     transSpecialCode: (specialWord) => {
-        
-        // try{
-        //     console.log(specialWord)
-        // }catch(e){
-        //     console.log(e)
-        // }
+    
         let dom = specialWord
         let transDom = JSON.stringify(dom)
         if(transDom.indexOf('®') !== -1) {
@@ -266,7 +261,14 @@ const Common = {
         }else{
             return specialWord
         }
+    },
+
+    //ISD硬件接口
+    JpackParse:(jPack) => {
+        console.log(jPack)
     }
 };
+
+
 
 export default Common
