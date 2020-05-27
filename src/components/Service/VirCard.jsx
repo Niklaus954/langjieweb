@@ -3,155 +3,269 @@ import ItemList from '../Common/ItemList';
 import apiService from '../../api/apiService';
 import CONFIG from '../../config';
 import {
-    withRouter,
+    withRouter
 } from 'react-router-dom'
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import FadeTransitions from '../Common/FadeTransitions'
-import { List, ListView } from 'antd-mobile';
-import { Paper, InputBase, Divider, makeStyles, TableBody, Table, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@material-ui/core';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
-import DirectionsIcon from '@material-ui/icons/Directions';
-
-const columns = [
-    {id: 'album', label: '', align: 'left', minWidth: 100},
-    {id: 'serial_number', label: '序列号', align: 'left', minWidth: 100},
-    {id: 'serial_type', label: '型号', align: 'left', minWidth: 100},
-    {id: 'validity', label: '有效期', align: 'left', minWidth: 100}
-]
-
-const toggleOptions = []
-
-const useStyles = makeStyles(theme => ({
-    root: {
-        padding: '2px 4px',
-        display: 'flex',
-        alignItems: 'center',
-    },
-    container: {
-        maxHeight: 540,
-    },
-    input: {
-        marginLeft: theme.spacing(1),
-        flex: 1,
-    },
-    iconButton: {
-        padding: 10,
-    },
-    divider: {
-        height: 28,
-        margin: 4,
-    },
-}))
+import { List, Tabs as MobileTabs } from 'antd-mobile';
+import AppBar from '@material-ui/core/AppBar';
+import {Tabs, Tab, Box, Typography, Card, CardContent, Popover, Link, Paper} from '@material-ui/core';
+import SwipeableViews from 'react-swipeable-views';
+import { makeStyles } from '@material-ui/core/styles';
+import ParagraphStyles from '../Common/ParagraphStyles';
 
 const Item = List.Item;
+const transTab = {
+    "productInfo": "生产信息",
+    "hardInfo": "硬件信息",
+    "contractInfo": "销售信息",
+    "regHistoryList": "注册历史",
+    "warrantyInfo": "保修单"
+}
+
+function RegCard(props) {
+    const { children } = props
+    const validDate = children.validDate === 0 ? '永久注册' : children.validDate;
+    return(
+        <div style={{margin: 10}}>
+            <Card variant="outlined"><CardContent>
+                <Typography>注册日期：{children.regDate}</Typography>
+                <Typography>公司：{children.company}</Typography>
+                <Typography>注册人：{children.name}</Typography>
+                <Typography>注册产品：{children.product}</Typography>
+                <Typography>有效期：{validDate}</Typography>
+                <Typography>注册码：{children.regCode}</Typography>
+                <Typography>授权操作码：{children.authOperKey}</Typography>
+            </CardContent></Card>
+        </div>
+    )
+}
+
+//弹出合同
+function ContractPopover(props){
+    const labelObj = {
+        contract_no: {
+            name: '合同编号',
+        },
+        cus_abb: {
+            name: '购方',
+        },
+        purchase: {
+            name: '购方采购',
+        },
+        contract_state: {
+            name: '合同状态',
+        },
+        sale_person: {
+            name: '销售员',
+        },
+        sign_time: {
+            name: '签订日期',
+        },
+        total_amount: {
+            name: '总金额',
+        },
+        payable: {
+            name: '应付金额',
+        },
+        paid: {
+            name: '已付金额',
+        },
+        install: {
+            name: '需要安装',
+        },
+        isDirectSale: {
+            name: '是否直销',
+        },
+        delivery_state: {
+            name: '发货状态',
+        },
+        delivery_time: {
+            name: '发货时间',
+        },
+        take_person: {
+            name: '收货确认人',
+        },
+        take_time: {
+            name: '收货确认时间',
+        },
+        isFreeze: {
+            name: '是否冻结',
+        },
+        freeze_reason: {
+            name: '冻结原因',
+        },
+        freeze_start_time: {
+            name: '冻结开始时间',
+        },
+        freeze_time: {
+            name: '冻结截止日期',
+        },
+        close_reason: {
+            name: '关闭原因',
+        },
+        close_time: {
+            name: '关闭日期',
+        },
+        other: {
+            name: '其他约定',
+        },
+    };
+    const { children } = props
+    const [anchorEl, setAnchorEl] = useState(null)
+    const [comment, setComment] = useState([])
+    const [album, setAlbum] = useState([])
+    const handleClose = () => {
+        setAnchorEl(null)
+    }
+    const toViewContract = (contract_no, event) => {
+        fetch({contract_no})
+        setAnchorEl(event.currentTarget)
+    }
+    const fetch = async (param) => {
+        const result = await apiService.getContractInfo(param)
+        const resAlbum = result.data.comment.filter(item => item.column_name === 'album')
+        if(!resAlbum[0].val){
+            resAlbum[0].val = '/controller_system.png'
+        }
+        setAlbum(resAlbum)
+        if(result.code === 200) {
+            for (let i = 0; i < result.data.comment.length; i++) {
+                const key = result.data.comment[i].column_name;
+                if (labelObj[key]) labelObj[key].val = result.data.comment[i].val;
+                if(key === 'isFreeze' && result.data.comment[i].val == 0) {
+                    delete labelObj.freeze_reason;
+                    delete labelObj.freeze_start_time;
+                    delete labelObj.freeze_time;
+                }
+                if(key === 'contract_state' && result.data.comment[i].val !== '关闭') {
+                    delete labelObj.close_reason;
+                    delete labelObj.close_time;
+                }
+                if (key === 'install' || key === 'isFreeze' || key === 'isDirectSale') {
+                    if(labelObj[key].val==0){
+                        labelObj[key].val = '否';
+                    }else{
+                        labelObj[key].val = '是';
+                    }
+                }else if(key==='take_time'){
+                    if(labelObj[key].val==='0000-00-00'||labelObj[key].val==null) labelObj[key].val = '';
+                }
+            };
+            const renderList = [];
+            for (const key in labelObj) {
+                renderList.push({
+                    column_name: key,
+                    column_comment: labelObj[key].name,
+                    val: labelObj[key].val,
+                });
+            }
+            setComment(renderList)
+        }
+        
+    }
+    const open = Boolean(anchorEl);
+    const id = open ? 'simple-popover' : undefined;
+    return(
+        <div>
+            <Link component="button" aria-describedby={id} onClick={(event) => toViewContract(children, event)}>{children}</Link>
+            <Popover
+            open={open}
+            anchorEl={anchorEl}
+            onClose={handleClose}
+            anchorReference="anchorPosition"
+            anchorPosition={{top: 300, left: 600}}
+            >
+                <div style={{width: 500, height: 600}}>
+                    <div style={{padding: '10px 0', textAlign: 'center', background: '#ccc', fontSize: 18}}><span>合同详情</span></div>
+                    <div style={{overflow: 'auto', height: "92%"}}><div>{ParagraphStyles.RenderServiceCarousel(album)}</div>
+                    {comment.map((item, index) => (
+                    <Item key={index+ item.column_name} extra={item.val} wrap={true}>{item.column_comment}</Item>
+                ))}</div></div>
+            </Popover>
+        </div>
+    )
+}
+
+
+//tab滑动组件
+function TabPanel(props) {
+    const { children, infoListKey } = props;
+    return (
+        <div >{infoListKey === "regHistoryList" ? 
+        children.map((item, index) => {
+            return(<RegCard key={index}>{item}</RegCard>)
+        }) : children.map((item, index) => {
+            if(item.column_name === 'contract_no') {
+                return(<Item key={index} extra={(<ContractPopover>{item.val}</ContractPopover>)} wrap={true}>{item.column_comment}</Item>)
+            }else{
+                return(<Item key={index} extra={item.val} wrap={true}>{item.column_comment}</Item>)
+            }
+        })}</div>
+    );
+}
+  
+
 
 const VirCard = props => {
     const [infoList, setInfoList] = useState([]);
-    const [page, setPage] = useState(0)
-    const [pageSize, setPageSize] = useState(10)
-    const [data, setData] = useState([])
+    const [album, setAlbum] = useState([])
     const isPc = useMediaQuery(CONFIG.minDeviceWidth);
-    const classes = useStyles();
-    useEffect(() => {
-        const fetch = async() => {
-            const result = await apiService.fetchVirCard({
-                page: page,
-                pageSize: pageSize,
-                keywords: ''
-            })
-            if(result.code === 200) setData(result.data)
+    const [value ,setValue] = useState(0)
+
+    const backSelectedItem = async item => {
+        if (isPc) {
+            const result = await apiService.fetchVirCardInfo(item)
+            setValue(0)
+            setInfoList(result.data)
+        } else {
+            props.history.push({
+                pathname: '/virInfo/' + item.serialNo, 
+            });
         }
-        fetch()
-    },[page, pageSize])
-    
-    const SearchBar = () => {
-        return(
-            <div>
-                <Paper component="form" className={classes.root} style={{width: isPc ? 500 : 300}}>
-                    <IconButton className={classes.iconButton} aria-label="menu">
-                        <MenuIcon />
-                    </IconButton>
-                    <InputBase
-                        className={classes.input}
-                        placeholder="请输入产品序列号、型号"
-                        inputProps={{ 'aria-label': '请输入产品序列号、型号' }}
-                    />
-                    <IconButton type="submit" className={classes.iconButton} aria-label="search">
-                        <SearchIcon />
-                    </IconButton>
-                    {/* <Divider className={classes.divider} orientation="vertical" />
-                    <IconButton color="primary" className={classes.iconButton} aria-label="directions">
-                        <DirectionsIcon />
-                    </IconButton> */}
-                </Paper>
+    }
+
+    const renderList = items => {
+        const validTime = items.validTime === 0 ? '永久注册' : items.validTime;
+        return (
+            <div style={{ flex: 1, padding: 4, marginLeft: 4 }}>
+                <p>序列号: {items.serialNo}</p>
+                <p>型号: {items.model}</p>
+                <p>有效日期: {validTime}</p>
             </div>
         )
     }
 
-    //mobile
-    const renderMobileList = () => {
-        if(data.length === 0) return
-        const resArr = []
-        data.map((item, index) => {
-            const validTime = item.validTime === 0 ? '永久注册' : item.validTime;
-            resArr.push(<div key={index} onClick={() => {props.history.push({pathname: '/virInfo/' + item.serialNo })}}>
-                <div style={{display: 'flex', flexDirection: 'row'}}>
-                    <div><img src={item.album} alt=""/></div>
-                    <div>
-                    <p>序列号: {item.serialNo}</p>
-                    <p>型号: {item.model}</p>
-                    <p>有效日期: {validTime}</p>
-                    </div>
-                </div>
-                <Divider variant='middle'/>
-            </div>)
-        })
-        return resArr
-    }
-
-    const renderPcList = () => {
-        const handleOnMouseEnter = (index) => {
-            window.document.getElementById(index).style.background = '#eee'
-        }
-        const handleOnMouseLeave = (index) => {
-            window.document.getElementById(index).style.background = 'none'
-        }
-        if(data.length === 0) return
-        const resArr = []
-        data.forEach((item, index) => {
-            const validTime = item.validTime === 0 ? '永久注册' : item.validTime;
-            resArr.push(<div key={index} id={index} style={{display: 'flex', flexDirection: 'row'}} onMouseEnter={() => {handleOnMouseEnter(index)}} onMouseLeave={() => {handleOnMouseLeave(index)}} onClick={() => {props.history.push({pathname: '/virInfo/' + item.serialNo })}}>
-                <div><img src={item.album} alt=""/></div>
-                <div>
-                    <p>序列号：{item.serialNo}</p>
-                    <p>型号：{item.model}</p>
-                    <p>有效日期：{validTime}</p>
-                </div>
-            </div>)
-        })
-        return resArr
-    }
-
-
     return (
         <FadeTransitions>
-            <div>{isPc ? 
-                <div>
-                    <div>
-                        <div className="top_img" style={{display:'flex', justifyContent: 'center'}}>{isPc ? <img src="http://iph.href.lu/800x150" alt=""/> : <img src="http://iph.href.lu/300x80" alt=""/>}</div>
-                        <div className="search" style={{display:'flex', justifyContent: 'center', margin: '20px 0'}}><SearchBar/></div>
+            <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'row', borderRight: '1px solid #eee' }}>
+                <div style={{display: 'flex', flexDirection:'column',  width: isPc ? 400 : '100%', background: "#f5f5f5"}}>
+                    <div style={{ overflow: 'auto' }}>
+                        <ItemList
+                            isPc={isPc}
+                            fetchList={apiService.fetchVirCard}
+                            renderAlbum={true}
+                            renderList={renderList}
+                            backSelectedItem={backSelectedItem}
+                            serviceType="VirCard"
+                        ></ItemList>
                     </div>
-                    <div style={{height: 500, overflow: 'auto', width: '70%', margin: '10px auto 10px auto'}}>{renderPcList()}</div>
-                </div> : 
-                <div style={{ display: 'flex', justifyContent: 'center',flexDirection: 'column' }}>
-                    <div style={{background: '#fff', position: 'fixed', top: 44, width: '100%', paddingTop: '10px'}}>
-                        <div className="top_img" style={{display:'flex', justifyContent: 'center'}}>{isPc ? <img src="http://iph.href.lu/800x150" alt=""/> : <img src="http://iph.href.lu/300x80" alt=""/>}</div>
-                        <div className="search" style={{display:'flex', justifyContent: 'center', margin: '20px 0'}}><SearchBar/></div>
+                </div>
+                {isPc && 
+                    <div style={{overflowY: 'auto', width: "60%", margin: "0 auto"}}>
+                    <div style={{height: "100%"}}>
+                        <MobileTabs
+                        tabs={Object.keys(infoList).filter(item => infoList[item].length > 0)}
+                        initialPage={0}
+                        renderTab={tab => <span>{transTab[tab]}</span>}
+                        >
+                            {Object.keys(infoList).filter(item => infoList[item].length > 0).map((items, index) => (
+                                <TabPanel key={index+'tabPanel'} param={props} infoListKey={items}>{infoList[items]}</TabPanel>
+                            ))}
+                        </MobileTabs>
                     </div>
-                <div style={{paddingTop: '160px'}}>{renderMobileList()}</div>
-            </div>}</div>
+                </div>}
+            </div>
         </FadeTransitions>
     )
 }

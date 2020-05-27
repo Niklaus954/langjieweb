@@ -20,6 +20,9 @@ const ContractInfo = props => {
     const fetch = async contract_no => {
         const result = await apiService.getContractInfo({contract_no});
         const resAlbum = result.data.comment.filter(item => item.column_name === "album");
+        if(!resAlbum[0].val){
+            resAlbum[0].val = '/controller_system.png'
+        }
         setAlbum(resAlbum)
         const labelObj = {
             contract_no: {

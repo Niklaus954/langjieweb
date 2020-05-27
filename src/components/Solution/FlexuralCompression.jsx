@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import apiSolution from '../../api/apiSolution';
 import ParagraphStyles from '../Common/ParagraphStyles'
 import Common from '../Common/Common'

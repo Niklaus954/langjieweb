@@ -7,7 +7,6 @@ import CONFIG from "../../config";
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { withRouter } from 'react-router-dom';
 import Divider from '@material-ui/core/Divider'
-import Paper from '@material-ui/core/Paper'
 
 
 const Vir = ({history}) => {
@@ -26,16 +25,16 @@ const Vir = ({history}) => {
         const orderArr = []
         const resArr = []
         if(data.length === 0) return
-        data.forEach((items, index) => {
-            if(data[0]['link'].indexOf(items['id'].toString()) != -1){
-                const content = items['content']['介绍'][0].split('。')[0]
-                const transArr = Common.transToViewAll(items['content'])
+        data.forEach((item, index) => {
+            if(data[0]['link'].indexOf(item['id'].toString()) !== -1){
+                const des = item['content']['介绍'][0].split('。')[0]
+                const transArr = Common.transToViewAll(item['content'])
                 transArr.forEach((ite, ind) => {
                     if(ite['type'] === 'picture') {
                         orderArr.push({
                             value: ite.value,
-                            id: items['id'],
-                            content
+                            id: item['id'],
+                            content: des
                         })
                     }
                 })
