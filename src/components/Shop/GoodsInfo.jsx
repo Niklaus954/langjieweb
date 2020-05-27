@@ -256,7 +256,7 @@ const GoodsInfo = props => {
 
     const openTypeSelect = async () => {
         const token = localStorage.getItem('shop_access_token');
-        if (!token) {
+        if (!token || !Common.getAuthToken()) {
             const pathname = props.history.location.pathname;
             props.history.push('/login?path=' + pathname);
             return;
