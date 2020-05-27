@@ -7,12 +7,10 @@ import {
 } from 'react-router-dom'
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import FadeTransitions from '../Common/FadeTransitions'
-import { List, ListView } from 'antd-mobile';
+import { List } from 'antd-mobile';
 import { Paper } from '@material-ui/core'
 import ParagraphStyles from "../Common/ParagraphStyles";
-import Common from '../Common/Common';
 const Item = List.Item;
-const SearchBarComponent = Common.SearchBarComponent
 
 const Repair = props => {
     const [infoList, setInfoList] = useState([]);
@@ -27,6 +25,9 @@ const Repair = props => {
             const resAlbum = result.data.res_arr.filter(item => item.column_name === 'album')
             const renderList = result.data.res_arr.filter(items => delCol.indexOf(items.column_name) === -1);
             setInfoList(renderList);
+            if(!resAlbum[0].val){
+                resAlbum[0].val = '/no_img.png'
+            }
             setAlbum(resAlbum)
         } else {
             props.history.push({
@@ -49,7 +50,7 @@ const Repair = props => {
         <FadeTransitions>
             <div style={{ width: '100%', height: '100%', display: 'flex', borderRight: '1px solid #eee' }}>
             <div style={{display: 'flex', flexDirection:'column',  width: isPc ? 400 : '100%', background: "#f5f5f5"}}>
-                    <SearchBarComponent searchFetch={apiService.fetchRepair} serviceType="Repair"/>
+                    {/* <SearchBarComponent searchFetch={apiService.fetchRepair} serviceType="Repair"/> */}
                     <div style={{ overflow: 'auto' }}>
                         <ItemList
                             isPc={isPc}
@@ -57,6 +58,7 @@ const Repair = props => {
                             renderAlbum={true}
                             renderList={renderList}
                             backSelectedItem={backSelectedItem}
+                            serviceType="Repair"
                         ></ItemList>
                     </div>
                 </div>

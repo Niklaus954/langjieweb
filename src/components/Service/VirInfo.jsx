@@ -4,33 +4,75 @@ import {
 } from 'react-router-dom'
 import apiService from '../../api/apiService';
 import FadeTransitions from '../Common/FadeTransitions'
-import { List, Tabs } from 'antd-mobile';
-import { Paper } from '@material-ui/core';
-import PropTypes from 'prop-types'
+import { List, Tabs as MobileTabs } from 'antd-mobile';
+import { makeStyles, AppBar, Tab, Tabs, Box, Card, CardContent, Typography, Paper } from '@material-ui/core';
+import PropTypes from 'prop-types';
+import SwipeableViews from 'react-swipeable-views';
 const Item = List.Item;
 
-const tabs = [
-    {title: "生产信息", sub: "1"},
-    {title: "销售信息", sub: "2"},
-    {title: "注册历史", sub: "3"},
-    {title: "保修单", sub: "4"}
-]
+const transTab = {
+    "productInfo": "生产信息",
+    "hardInfo": "硬件信息",
+    "contractInfo": "销售信息",
+    "regHistoryList": "注册历史",
+    "warrantyInfo": "保修单"
+}
 
+function RegCard(props) {
+    const { children } = props
+    const validDate = children.validDate === 0 ? '永久注册' : children.validDate;
+    return(
+        <div style={{margin: 10}}>
+            <Card variant="outlined"><CardContent>
+                <Typography>注册日期：{children.regDate}</Typography>
+                <Typography>公司：{children.company}</Typography>
+                <Typography>注册人：{children.name}</Typography>
+                <Typography>注册产品：{children.product}</Typography>
+                <Typography>有效期：{validDate}</Typography>
+                <Typography>注册码：{children.regCode}</Typography>
+                <Typography>授权操作码：{children.authOperKey}</Typography>
+            </CardContent></Card>
+        </div>
+    )
+}
+
+//tab滑动组件
+function TabPanel(props) {
+    const { value, info, param, index, children, infoListKey, ...other } = props;
+    const toViewContract = (contract_no) => {
+        //指向合同详情
+        param.history.push({
+            pathname: '/contractInfo/' + contract_no, 
+        });
+    }
+    
+    return (
+        <div p={3}>{infoListKey === "regHistoryList" ? 
+        children.map((item, index) => {
+            return(<RegCard key={index}>{item}</RegCard>)
+        }) : children.map((item, index) => {
+            if(item.column_name === 'contract_no') {
+                return(<Item key={index} extra={(<span style={{color: "#3f51b5"}} onClick={() => toViewContract(item.val)}>{item.val}</span>)} wrap={true}>{item.column_comment}</Item>)
+            }else{
+                return(<Item key={index} extra={item.val} wrap={true}>{item.column_comment}</Item>)
+            }
+        })}</div>
+      );
+}
 
 function TabsComponent(props) {
-    let { infoList } = props
+    let { infoList, param } = props
+    const [value ,setValue] = useState(0);
     return(
-        <div style={{width: "100%"}}>
-            <div style={{display: 'flex', justifyContent: 'center', padding: 10}}><img src="http://iph.href.lu/240x160" alt=""/></div>
-            <Tabs tabs={tabs}
-            initialPage={0}
-            tabBarPosition="top"
-            renderTab={tab => <span>{tab.title}</span>}
+        <div style={{width: "100%", height: "100%"}}>
+            <MobileTabs
+            tabs={Object.keys(infoList).filter(item => infoList[item].length > 0)}
+            renderTab={tab => <span>{transTab[tab]}</span>}
             >
-                {tabs.map((tab, index) => (
-                    <div key={index} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '150px', }}>{tab.title}</div>
+                {Object.keys(infoList).filter(item => infoList[item].length > 0).map((items, index) => (
+                    <TabPanel key={index+'tabPanel'} value={value} index={index} param={param} infoListKey={items}>{infoList[items]}</TabPanel>
                 ))}
-            </Tabs>
+            </MobileTabs>
         </div>
     )
 }
@@ -53,20 +95,7 @@ const VirInfo = props => {
 
     return (
         <FadeTransitions>
-            <TabsComponent infoList={infoList}/>
-            {/* <div style={{ width: '96%', height: '100%', display: 'flex', borderRight: '1px solid #eee', margin: "auto" }}>
-                <div style={{ flex: 1, overflow: 'auto' }} id="grid">
-                    <div style={{margin: 5}}>
-                        <Paper elevation={3}>
-                            <List renderHeader={() => '明细'}>
-                                {
-                                    infoList.map((items, index) => <Item key={items.column_name + index} extra={items.val} wrap={true}>{items.column_comment}</Item>)
-                                }
-                            </List>
-                        </Paper>
-                    </div>
-                </div>
-            </div> */}
+            <TabsComponent infoList={infoList} param={props}/>
         </FadeTransitions>
     )
 }

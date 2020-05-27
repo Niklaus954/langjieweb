@@ -26,11 +26,6 @@ const CommonContentRender = (data) => {
     transArr.forEach((item, index) => {
         if(item.type == 'text'){
             item.valueArr.map((ite, ind) => {
-                // if(ite.indexOf('®') !== -1) {
-                //     //ite.split('®')
-                // resArr.push(<div key={index+''+ind} style={{display: 'flex'}}><div>{ite.split('®')[0]}</div><sup>®</sup><div>{ite.split('®')[ite.split('®').length - 1]}</div></div>)
-                // }
-                // console.log(ite)
                 resArr.push(<div key={index+'1'+ind} ><p>{ite}</p></div>)
             })
         }else if(item.type == 'picture'){
@@ -81,58 +76,22 @@ const RenderTitle = (data) => {
 
 const RenderServiceCarousel = (album) => {
     let albumArr = []
-    let type
     if(album.length === 0) return;
-    const val = window.location.hash.indexOf('contract')
-    const typeArr = ['contract'];
     const settings = {
         dots: true,
         dotsClass: "slick-dots slick-thumb",
         infinite: false,
         speed: 500,
-        autoplay: true,
+        autoplay: false,
         arrows: false
     }
-    try {
-        if(album[0].val == ""){
-            if(val === -1){
-                albumArr = ['/no_img.png']
-            }else {
-                albumArr = ['/controller_system.png']
-            }
-        }else {
-            albumArr = album[0].val.split(',');
-        }
-        type = album[0].val.indexOf(typeArr[0]);
-    }catch (e) {
-        if(val === -1){
-            albumArr = ['/no_img.png']
-        }else {
-            albumArr = ['/controller_system.png']
-        }
-    }
-    // return(
-    //     <div>
-    //         <div>
-    //             <Carousel
-    //                 autoplay={true}
-    //                 dots={type === -1 ? true : false }
-    //                 infinite={true}
-    //             >
-    //                 {albumArr.map((item, index) => (
-    //                     <div key={index} style={{margin: 20}}><div style={{backgroundImage: `url(${CONFIG.url(`/img${item}`)})`, backgroundPosition: "center", backgroundSize: type === -1 ? "cover" : "contain", backgroundRepeat: "no-repeat", height:  200, width: "80%", margin: "auto", cursor: "pointer"}} onClick={() =>{window.open(CONFIG.url(`/img${item}`))}}></div></div>
-    //                 ))}
-    //             </Carousel>
-    //         </div>
-    //         {/*<div><p style={{textAlign: "center"}}>（点击图片查看原图）</p></div>*/}
-    //     </div>
-    // )
+    albumArr = album[0].val.split(',');
 
     return(
         <div style={{paddingBottom: 20}}>
             <Slider {...settings}>
                 {albumArr.map((item, index) => (
-                    <div key={index}><div style={{backgroundImage: `url(${CONFIG.url(`/img${item}`)})`, backgroundPosition: "center", backgroundSize: type === -1 ? "cover" : "contain", backgroundRepeat: "no-repeat", height:  200, width: "80%", margin: "auto", cursor: "pointer"}} onClick={() =>{window.open(CONFIG.url(`/img${item}`))}}></div></div>
+                    <div key={index}><div style={{backgroundImage: `url(${CONFIG.url(`/img${item}`)})`, backgroundPosition: "center", backgroundSize: "contain", backgroundRepeat: "no-repeat", height:  200, width: "80%", margin: "auto", cursor: "pointer"}} onClick={() =>{window.open(CONFIG.url(`/img${item}`))}}></div></div>
                 ))}
             </Slider>
         </div>

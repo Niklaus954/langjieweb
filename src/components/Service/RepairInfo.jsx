@@ -6,7 +6,6 @@ import apiService from '../../api/apiService';
 import FadeTransitions from '../Common/FadeTransitions'
 import { List } from 'antd-mobile';
 import { Paper } from '@material-ui/core'
-import CONFIG from '../../config'
 import ParagraphStyles from "../Common/ParagraphStyles";
 const Item = List.Item;
 
@@ -26,6 +25,9 @@ const RepairInfo = props => {
         const resAlbum = renderList.filter(item => item.column_name === 'album')
         renderList = renderList.filter(items => delCol.indexOf(items.column_name) === -1);
         setInfoList(renderList);
+        if(!resAlbum[0].val){
+            resAlbum[0].val = '/no_img.png'
+        }
         setAlbum(resAlbum)
     }
 

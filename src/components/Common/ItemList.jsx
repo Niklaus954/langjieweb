@@ -1,7 +1,76 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
-import { ListView } from 'antd-mobile'
 import '../../public/css/hoverStyle.css';
+import { makeStyles } from '@material-ui/core/styles';
+import { Paper, InputBase, IconButton, useMediaQuery, Button, Divider } from '@material-ui/core';
+import { Search as SearchIcon } from '@material-ui/icons';
+import CONFIG from '../../config';
+var that
+
+    //朗杰服务 产品、维修、合同搜索框
+   function SearchBarComponent (children){
+        const useStyles = makeStyles(theme => ({
+            root: {
+                padding: "2px 4px",
+                display: 'flex',
+                alignItems: 'center',
+                border: "#3F51B5 1px solid"
+            },
+            container: {
+                maxHeight: 540,
+            },
+            input: {
+                marginLeft: theme.spacing(1),
+                flex: 1
+            },
+            IconButton: {
+                padding: 10
+            },
+            divider: {
+                height: 28, 
+                margin: 4
+            }
+        }))
+        const classes = useStyles()
+        const isPc = useMediaQuery(CONFIG.minDeviceWidth)
+        const [inputVal, setInputVal] = useState()
+        const searchFetch = () => {
+            children.searchInput(inputVal)
+            //产品、 维修、 合同查询搜索接口
+        }
+
+        const resetSearchVal = () => {
+            children.resetSearchInput()
+            setInputVal("")
+            document.getElementById('input').value = ''
+        }
+        const type = (child) =>{
+            if(child.serviceType === 'VirCard') {
+                return ("请输入产品序列号、型号")
+            }else if(child.serviceType === 'Repair') {
+                return ('请输入维修单号')
+            }else if(child.serviceType === 'Contract'){
+                return ('请输入合同编号')
+            }
+        }
+
+        return(
+            <div style={{margin: isPc ? "30px 20px": "10px"}}>
+                <Paper component="form" className={classes.root}>
+                    <InputBase
+                    id="input"
+                    className={classes.input}
+                    placeholder={type(children.children)}
+                    onChange={ e => setInputVal(e.target.value)}
+                    />
+                    <IconButton type="submit" className={classes.IconButton} aria-label="search" onClick={searchFetch}><SearchIcon/></IconButton>
+                    <Divider orientation="vertical" className={classes.divider} />
+                    <Button variant="text" color="primary" onClick={resetSearchVal}>重置</Button>
+                </Paper>
+            </div>
+        )
+    }
+
 
 class ItemList extends Component {
 
@@ -18,14 +87,16 @@ class ItemList extends Component {
             hasMore: true,
             loading: false,
         },
+        keywords: ''
     };
 
     componentWillMount() {
+        that = this
         this.fetch();
     }
 
     async fetch() {
-        const { scroll, list } = this.state;
+        const { scroll, list, keywords } = this.state;
         scroll.loading = true;
         this.setState({
             scroll,
@@ -33,6 +104,7 @@ class ItemList extends Component {
         const result = await this.props.fetchList({
             page: scroll.page,
             pageSize: scroll.pageSize,
+            keywords: keywords
         });
         scroll.loading = false;
         scroll.page++;
@@ -61,6 +133,50 @@ class ItemList extends Component {
         }
     }
 
+    searchInput(serialNo){
+        that.searchFetch(serialNo)   
+    }
+    resetSearchInput(){
+        let { scroll, list } = that.state
+        scroll.page = 1
+        scroll.hasMore = true
+        scroll.loading = false
+        list = []
+        that.setState({
+            scroll: scroll,
+            list: list,
+            keywords: ''
+        }, () => {
+            that.fetch()
+        })
+    }
+
+    async searchFetch(serialNo) {
+        const { scroll } = this.state;
+        scroll.loading = true;
+        scroll.page = 1
+        this.setState({
+            scroll,
+            keywords: serialNo
+        });
+        const searchResult = await this.props.fetchList({
+            page: scroll.page,
+            pageSize: scroll.pageSize,
+            keywords: serialNo
+        })
+        scroll.loading = false;
+        scroll.page++;
+        if (searchResult.data.length === 0) scroll.hasMore = false;
+        this.setState({
+            list: [...searchResult.data],
+            scroll,
+        }, () => {
+            if (scroll.page === 2 && searchResult.data.length !== 0 && this.props.isPc) {
+                this.itemSelected(searchResult.data[0], 0);
+            }
+        });
+    }
+
     render() {
         const { list, scroll } = this.state;
         const renderAlbum = this.props.renderAlbum ? true : false;
@@ -74,6 +190,7 @@ class ItemList extends Component {
                 useWindow={false}
                 threshold={1}
             >
+                <div style={{position: 'sticky'}}><SearchBarComponent children={this.props} searchInput={this.searchInput} resetSearchInput={this.resetSearchInput}/></div>
                 <div style={{background: "#eee", color: "#333"}}>
                     {
                         list.map((items, index) => (

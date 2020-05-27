@@ -4,6 +4,7 @@ import FadeTransitions from '../Common/FadeTransitions';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import CONFIG from '../../config';
 import Common from '../Common/Common';
+import ISD from '../Common/ISDInfomation'
 
 const DynaProInfo = state => {
     const isPc = useMediaQuery(CONFIG.minDeviceWidth)
