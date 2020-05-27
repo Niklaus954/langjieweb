@@ -67,6 +67,7 @@ function TabsComponent(props) {
         <div style={{width: "100%", height: "100%"}}>
             <MobileTabs
             tabs={Object.keys(infoList).filter(item => infoList[item].length > 0)}
+            initialPage={0}
             renderTab={tab => <span>{transTab[tab]}</span>}
             >
                 {Object.keys(infoList).filter(item => infoList[item].length > 0).map((items, index) => (

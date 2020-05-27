@@ -190,7 +190,7 @@ function ContractPopover(props){
 
 //tab滑动组件
 function TabPanel(props) {
-    const { value, info, param, index, children, infoListKey, ...other } = props;
+    const { children, infoListKey } = props;
     return (
         <div >{infoListKey === "regHistoryList" ? 
         children.map((item, index) => {
@@ -256,11 +256,11 @@ const VirCard = props => {
                     <div style={{height: "100%"}}>
                         <MobileTabs
                         tabs={Object.keys(infoList).filter(item => infoList[item].length > 0)}
-                        initialPage={1}
+                        initialPage={0}
                         renderTab={tab => <span>{transTab[tab]}</span>}
                         >
                             {Object.keys(infoList).filter(item => infoList[item].length > 0).map((items, index) => (
-                                <TabPanel key={index+'tabPanel'} value={value} index={index} param={props} infoListKey={items}>{infoList[items]}</TabPanel>
+                                <TabPanel key={index+'tabPanel'} param={props} infoListKey={items}>{infoList[items]}</TabPanel>
                             ))}
                         </MobileTabs>
                     </div>
