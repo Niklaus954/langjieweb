@@ -25,7 +25,8 @@ const transTab = {
 
 function RegCard(props) {
     const { children } = props
-    const validDate = children.validDate === 0 ? '永久注册' : children.validDate;
+    console.log(children)
+    const validDate = children.validDate == 0 ? '永久注册' : children.validDate;
     return(
         <div style={{margin: 10}}>
             <Card variant="outlined"><CardContent>
