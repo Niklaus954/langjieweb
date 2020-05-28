@@ -25,7 +25,6 @@ const transTab = {
 
 function RegCard(props) {
     const { children } = props
-    console.log(children)
     const validDate = children.validDate == 0 ? '永久注册' : children.validDate;
     return(
         <div style={{margin: 10}}>
