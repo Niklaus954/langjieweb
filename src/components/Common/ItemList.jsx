@@ -63,7 +63,8 @@ var that
                     placeholder={type(children.children)}
                     onChange={ e => setInputVal(e.target.value)}
                     />
-                    <IconButton type="submit" className={classes.IconButton} aria-label="search" onClick={searchFetch}><SearchIcon/></IconButton>
+                    {/* <IconButton type="submit"  className={classes.IconButton} aria-label="search" onClick={searchFetch}></IconButton> */}
+                    <Button className={classes.IconButton} onClick={searchFetch}><SearchIcon/></Button>
                     <Divider orientation="vertical" className={classes.divider} />
                     <Button variant="text" color="primary" onClick={resetSearchVal}>重置</Button>
                 </Paper>

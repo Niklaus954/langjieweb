@@ -25,7 +25,8 @@ const transTab = {
 
 function RegCard(props) {
     const { children } = props
-    const validDate = children.validDate === 0 ? '永久注册' : children.validDate;
+    console.log(children)
+    const validDate = children.validDate == 0 ? '永久注册' : children.validDate;
     return(
         <div style={{margin: 10}}>
             <Card variant="outlined"><CardContent>
@@ -211,13 +212,12 @@ const VirCard = props => {
     const [infoList, setInfoList] = useState([]);
     const [album, setAlbum] = useState([])
     const isPc = useMediaQuery(CONFIG.minDeviceWidth);
-    const [value ,setValue] = useState(0)
-
+    const [tabPage,setTabPage] = useState(0)
     const backSelectedItem = async item => {
         if (isPc) {
             const result = await apiService.fetchVirCardInfo(item)
-            setValue(0)
             setInfoList(result.data)
+            setTabPage(0)
         } else {
             props.history.push({
                 pathname: '/virInfo/' + item.serialNo, 
@@ -256,8 +256,10 @@ const VirCard = props => {
                     <div style={{height: "100%"}}>
                         <MobileTabs
                         tabs={Object.keys(infoList).filter(item => infoList[item].length > 0)}
-                        initialPage={0}
+                        page={tabPage}
                         renderTab={tab => <span>{transTab[tab]}</span>}
+                        onTabClick={e => setTabPage(Object.keys(infoList).filter(item => infoList[item].length > 0).indexOf(e))}
+                        
                         >
                             {Object.keys(infoList).filter(item => infoList[item].length > 0).map((items, index) => (
                                 <TabPanel key={index+'tabPanel'} param={props} infoListKey={items}>{infoList[items]}</TabPanel>
