@@ -9,9 +9,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import FadeTransitions from '../Common/FadeTransitions'
 import { List, Tabs as MobileTabs } from 'antd-mobile';
 import AppBar from '@material-ui/core/AppBar';
-import {Tabs, Tab, Box, Typography, Card, CardContent, Popover, Link, Paper} from '@material-ui/core';
-import SwipeableViews from 'react-swipeable-views';
-import { makeStyles } from '@material-ui/core/styles';
+import { Typography, Card, CardContent, Popover, Link } from '@material-ui/core';
 import ParagraphStyles from '../Common/ParagraphStyles';
 
 const Item = List.Item;

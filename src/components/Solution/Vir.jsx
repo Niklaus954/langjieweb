@@ -32,7 +32,7 @@ const Vir = ({history}) => {
                 transArr.forEach((ite, ind) => {
                     if(ite['type'] === 'picture') {
                         orderArr.push({
-                            value: ite.value,
+                            value: ite.valueArr[0],
                             id: item['id'],
                             content: des
                         })

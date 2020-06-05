@@ -52,11 +52,16 @@ const VirProInfo = state => {
         const resArr = []
         for(let key in content) {
             const arr = []
-            if(typeof content[key] === 'string') {
-                key = JSON.parse(content[key])
+            const val = Common.transToView(content[key])
+            if(val.type === 'picture') {
                 resArr.push(<div key={key} style={{display: 'flex', justifyContent:'space-around'}}>
-                    <div style={{backgroundImage: `url(${CONFIG.url(`/img/gallery/${key['name']}`)})`, width:  "45%", height: 200,  backgroundSize:'contain', backgroundRepeat: "no-repeat", backgroundPosition:"center", cursor:"pointer" }} onLoad={() => {console.log(111)}}></div>
-                    {/* <div style={{alignSelf: 'flex-end'}}>
+                    {
+                        val.valueArr.map((img, index) => (
+                            <div key={img} style={{backgroundImage: `url(${CONFIG.url(`/img/gallery/${img}`)})`, width: isPc ? "45%" : "100%", height: 200,  backgroundSize:'contain', backgroundRepeat: "no-repeat", backgroundPosition:"center", cursor:"pointer" }} onLoad={() => {console.log(111)}}></div>
+                        ))
+                    }
+                    {/* <div></div>
+                    <div style={{alignSelf: 'flex-end'}}>
                         <ButtonGroup orientation="vertical" color="primary" size="small">
                             <Button>正面图</Button>
                             <Button>背面图</Button>
@@ -65,19 +70,19 @@ const VirProInfo = state => {
                 </div>)
             }else{
                 resArr.push(<div key={key}><h3>{key}</h3></div>)
-                content[key].forEach((item, index) => {
+                val.valueArr.map((item, index) => {
                     arr.push(<div key={index} style={{fontSize: isPc ? 16 : 14, textIndent: isPc ? 32 : 28, fontWeight: 400, lineHeight: 1.4, color: "#333"}}>
                         <div><p>{item}</p></div>
                     </div>)
                 })
+                resArr.push(arr)
             }
-            resArr.push(arr)
         }
         return resArr
     }
     return(
         <FadeTransitions>
-            <div style={{padding: isPc ? "20px 40px" : "20px", overflow:'auto', background: "#fff"}}>
+            <div style={{padding: isPc ? "20px 40px" : "20px", overflow:'auto', background: "#fff", width: "100%"}}>
                 <div>{RenderContent()}</div>
             </div>
         </FadeTransitions>
