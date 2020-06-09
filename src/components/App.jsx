@@ -27,6 +27,7 @@ import ContractInfo from './Service/ContractInfo'
 import VirInfo from './Service/VirInfo'
 import VirProInfo from '../containers/VirProInfoContainer';
 import DynaProInfo from '../containers/DynaProInfoContainer';
+import SuperAuth from '../containers/SuperAuth';
 
 
 const App = ({ selectedSideMenu }) => {
@@ -78,6 +79,7 @@ const App = ({ selectedSideMenu }) => {
                             <Route path="/virProInfo" component={VirProInfo}/>
                             <Route path="/dynaProInfo" component={DynaProInfo}/>
                             <Route path="/shop*" component={LazyShop}/>
+                            <Route path="/superAuth" component={SuperAuth} />
                             <Redirect from='/' to='/index' />
                         </Switch>
                     </div>
