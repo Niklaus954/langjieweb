@@ -87,6 +87,20 @@ const Common = {
         }
     },
 
+    // 前端本地判断是否员工
+    showSuperAuth: () => {
+        let showSuperAuth = false;
+        try {
+            const lj_member_info = JSON.parse(localStorage.getItem('lj_member_info'));
+            if (lj_member_info.company === '杭州朗杰测控技术开发有限公司' && Number(lj_member_info.checked) === 1 ) {
+                showSuperAuth = true;
+            }
+        } catch (e) {
+            
+        }
+        return showSuperAuth;
+    },
+
     refreshSideMenuAuth: async (history, location) => {
         if (Common.getAuthToken()) {
             const result = await apiLogin.refreshSideMenuAuth();

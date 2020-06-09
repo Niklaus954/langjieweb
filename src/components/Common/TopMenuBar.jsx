@@ -167,6 +167,7 @@ const TopMenuBar = ({memberInfo, selectedSideMenu, updateSideMenuList, updateSel
             return(
                 <div style={{minWidth: 150}}>
                     <MenuItem onClick={handleMemberClose}>{timeGreet + memberInfo.name}</MenuItem>
+                    { Common.showSuperAuth() && <MenuItem onClick={() => history.push('/superAuth?path='+history.location.pathname)}>超级权限</MenuItem> }
                     {/* <MenuItem onClick={() => history.push('/shop/cart')}>购物车</MenuItem>
                     <MenuItem onClick={() => history.push('/shop/myOrder')}>订单</MenuItem> */}
                     <MenuItem onClick={logout}>注销</MenuItem>
