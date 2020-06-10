@@ -97,29 +97,9 @@ class ItemList extends Component {
     }
 
     //节流函数
-    throttle(fn, wait) {
-        let last, timer;
-        let interval = wait || 1000;
-
-        return function(){
-            let th = this,
-            args = arguments;
-            let now = +new Date();
-            if(now - last < interval) {
-                clearTimeout(timer);
-                timer = setTimeout(function() {
-                    last = now;
-                    fn.apply(th, args)
-                }, interval) 
-            }else{
-                last = now;
-                fn.apply(th, args)
-            }
-        }
-    }
 
     async fetch() {
-        
+        console.log(111)
         const { scroll, list, keywords } = this.state;
         scroll.loading = true;
         this.setState({
@@ -142,7 +122,6 @@ class ItemList extends Component {
                 this.itemSelected(result.data[0], 0);
             }
         });
-        //console.log(this.throttle())
     }
 
     itemSelected(item, index) {
@@ -215,7 +194,7 @@ class ItemList extends Component {
                 loadMore={this.fetch}
                 hasMore={scroll.hasMore}
                 useWindow={false}
-                //threshold={0}
+                threshold={1}
             >
                 <div style={{position: 'sticky'}}><SearchBarComponent children={this.props} searchInput={this.searchInput} resetSearchInput={this.resetSearchInput}/></div>
                 <div style={{background: "#eee", color: "#333"}}>
