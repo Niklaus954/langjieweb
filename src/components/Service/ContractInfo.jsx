@@ -93,14 +93,13 @@ function AppendPopover(props){
         <div>
             <Typography variant="body2" component="a" aria-describedby={id} style={{cursor: "pointer"}} color="primary" onClick={(event) => toViewContent(children, event)}>{children}</Typography>
             <Popover
-            style={{width: "80%"}}
             open={open}
             anchorEl={anchorEl}
             onClose={handleClose}
             anchorReference="anchorPosition"
             anchorPosition={{top: 150, left: 30}}
             >
-                <div style={{ height: 300}}>
+                <div style={{ height: 300, width: 240}}>
                     <div>
                         <div style={{padding: '5px 0', textAlign: 'center', background: '#ccc', fontSize: 14}}>{name === "expressNo" ? <span>快递信息</span> : <span>产品详情</span>}</div>
                         <div style={{overflow: 'auto', height: "92%"}}>
@@ -148,7 +147,6 @@ function TypographyValue(props){
 }
 
 function TabPanel(props){
-   // console.log(props)
     const { name, children } = props
     if(name === 'infoList') {
         return(
@@ -215,7 +213,6 @@ const ContractInfo = props => {
 
     const fetch = async contract_no => {
         const result = await apiService.getContractInfo({contract_no});
-        console.log(result)
         const albumData = [{ column_name: 'album', column_comment: '图片', val: '/controller_system.png' }];
         const album = result.data.data.album;
         const { goodsList, packingList } = result.data.data
@@ -241,15 +238,6 @@ const ContractInfo = props => {
             <div style={{ width: '96%', height: '100%', display: 'flex', borderRight: '1px solid #eee', margin: "auto" }}>
                 <div style={{ flex: 1, overflow: 'auto' }} id="grid">
                     <div>{ParagraphStyles.RenderServiceCarousel(album)}</div>
-                    {/* <div style={{ margin: 5}}>
-                        <Paper elevation={3}>
-                            <List renderHeader={() => '明细'}>
-                                {
-                                    infoList.map((items, index) => <Item key={items.column_name + index} extra={items.val} wrap={true}>{items.column_comment}</Item>)
-                                }
-                            </List>
-                        </Paper>
-                    </div> */}
                     <div>
                         <MobileTabs
                         tabs={tabs}
