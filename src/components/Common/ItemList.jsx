@@ -145,7 +145,6 @@ class ItemList extends Component {
             if (scroll.page === 2 && result.data.length !== 0 && this.props.isPc) {
                 this.itemSelected(result.data[0], 0);
             }
-            console.log(result)
         });
     }
 
