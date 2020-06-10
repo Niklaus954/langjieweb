@@ -62,10 +62,39 @@ const refreshSideMenuAuth = async params => {
     return result;
 }
 
+const fetchCompanyList = async () => {
+    const result = await api({
+        url: '/open/service/getSuperAuth',
+    });
+    return result;
+}
+
+const fetchSuperAuthMember = async params => {
+    const result = await api({
+        url: '/open/service/getSuperAuthMember',
+        queryData: {
+            company: params.company,
+        },
+    });
+    return result;
+}
+
+const postSuperAuthMember = async params => {
+    const result = await api({
+        url: '/open/service/postSuperAuthMember',
+        method: 'post',
+        formData: params,
+    });
+    return result;
+}
+
 export default {
     fetchVerCode,
     checkVerCode,
     fetchMemberInfo,
     checkWxCode,
     refreshSideMenuAuth,
+    fetchCompanyList,
+    fetchSuperAuthMember,
+    postSuperAuthMember,
 };
