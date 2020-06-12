@@ -65,12 +65,6 @@ const packingItemLabel = {
     
 }
 
-const expressNo = {
-    expName: {
-        name: "快递名称"
-    },
-    number: "快递单号"
-}
 
 // 
 function AppendPopover(props){
@@ -94,6 +88,7 @@ function AppendPopover(props){
             setExpressInfo(result.data.result.list)
         }else{
             const result = await apiService.fetchVirCardInfo({serialNo: params})
+            if(result.code === -1) return
             setInfoList([...result.data['hardInfo'],...result.data['productInfo']])
         }
         
@@ -111,7 +106,7 @@ function AppendPopover(props){
             anchorPosition={{top: 300, left: 600}}
             >
                 <div style={{width: 500, height: 600}}>
-                    <div>
+                    <div style={{height: "100%"}}>
                         <div style={{padding: '10px 0', textAlign: 'center', background: '#ccc', fontSize: 18}}>{name === "expressNo" ? <span>快递信息</span> : <span>产品详情</span>}</div>
                         <div style={{overflow: 'auto', height: "92%"}}>
                             {name === "expressNo" ? 

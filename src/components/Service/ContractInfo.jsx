@@ -63,9 +63,8 @@ const packingItemLabel = {
 
 
 function AppendPopover(props){
-    const { name, children } = props
+    const { name, children, history } = props
     const [anchorEl, setAnchorEl] = useState(null);
-    const [infoList, setInfoList] = useState([]);
     const [expressInfo, setExpressInfo] = useState([])
     
     const handleClose = () => {
@@ -78,55 +77,62 @@ function AppendPopover(props){
     }
 
     const fetch = async (params) => {
-        if(name === 'expressNo') {
-            const result = await apiService.getExpressInfo(params)
-            setExpressInfo(result.data.result.list)
-        }else{
-            const result = await apiService.fetchVirCardInfo({serialNo: params})
-            setInfoList([...result.data['hardInfo'],...result.data['productInfo']])
-        }
+        const result = await apiService.getExpressInfo(params)
+        setExpressInfo(result.data.result.list)
         
     }
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
-    return(
-        <div>
-            <Typography variant="body2" component="a" aria-describedby={id} style={{cursor: "pointer"}} color="primary" onClick={(event) => toViewContent(children, event)}>{children}</Typography>
-            <Popover
-            open={open}
-            anchorEl={anchorEl}
-            onClose={handleClose}
-            anchorReference="anchorPosition"
-            anchorPosition={{top: 150, left: 30}}
-            >
-                <div style={{ height: 300, width: 240}}>
-                    <div>
-                        <div style={{padding: '5px 0', textAlign: 'center', background: '#ccc', fontSize: 14}}>{name === "expressNo" ? <span>快递信息</span> : <span>产品详情</span>}</div>
-                        <div style={{overflow: 'auto', height: "92%"}}>
-                            {name === "expressNo" ? 
-                                <Stepper orientation="vertical" activeStep={-1}>
+
+    if(name === "expressNo") {
+        return(
+            <div>
+                <Typography variant="body2" component="a" aria-describedby={id} style={{cursor: "pointer"}} color="primary" onClick={(event) => toViewContent(children, event)}>{children}</Typography>
+                <Popover
+                open={open}
+                anchorEl={anchorEl}
+                onClose={handleClose}
+                anchorReference="anchorPosition"
+                anchorPosition={{top: 150, left: 30}}
+                >
+                    <div style={{ height: 300, width: 240}}>
+                        <div>
+                            <div style={{padding: '5px 0', textAlign: 'center', background: '#ccc', fontSize: 14}}><span>快递信息</span></div>
+                            <div style={{overflow: 'auto', height: "92%"}}>
+                                <Stepper 
+                                orientation="vertical"
+                                activeStep={-1}>
                                     {expressInfo.map((item, index) => (
                                         <Step key={index+ "exp"}>
                                             <StepLabel>{item['status']}：{item['time']}</StepLabel>
                                         </Step>
                                     ))}
                                 </Stepper>
-                                :
-                                infoList.map((item, index) => (
-                                    <Item key={index} extra={item.val} wrap={true}>{item.column_comment}</Item>
-                                ))
-                            }
+                            </div>
                         </div>
                     </div>
-                </div>
-            </Popover>
-        </div>
-    )
+                </Popover>
+            </div>
+        )
+    }else{
+        return(
+            <Typography
+            variant="body2"
+            component="a"
+            aria-describedby={id} 
+            style={{cursor: "pointer"}} 
+            color="primary" 
+            onClick={(event) => history.history.push({pathname: '/virInfo/' + children, })}
+            >
+                {children}
+            </Typography>
+        )
+    }
 }
 
 
 function TypographyValue(props){
-    let { children, isLink, name } = props
+    let { children, isLink, name, history } = props
     if(name === "sn" && children) {
         children = children.split(',')
     }
@@ -138,16 +144,16 @@ function TypographyValue(props){
             {isLink ?
             children instanceof Array ? 
             <div style={{display: "flex", flexWrap: "wrap"}}>{children.map((item, index) => (
-                <Box key={index} style={{marginRight: 15}}><AppendPopover name={name}>{item}</AppendPopover></Box>
+                <Box key={index} style={{marginRight: 15}}><AppendPopover name={name} history={history}>{item}</AppendPopover></Box>
             ))}</div> :
-            <AppendPopover name={name}>{children}</AppendPopover> :
+            <AppendPopover name={name} history={history}>{children}</AppendPopover> :
             <Typography variant="body2">{children}</Typography>}
         </div>
     )
 }
 
 function TabPanel(props){
-    const { name, children } = props
+    const { name, children, history } = props
     if(name === 'infoList') {
         return(
             <div>{ children.map((item, index) => (
@@ -190,7 +196,7 @@ function TabPanel(props){
                             <div style={{margin: "10px 5px"}}>{labelArr.map((label, ind) =>(
                                 <div key={index+ind} style={{display: "flex"}}>
                                     <Typography variant="subtitle2" style={{minWidth: 150,}}>{packingItemLabel[label]['name']}：</Typography>
-                                    <TypographyValue isLink={packingItemLabel[label]['link']} name={label}>{item[label]}</TypographyValue>
+                                    <TypographyValue isLink={packingItemLabel[label]['link']} name={label} history={history}>{item[label]}</TypographyValue>
                                 </div>
                             ))}</div>
                         </div>
@@ -246,7 +252,7 @@ const ContractInfo = props => {
                         >
                             <TabPanel name="infoList">{infoList}</TabPanel>
                             <TabPanel name="goodsList">{GoodsList}</TabPanel>
-                            <TabPanel name="packingList">{PackingList}</TabPanel>
+                            <TabPanel history={props} name="packingList">{PackingList}</TabPanel>
                         </MobileTabs>
                     </div>
                 </div>
