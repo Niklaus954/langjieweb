@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Paper, InputBase, IconButton, useMediaQuery, Button, Divider } from '@material-ui/core';
 import { Search as SearchIcon } from '@material-ui/icons';
 import CONFIG from '../../config';
+import { ListView } from 'antd-mobile';
 var that
 
     //朗杰服务 产品、维修、合同搜索框
@@ -96,6 +97,33 @@ class ItemList extends Component {
         this.fetch();
     }
 
+    /**
+     * 节流函数
+     * @param {*} fun 要执行的函数
+     * @param {*} delay 延迟
+     * @param {*} time 在time时间内必须执行一次
+     */
+    throttle(fun, delay, time) {
+        var timeout,
+            startTime = new Date();
+        return function () {
+            var context = this,
+                args = arguments,
+                curTime = new Date();
+            clearTimeout(timeout);
+            // 如果达到了规定的触发时间间隔，触发 handler
+            if (curTime - startTime >= time) {
+                fun.apply(context, args);
+                startTime = curTime;
+                // 没达到触发间隔，重新设定定时器
+            } else {
+                timeout = setTimeout(function () {
+                    fun.apply(context, args);
+                }, delay);
+            }
+        };
+    };
+
     async fetch() {
         const { scroll, list, keywords } = this.state;
         scroll.loading = true;
@@ -186,7 +214,7 @@ class ItemList extends Component {
                 initialLoad={false}
                 pageStart={scroll.page}
                 isReverse={false}
-                loadMore={this.fetch}
+                loadMore={this.throttle(this.fetch, 500, 1000)}
                 hasMore={scroll.hasMore}
                 useWindow={false}
                 threshold={1}
@@ -209,6 +237,7 @@ class ItemList extends Component {
             </InfiniteScroll>
         )
     }
+    
 }
 
 export default ItemList;

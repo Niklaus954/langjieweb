@@ -70,6 +70,14 @@ const getContractInfo = async params => {
     return result;
 }
 
+//快递查询
+const getExpressInfo = async params  => {
+    const result = await api({
+        url: "/open/service/queryExpress/"+params
+    })
+    return result
+}
+
 export default {
     getTicket,
     fetchRepair,
@@ -78,4 +86,5 @@ export default {
     fetchVirCardInfo,
     fetchContract,
     getContractInfo,
+    getExpressInfo,
 };

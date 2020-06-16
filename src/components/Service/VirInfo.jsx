@@ -5,9 +5,8 @@ import {
 import apiService from '../../api/apiService';
 import FadeTransitions from '../Common/FadeTransitions'
 import { List, Tabs as MobileTabs } from 'antd-mobile';
-import { makeStyles, AppBar, Tab, Tabs, Box, Card, CardContent, Typography, Paper } from '@material-ui/core';
+import { Card, CardContent, Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import SwipeableViews from 'react-swipeable-views';
 const Item = List.Item;
 
 const transTab = {
