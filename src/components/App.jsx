@@ -40,6 +40,12 @@ const App = ({ selectedSideMenu }) => {
         setBarHeight(barHeight);
     }, [ window.innerHeight, barHeight ]);
 
+    // 20200619补丁
+    if (!localStorage.getItem('tokenbuding')) {
+        localStorage.clear();
+        localStorage.setItem('tokenbuding', '1');
+    }
+
     const getStyle = () => {
         const style = {
             display: 'flex',
