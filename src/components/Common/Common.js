@@ -79,8 +79,9 @@ const Common = {
             localStorage.setItem('lj_member_info', JSON.stringify(memberInfo.data));
             updateMemberInfo(memberInfo.data);
             // 预登陆商城系统
-            const shopLoginInfo = await apiShop.loginShop(result.data.unionid);
-            localStorage.setItem('shop_access_token', shopLoginInfo.data.access_token);
+            // const shopLoginInfo = await apiShop.loginShop(result.data.unionid);
+            // localStorage.setItem('shop_access_token', shopLoginInfo.data.access_token);
+            localStorage.setItem('shop_access_token', result.data.lj_token);
 
             history.push(redirectUrl);
             Common.refreshSideMenuAuth(history, { pathname: redirectUrl });
@@ -104,7 +105,9 @@ const Common = {
     refreshSideMenuAuth: async (history, location) => {
         if (Common.getAuthToken()) {
             const result = await apiLogin.refreshSideMenuAuth();
-            SIDEMENUIDARR = result.data;
+            if (result.code === 200) {
+                SIDEMENUIDARR = result.data;
+            }
             const path = location.pathname === '/' ? '/index' : location.pathname;
             history.push({
                 pathname: path,
