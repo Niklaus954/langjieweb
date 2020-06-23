@@ -88,7 +88,7 @@ const RenderServiceCarousel = (album) => {
     albumArr = album[0].val.split(',');
 
     return(
-        <div style={{paddingBottom: 20}}>
+        <div style={{paddingBottom: 10}}>
             <Slider {...settings}>
                 {albumArr.map((item, index) => (
                     <div key={index}><div style={{backgroundImage: `url(${CONFIG.url(`/img${item}`)})`, backgroundPosition: "center", backgroundSize: "contain", backgroundRepeat: "no-repeat", height:  200, width: "80%", margin: "auto", cursor: "pointer"}} onClick={() =>{window.open(CONFIG.url(`/img${item}`))}}></div></div>

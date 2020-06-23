@@ -64,6 +64,21 @@ const packingItemLabel = {
     },
     
 }
+//步骤条
+function ComponentSteps(props){
+    const Step = Steps.Step
+    const steps = ["审核中", "待发货", "发货中", "已发货", "已收货"]
+
+    return(
+        <div>
+            <Steps direction="horizontal" current={steps.indexOf(props.children.delivery_state)}>{
+                steps.map((s, i) => (
+                    <Step key={i} title={s} />
+                ))
+            }</Steps>
+        </div>
+    )
+}
 
 
 // 
@@ -153,7 +168,6 @@ function TypographyValue(props){
 }
 
 function TabPanel(props){
-   // console.log(props)
     const { name, children } = props
     if(name === 'infoList') {
         return(
@@ -215,6 +229,7 @@ const Contract = props => {
     const [GoodsList, setGoodsList] = useState([]);
     const [PackingList, setPackingList] = useState([]);
     const [album, setAlbum] = useState([]);
+    const [dataSource, setDataSource] = useState([])
     const isPc = useMediaQuery(CONFIG.minDeviceWidth);
 
     const backSelectedItem = async item => {
@@ -240,6 +255,7 @@ const Contract = props => {
             setInfoList(renderList);
             setGoodsList(goodsList)
             setPackingList(packingList)
+            setDataSource(result.data.data)
         } else {
             props.history.push({
                 pathname: '/contractInfo/' + item.contract_no, 
@@ -273,7 +289,8 @@ const Contract = props => {
                 </div>
                 { isPc && <div style={{ flex: 1, height: "100%", width:"70%", marginLeft: "10px" }} id="grid">
                     <div style={{height: "26%"}}>{ParagraphStyles.RenderServiceCarousel(album)}</div>
-                    <div style={{ height: "73%", overflow: 'auto'}}>
+                    <div style={{height: "7%"}}><ComponentSteps>{dataSource}</ComponentSteps></div>
+                    <div style={{ height: "67%", overflow: 'auto'}}>
                         <MobileTabs
                         tabs={tabs}
                         initialPage={0}

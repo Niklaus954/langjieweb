@@ -28,6 +28,7 @@ import VirInfo from './Service/VirInfo'
 import VirProInfo from '../containers/VirProInfoContainer';
 import DynaProInfo from '../containers/DynaProInfoContainer';
 import SuperAuth from '../containers/SuperAuth';
+import DeliveryInfo from './Service/DeliveryInfo';
 
 
 const App = ({ selectedSideMenu }) => {
@@ -75,6 +76,7 @@ const App = ({ selectedSideMenu }) => {
                             <Route path="/checkLogin" component={CheckLogin} />
                             <Route path="/repairInfo" component={RepairInfo}/>
                             <Route path="/contractInfo" component={ContractInfo}/>
+                            <Route path="/DeliveryInfo" component={DeliveryInfo}/>
                             <Route path="/virInfo" component={VirInfo}/>
                             <Route path="/virProInfo" component={VirProInfo}/>
                             <Route path="/dynaProInfo" component={DynaProInfo}/>

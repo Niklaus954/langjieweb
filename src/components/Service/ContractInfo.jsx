@@ -4,7 +4,7 @@ import {
 } from 'react-router-dom'
 import apiService from '../../api/apiService';
 import FadeTransitions from '../Common/FadeTransitions'
-import { List, Tabs as MobileTabs } from 'antd-mobile';
+import { List, Tabs as MobileTabs, Steps } from 'antd-mobile';
 import ParagraphStyles from "../Common/ParagraphStyles";
 import { Paper, Box, Typography, Card, CardContent, Popover, Stepper, StepLabel, Step } from "@material-ui/core"
 const Item = List.Item;
@@ -61,6 +61,22 @@ const packingItemLabel = {
     
 }
 
+//步骤条
+function ComponentSteps(props){
+    const Step = Steps.Step
+    const steps = ["审核中", "待发货", "发货中", "已发货", "已收货"]
+
+    return(
+        <div>
+            <Steps direction="horizontal" size="small" current={steps.indexOf(props.children.delivery_state)}>{
+                steps.map((s, i) => (
+                    <Step style={{width: "20%"}} key={i} title={<span style={{fontSize: 14}}>{s}</span>} />
+                ))
+            }</Steps>
+        </div>
+    )
+}
+
 
 function AppendPopover(props){
     const { name, children, history } = props
@@ -87,8 +103,14 @@ function AppendPopover(props){
     if(name === "expressNo") {
         return(
             <div>
-                <Typography variant="body2" component="a" aria-describedby={id} style={{cursor: "pointer"}} color="primary" onClick={(event) => toViewContent(children, event)}>{children}</Typography>
-                <Popover
+                <Typography 
+                variant="body2" 
+                component="a" 
+                aria-describedby={id} 
+                style={{cursor: "pointer"}} 
+                color="primary" 
+                onClick={(event) => history.history.push('/deliveryInfo/'+children)}>{children}</Typography>
+                {/* <Popover
                 open={open}
                 anchorEl={anchorEl}
                 onClose={handleClose}
@@ -111,7 +133,7 @@ function AppendPopover(props){
                             </div>
                         </div>
                     </div>
-                </Popover>
+                </Popover> */}
             </div>
         )
     }else{
@@ -212,6 +234,7 @@ const ContractInfo = props => {
     const [album, setAlbum] = useState([]);
     const [GoodsList, setGoodsList] = useState([])
     const [PackingList, setPackingList] = useState([])
+    const [dataSource, setDataSource] = useState([])
     useEffect(() => {
         const contract_no = props.location.pathname.split('/contractInfo/')[1];
         fetch(contract_no);
@@ -237,6 +260,7 @@ const ContractInfo = props => {
         setInfoList(renderList);
         setGoodsList(goodsList);
         setPackingList(packingList);
+        setDataSource(result.data.data)
     }
 
     return (
@@ -244,6 +268,7 @@ const ContractInfo = props => {
             <div style={{ width: '96%', height: '100%', display: 'flex', borderRight: '1px solid #eee', margin: "auto" }}>
                 <div style={{ flex: 1, overflow: 'auto' }} id="grid">
                     <div>{ParagraphStyles.RenderServiceCarousel(album)}</div>
+                    <div style={{width: "90%"}}><ComponentSteps>{dataSource}</ComponentSteps></div>
                     <div>
                         <MobileTabs
                         tabs={tabs}
