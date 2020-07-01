@@ -6,7 +6,7 @@ import apiService from '../../api/apiService';
 import FadeTransitions from '../Common/FadeTransitions'
 import { List, Tabs as MobileTabs, Steps } from 'antd-mobile';
 import ParagraphStyles from "../Common/ParagraphStyles";
-import { Paper, Box, Typography, Card, CardContent, Popover, Stepper, StepLabel, Step } from "@material-ui/core"
+import { Paper, Box, Typography, Card, CardContent } from "@material-ui/core"
 const Item = List.Item;
 
 const tabs = [
@@ -110,30 +110,6 @@ function AppendPopover(props){
                 style={{cursor: "pointer"}} 
                 color="primary" 
                 onClick={(event) => history.history.push('/deliveryInfo/'+children)}>{children}</Typography>
-                {/* <Popover
-                open={open}
-                anchorEl={anchorEl}
-                onClose={handleClose}
-                anchorReference="anchorPosition"
-                anchorPosition={{top: 150, left: 30}}
-                >
-                    <div style={{ height: 300, width: 240}}>
-                        <div>
-                            <div style={{padding: '5px 0', textAlign: 'center', background: '#ccc', fontSize: 14}}><span>快递信息</span></div>
-                            <div style={{overflow: 'auto', height: "92%"}}>
-                                <Stepper 
-                                orientation="vertical"
-                                activeStep={-1}>
-                                    {expressInfo.map((item, index) => (
-                                        <Step key={index+ "exp"}>
-                                            <StepLabel>{item['status']}：{item['time']}</StepLabel>
-                                        </Step>
-                                    ))}
-                                </Stepper>
-                            </div>
-                        </div>
-                    </div>
-                </Popover> */}
             </div>
         )
     }else{

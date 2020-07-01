@@ -83,6 +83,19 @@ const fetchDynaTest = async() => {
     return result
 }
 
+const fetchHardInterfaceInfo = async params => {
+    const fetchIdMaps = {
+        "DBF25": 114,
+        "DBM25": 115,
+        "DBF9": 112,
+        "DBM9": 113
+    }
+    const result = await api({
+        url: "/open/knowledge/"+ fetchIdMaps[`${params}`]
+    })
+    return result
+}
+
 export default {
     fetchActionPlat,
     fetchApplication,
@@ -95,5 +108,6 @@ export default {
     fetchVir,
     fetchVirInfo,
     fetchDynaTest,
-    fetchMaxTest
+    fetchMaxTest,
+    fetchHardInterfaceInfo
 }

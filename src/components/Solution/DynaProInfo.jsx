@@ -51,9 +51,7 @@ const DynaProInfo = state => {
         if(data.length === 0) return
         const content = data.content;
         const resArr = []
-        // console.log(Common.transToViewAll(content))
         for(let key in content) {
-            //console.log(typeof content[key])
             const arr = []
             if(typeof content[key] === 'string') {
                 key = JSON.parse(content[key])
