@@ -105,17 +105,12 @@ const VirProInfo = state => {
                             ))}
                         </Carousel>
                     </div>
-                    <div style={{display: "flex", alignSelf: "flex-end"}}>
+                    <div style={{display: isPc ? "flex" : "none", alignSelf: "flex-end"}}>
                         <ButtonGroup color="primary" size="small">
                             <Button variant={variant === "contained" ? "contained" : "outlined"} onClick={() => setVariant('contained')}>正面图</Button>
                             <Button variant={variant === "outlined" ? "contained" : "outlined" } onClick={() => setVariant('outlined')}>背面图</Button>
                         </ButtonGroup>
                     </div>
-                    {/* {
-                        val.valueArr.map((img, index) => (
-                            <div key={img} style={{backgroundImage: `url(${CONFIG.url(`/img/gallery/${img}`)})`, width: isPc ? "45%" : "100%", height: 200,  backgroundSize:'contain', backgroundRepeat: "no-repeat", backgroundPosition:"center", cursor:"pointer" }} onMouseEnter={() => showHardInfo(hardInfo)}></div>
-                        ))
-                    } */}
                 </div>)
             }else{
                 resArr.push(<div key={key}><h3>{key}</h3></div>)
