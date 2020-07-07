@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { Paper, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, withStyles, AppBar, Tabs, Tab } from '@material-ui/core';
-import SwipeableViews from 'react-swipeable-views';
-import CONFIG from "../../config";
-import { withRouter } from 'react-router-dom'
+import React, {useState} from 'react';
+import SwipeableViews from 'react-swipeable-views'
+import { Typography, withStyles, Table, TableContainer, TableCell, TableBody, TableHead, TableRow, Tab, AppBar, Tabs } from '@material-ui/core';
+import CONFIG from '../../config';
+import apiSolution from '../../api/apiSolution'
+import { useEffect } from 'react';
 
 
 function TabPanel (props) {
@@ -25,14 +26,34 @@ function TabPanel (props) {
     )
 }
 
-/**
- * tabs组件
- */
+//text
+function RenderText(props){
+    const { name, children } = props
+    if(typeof children === 'string') {
+        return(
+            <div style={{margin: "10px 0", display: "flex", alignItems: "center"}}>
+                <Typography variant="subtitle1">{name}：</Typography>
+                <Typography variant="body2" gutterBottom>{children}</Typography>
+            </div>
+        )
+    }else{
+        return(
+            <div style={{margin: "10px 0"}}>
+                <div><Typography variant="subtitle1">{name}：</Typography></div>
+                <div>{children['name'].map((ele, index) => (
+                    <Typography style={{textIndent: 28}} variant="body2" key={ele+index}>{index+1+"、"+ele}</Typography>
+                ))}</div>
+            </div>
+        )
+    }
+}
 
+//tabs
 function RenderTabs(props){
     const { children } = props
     const [tab, setTab] = useState(0)
     const handleChange = (e, v) => {
+        console.log(v)
         setTab(v)
     }
     return(
@@ -43,9 +64,8 @@ function RenderTabs(props){
                 onChange={handleChange}
                 indicatorColor="primary"
                 textColor="primary"
-                variant={children.length >= 5 ? "scrollable" : "fullWidth"}
+                variant="scrollable"
                 scrollButtons="on"
-
                 >
                     {children.map((tab, index) => (
                         <Tab key={index+'tab'} label={Object.values(tab)[0]['title']}/>
@@ -56,18 +76,34 @@ function RenderTabs(props){
             index={tab}
             >
                 {children.map((item, index) => (
-                    <div style={{margin: "20px 10px", minHeight:240}} key={index+"tabPanel"}><TabPanel value={tab} index={index}>{item}</TabPanel></div>
+                    <div style={{margin: "20px 10px"}} key={index+"tabPanel"}><TabPanel value={tab} index={index}>{item}</TabPanel></div>
                 ))}
             </SwipeableViews>
         </div>
     )
 }
 
-/**
- * Table组件
- */
+//picture
+function RenderPicture(props){
+    const { name, children } = props
+    return(
+        <div key={children['name'].toString()+ name} style={{display: 'flex', alignItems: 'center', margin: 0}}>
+            <div style={{textAlign: 'end'}}><Typography variant="subtitle1">{name}：</Typography></div>
+            { children['name'] instanceof Array === true ? 
+                children['name'].map((item, index) => (
+                    <div key={index+item}><img style={{cursor: 'pointer'}} src={CONFIG.url(`/img/gallery/${item}`)} alt="" width={children.width > 250 ? 250 : children.width} onClick={() => window.open(CONFIG.url(`/img/gallery/${item}`))}></img></div>
+                )) :
+                <div>
+                    <div><img style={{cursor: 'pointer'}} src={CONFIG.url(`/img/gallery/${children['name']}`)} alt="" width={children.width > 250 ? 250 : children.width} onClick={() => window.open(CONFIG.url(`/img/gallery/${children['name']}`))}></img></div>
+                    <div style={{textAlign:'center'}}><Typography variant="caption">{children['title']}</Typography></div>
+                </div>
+            } 
+        </div>
+    )
+}
 
-function RenderTable(props) {
+//table
+function RenderTable(props){
     const { name, children} = props
     if(children['name'].length === 0) return
     const tableData = children['name']
@@ -89,11 +125,11 @@ function RenderTable(props) {
         },
       }))(TableRow);
     return(
-        <div key="table" style={{display: 'flex', margin: 10}} >
-           <div style={{width: "25%",textAlign: 'end'}}><Typography variant="subtitle2">{name}：</Typography></div>
+        <div>
+            <Typography variant="subtitle1">{name}：</Typography>
             <div>
                 <TableContainer>
-                    <Table style={{minWidth: 400}} size="small">
+                    <Table size="small">
                         <TableHead>
                             <TableRow>
                                 {tableData[0].map((title, index) => (
@@ -115,55 +151,21 @@ function RenderTable(props) {
     )
 }
 
-/**
- * picture组件
- */
-
-function RenderPicture(props){
-    const { name, children } = props
-    return(
-        <div key={children['name'].toString()+ name} style={{display: 'flex', alignItems: 'center', margin: 10}}>
-            <div style={{width: "25%",textAlign: 'end'}}><Typography variant="subtitle2">{name}：</Typography></div>
-            { children['name'] instanceof Array === true ? 
-                children['name'].map((item, index) => (
-                    <div key={index+item}><img style={{cursor: 'pointer'}} src={CONFIG.url(`/img/gallery/${item}`)} alt="" width={children.width} onClick={() => window.open(CONFIG.url(`/img/gallery/${item}`))}></img></div>
-                )) :
-                <div>
-                    <div><img style={{cursor: 'pointer'}} src={CONFIG.url(`/img/gallery/${children['name']}`)} alt="" width={children.width} onClick={() => window.open(CONFIG.url(`/img/gallery/${children['name']}`))}></img></div>
-                    <div style={{textAlign:'center'}}><Typography variant="caption">{children['title']}</Typography></div>
-                </div>
-            } 
-        </div>
-    )
-}
-
- /**
-  *  text组件
-  */
- function RenderText(props){
-     const { name, children } = props
-    if(typeof children === 'string') {
-        return(
-            <div key={children+name} style={{display: 'flex', margin: 10}}>
-                <div style={{width: "25%",textAlign: 'end'}}><Typography variant="subtitle2">{name}：</Typography></div>
-                <div><Typography variant="subtitle2">{children}</Typography></div>
-            </div>
-        )
-    }else{
-        return(
-            <div key={children['name'].toString()+name} style={{display: 'flex', margin: 10}}>
-                <div style={{width: "25%",textAlign: 'end'}}><Typography variant="subtitle2">{name}：</Typography></div>
-                <div style={{width: '75%'}} >{children['name'].map((ele, index) => (
-                    <Typography variant="subtitle2" key={ele+index}>{index+1+"、"+ele}</Typography>
-                ))}</div>
-            </div>
-        )
-    }
-}
-
-const HardInterfaceInfo = props => {
-    const { children } = props
+const HardInterfaceInfo = state => {
+    const hardInfoId = state.location.pathname.split('/')[state.location.pathname.split('/').length - 1]
+    const [hardInfo, setHardInfo] = useState([])
     const res = []
+    useEffect(() => {
+        const fetch = async () => {
+            const result = await apiSolution.fetchHardInterfaceInfo(hardInfoId)
+            if(result.code === 200) {
+                let val = result.data[0]['content']['说明'] 
+                val = typeof val === "object" ? val : JSON.parse(val)
+                setHardInfo(val)
+            }
+        }
+        fetch()
+    }, [hardInfoId])
     //解析json
     function JpackParse(Jpack, params){
         if(Jpack instanceof Array) {
@@ -194,18 +196,17 @@ const HardInterfaceInfo = props => {
                         }
                     }
                 }
+                
             }
         }
         return res
     }
 
     return(
-        <div>
-            <Paper elevation={3} style={{width: 750, margin: 'auto'}}>
-                <div style={{padding: "20px", height: 700, overflow: 'auto'}}>{JpackParse(children)}</div>
-            </Paper>
+        <div style={{margin: "auto", width: "98%", background: "#fff"}}>
+            <div style={{maxWidth: 600, margin: 'auto'}}>{JpackParse(hardInfo)}</div>
         </div>
     )
 }
 
-export default withRouter(HardInterfaceInfo)
+export default HardInterfaceInfo 

@@ -88,7 +88,13 @@ const fetchHardInterfaceInfo = async params => {
         "DBF25": 114,
         "DBM25": 115,
         "DBF9": 112,
-        "DBM9": 113
+        "DBM9": 113,
+        "CX16-9": 117,
+        "Y21-5": 116,
+        "GX20-8": 121,
+        "GX16-7": 120,
+        "GX16-6": 119,
+        "GX16-4": 118
     }
     const result = await api({
         url: "/open/knowledge/"+ fetchIdMaps[`${params}`]

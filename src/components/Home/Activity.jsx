@@ -4,7 +4,7 @@ import apiAboutLangjie from'../../api/apiAboutLangjie';
 import FadeTransitions from '../Common/FadeTransitions';
 import { Link, withRouter } from 'react-router-dom';
 import Divider from '@material-ui/core/Divider';
-import { Button, ButtonGroup } from '@material-ui/core';
+import { Button, ButtonGroup, Typography } from '@material-ui/core';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import CONFIG from '../../config'
 import { List, Button as MoButton, Toast } from 'antd-mobile';
@@ -63,10 +63,13 @@ const Activity = ({history}) => {
         data.forEach((item, index) => {
             resArr.push(<div key={index}>
                 <div className="title">
-                    <Link style={{color: "#3f51b5"}} to={`/activityContent/${item.id}`}><h3>{item.title}</h3></Link>
+                    <Link to={{pathname: `/activityContent/${item.id}`}}><Typography variant="h6">{item.title}</Typography></Link>
                 </div>
-                <div className="content">
-                    <p>{item.content['段落1']}</p>
+                <div className="content" style={{textIndent: 32}}>
+                    <Typography variant="subtitle1">{ item.content[Object.keys(item.content)[0]].indexOf('picture') === -1 ?
+                    item.content[Object.keys(item.content)[0]] : 
+                    item.content[Object.keys(item.content)[1]] 
+                    }...</Typography>
                 </div>
                 <Divider/>
             </div>)
@@ -107,7 +110,9 @@ const Activity = ({history}) => {
                         onClick={() => {history.push(`/activityContent/${item.id}`)}}
                         wrap={true}
                     >
-                        {item.title}<Brief>{item.content['段落1']}</Brief>
+                        {item.title}<Brief>{item.content[Object.keys(item.content)[0]].indexOf('picture') === -1 ?
+                        item.content[Object.keys(item.content)[0]] : 
+                        item.content[Object.keys(item.content)[1]]}</Brief>
                     </Item>
                 </List>
             </div>)

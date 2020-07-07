@@ -29,6 +29,7 @@ import VirProInfo from '../containers/VirProInfoContainer';
 import DynaProInfo from '../containers/DynaProInfoContainer';
 import SuperAuth from '../containers/SuperAuth';
 import DeliveryInfo from './Service/DeliveryInfo';
+import HardInterfaceInfo from './Solution/HardInterfaceInfo'
 
 
 const App = ({ selectedSideMenu }) => {
@@ -83,6 +84,7 @@ const App = ({ selectedSideMenu }) => {
                             <Route path="/repairInfo" component={RepairInfo}/>
                             <Route path="/contractInfo" component={ContractInfo}/>
                             <Route path="/DeliveryInfo" component={DeliveryInfo}/>
+                            <Route path="/hardInfo" component={HardInterfaceInfo} />
                             <Route path="/virInfo" component={VirInfo}/>
                             <Route path="/virProInfo" component={VirProInfo}/>
                             <Route path="/dynaProInfo" component={DynaProInfo}/>

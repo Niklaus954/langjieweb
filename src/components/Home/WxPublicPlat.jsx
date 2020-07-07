@@ -8,8 +8,9 @@ import FadeTransitions from "../Common/FadeTransitions";
 import { Link } from 'react-router-dom'
 import { hasHistory} from 'react-router'
 import { List, Toast, Button as MoButton } from 'antd-mobile';
-import { ButtonGroup, Button } from '@material-ui/core';
+import { ButtonGroup, Button, Typography } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
+import Axios from 'axios';
 const Item = List.Item;
 const Brief = Item.Brief;
 
@@ -18,9 +19,11 @@ const WxPublicPlat = ({history}) => {
     const isPc = useMediaQuery(CONFIG.minDeviceWidth);
     const [data, setData] = useState([]);
     const [page, setPage] = useState(1)
+    const [newsList, setNewsList] = useState('')
 
     useEffect(() => {
-        fetch()
+        //fetch()
+        fetchWxNewsList()
     },[])
     const fetch = async() => {
         const result = await apiAboutLangjie.fetchRecommendReading({
@@ -30,6 +33,16 @@ const WxPublicPlat = ({history}) => {
         if(result.code === 200) setData(result.data)
     }
 
+    const fetchWxNewsList = () => {
+        // Axios.get('/mp/homepage?__biz=MzAwMjE3NDY2MA==&hid=5&sn=79387bd180516a86eba2b13e172e83aa&scene=18#wechat_redirect').then(result => {
+        //     console.log(typeof result.data)
+        //     setNewsList(result.data)
+        // })
+        Axios.get('/loc/wechat/mediaMessageList').then(result => {
+            console.log(result)
+        })
+    }
+
     //pc端
     const PcView = () => {
         if(data.length === 0) return
@@ -37,10 +50,12 @@ const WxPublicPlat = ({history}) => {
         data.forEach((item, index) => {
             resArr.push(<div key={index}>
                 <div className="title">
-                    <Link style={{color: "#3f51b5"}} to={{pathname: `/readingContent/${item.id}`}}><h3>{item.title}</h3></Link>
+                    <Link to={{pathname: `/readingContent/${item.id}`}}><Typography variant="h6">{item.title}</Typography></Link>
                 </div>
-                <div className="content">
-                    <p>{item.content[Object.keys(item.content)[0]]}...</p>
+                <div className="content" style={{textIndent: 32}}>
+                    <Typography variant="subtitle1">{item.content[Object.keys(item.content)[0]].indexOf('picture') === -1 ?
+                    item.content[Object.keys(item.content)[0]] : 
+                    item.content[Object.keys(item.content)[1]]}...</Typography>
                 </div>
                 <Divider/>
             </div>)
@@ -120,15 +135,13 @@ const WxPublicPlat = ({history}) => {
     }
     return(
         <FadeTransitions>
-            <div>
-                { isPc ? <div>
-                    <div >{PcView()}</div>
-                    <PcPagination/>
-                </div> : <div>
-                    <div>{MobileView()}</div>
-                    <MobilePagination/>
-                </div> }
-            </div>
+            {/* <div>
+                {isPc ?
+                    <div><div >{PcView()}</div><PcPagination/></div> :
+                    <div><div>{MobileView()}</div><MobilePagination/>
+                </div>}
+            </div> */}
+            <div dangerouslySetInnerHTML={{__html:newsList}}></div>
         </FadeTransitions>
     )
 }
