@@ -34,12 +34,9 @@ const WxPublicPlat = ({history}) => {
     }
 
     const fetchWxNewsList = () => {
-        // Axios.get('/mp/homepage?__biz=MzAwMjE3NDY2MA==&hid=5&sn=79387bd180516a86eba2b13e172e83aa&scene=18#wechat_redirect').then(result => {
-        //     console.log(typeof result.data)
-        //     setNewsList(result.data)
-        // })
-        Axios.get('/loc/wechat/mediaMessageList').then(result => {
-            console.log(result)
+        Axios.get('/wechat/mediaMessageList').then(result => {
+            console.log(result.data)
+            setNewsList(result.data)
         })
     }
 
@@ -133,6 +130,14 @@ const WxPublicPlat = ({history}) => {
             </div>
         )
     }
+
+    const onLoadIframe = () => {
+        var iframe = document.getElementById('iframe');
+        var win = iframe.contentWindow;
+        var doc = win.document;
+        var name = win.name
+    }
+
     return(
         <FadeTransitions>
             {/* <div>
@@ -141,7 +146,14 @@ const WxPublicPlat = ({history}) => {
                     <div><div>{MobileView()}</div><MobilePagination/>
                 </div>}
             </div> */}
-            <div dangerouslySetInnerHTML={{__html:newsList}}></div>
+            <div>
+            <iframe id="iframe" src="http://mp.weixin.qq.com/mp/homepage?__biz=MzAwMjE3NDY2MA==&hid=8&sn=ae59c0e58b89fb06965e55b48097a5a0&scene=18#wechat_redirect"
+                frameBorder={0}
+                width="100%" 
+                height="98%"
+                onLoad={() => onLoadIframe()}
+                ></iframe>
+            </div>
         </FadeTransitions>
     )
 }
