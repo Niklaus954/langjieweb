@@ -7,12 +7,14 @@ import FadeTransitions from '../Common/FadeTransitions'
 import ParagraphStyles from "../Common/ParagraphStyles";
 import Button from '@material-ui/core/Button';
 import FormatListNumberedIcon from '@material-ui/icons/FormatListNumbered';
+import Axios from 'axios';
 
 const ReadingContent = state => {
     const isPc = useMediaQuery(CONFIG.minDeviceWidth)
     const contentId = state.location.pathname.split('/')[state.location.pathname.split('/').length - 1]
-   // const contentId = state.location.search.split('/')[state.location.search.split('/').length - 1]
     const [data, setData] = useState([])
+    const [news, setNews] = useState([])
+    const [newUrl, setNewUrl] = useState([])
     useEffect(() => {
         const fetch = async() => {
             const result = await apiAboutLangjie.fetchRecommendReadingById({
@@ -20,7 +22,24 @@ const ReadingContent = state => {
             })
             if(result.code === 200) setData(result.data)
         }
-        fetch()
+
+        const fetchNewsItem = () => {
+            Axios.get('/getToken/wx/getToken').then(res => {
+                Axios({
+                    method: "POST",
+                    url:'/wxApi/cgi-bin/material/get_material?access_token='+res.data.access_token,
+                    data: {
+                        "media_id": contentId
+                    }
+                }).then(val => {
+                    setNews(val.data['news_item'][0]['content'])
+                    setNewUrl(val.data['news_item'][0]['url'])
+                    console.log(val)
+                })
+            })
+        }
+        //fetch()
+        fetchNewsItem()
         updateSideMenu();
     },[])
 
@@ -43,13 +62,16 @@ const ReadingContent = state => {
             
         }
     }
-
+    
     return(
         <FadeTransitions>
-            <div style={{padding: isPc ? "20px 40px" : "20px", overflow:'auto', background: '#fff'}}>
+            {/* <div style={{padding: isPc ? "20px 40px" : "20px", overflow:'auto', background: '#fff'}}>
                 <div>{ParagraphStyles.RenderTitle(data)}</div>
                 <div>{ParagraphStyles.ContentStyles(ParagraphStyles.CommonContentRender(data))}</div>
                 <div style={{height: 60, display: 'flex', justifyContent: 'center', alignItems: 'center'}}><Button variant="outlined" color='primary' startIcon={<FormatListNumberedIcon/>} onClick={() => {console.log(state.history.goBack())}}>返回列表</Button></div>
+            </div> */}
+            <div style={{height: "100%", width: "100%"}}>
+                <iframe src={newUrl}  height="98%" width="98%" frameBorder={0}></iframe>
             </div>
         </FadeTransitions>
     )

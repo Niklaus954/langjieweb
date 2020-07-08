@@ -11,6 +11,7 @@ import { List, Toast, Button as MoButton } from 'antd-mobile';
 import { ButtonGroup, Button, Typography } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import Axios from 'axios';
+import $ from 'jquery'
 const Item = List.Item;
 const Brief = Item.Brief;
 
@@ -19,10 +20,11 @@ const WxPublicPlat = ({history}) => {
     const isPc = useMediaQuery(CONFIG.minDeviceWidth);
     const [data, setData] = useState([]);
     const [page, setPage] = useState(1)
-    const [newsList, setNewsList] = useState('')
+    const [newsList, setNewsList] = useState([])
+    const [offset, setOffset] = useState(0)
 
     useEffect(() => {
-        //fetch()
+       // fetch()
         fetchWxNewsList()
     },[])
     const fetch = async() => {
@@ -33,12 +35,48 @@ const WxPublicPlat = ({history}) => {
         if(result.code === 200) setData(result.data)
     }
 
-    const fetchWxNewsList = () => {
-        Axios.get('/wechat/mediaMessageList').then(result => {
-            console.log(result.data)
-            setNewsList(result.data)
+    const fetchWxNewsList = async () => {
+        Axios.get('/getToken/wx/getToken').then(res => {
+            Axios({
+                method: "POST",
+                url:'/wxApi/cgi-bin/material/batchget_material?access_token='+res.data.access_token,
+                data: {
+                    "type": 'news',
+                    "offset": offset,
+                    "count": 20
+                }
+            }).then(val => {
+                setNewsList(val.data.item)
+                console.log(val)
+            })
         })
     }
+
+    const listView = () => {
+        if(newsList.length === 0) return;
+        const resArr = []
+        newsList.map((item, index) => {
+            const newsItem = item['content']['news_item']
+            resArr.push(<div key={index}>
+                <List className="my-list">
+                    <Item
+                        arrow="horizontal"
+                        multipleLine
+                        onClick={() => {DirectSuggestReadingContent(item['media_id'])}}
+                        wrap={true}
+                        extra={(<img src={newsItem[0]['thumb_url']} width="60px"></img>)}
+                        style={{height: 80}}
+                    >
+                       {newsItem[0]['title']}<Brief>{newsItem[0]['digest']}</Brief>
+                    </Item>
+                </List>
+            </div>)
+        })
+        return resArr
+    }
+
+
+
 
     //pc端
     const PcView = () => {
@@ -61,8 +99,11 @@ const WxPublicPlat = ({history}) => {
     }
 
     const DirectSuggestReadingContent = (e) => {
+        // history.push({
+        //     pathname: `/readingContent/${e.id}`,
+        // })
         history.push({
-            pathname: `/readingContent/${e.id}`,
+            pathname: `/readingContent/${e}`,
         })
     }
 
@@ -131,13 +172,21 @@ const WxPublicPlat = ({history}) => {
         )
     }
 
-    const onLoadIframe = () => {
-        var iframe = document.getElementById('iframe');
-        var win = iframe.contentWindow;
-        var doc = win.document;
-        var name = win.name
-    }
-
+    // $.ajaxPrefilter(function(options){
+    //     if(options.crossDomain && $.support.cors) {
+    //         var http = (window.location.protocol === "http:" ? "http:" : "https:");
+    //         options.url = http + '//cors-anywhere.herokuapp.com/'+ options.url
+    //     }
+    // })
+    // var shareLink ="https://mp.weixin.qq.com/s/5dB6yPZbLTRGk47vTIl3_Q" // "http://mp.weixin.qq.com/mp/homepage?__biz=MzAwMjE3NDY2MA==&hid=5&sn=79387bd180516a86eba2b13e172e83aa&scene=18#wechat_redirect"//
+    // $.get(shareLink, function(res){
+    //     var html = res
+    //     html = html.replace(/data-src/g, "src");
+    //     //var html_src = 'data:text/html;charset=utf-8,' + html; //防止乱码
+    //     var html_src =  html;
+    //     $("#iframe").attr("srcdoc" , html_src);
+    // })
+    // console.log(window)
     return(
         <FadeTransitions>
             {/* <div>
@@ -146,14 +195,7 @@ const WxPublicPlat = ({history}) => {
                     <div><div>{MobileView()}</div><MobilePagination/>
                 </div>}
             </div> */}
-            <div>
-            <iframe id="iframe" src="http://mp.weixin.qq.com/mp/homepage?__biz=MzAwMjE3NDY2MA==&hid=8&sn=ae59c0e58b89fb06965e55b48097a5a0&scene=18#wechat_redirect"
-                frameBorder={0}
-                width="100%" 
-                height="98%"
-                onLoad={() => onLoadIframe()}
-                ></iframe>
-            </div>
+            <div>{listView()}</div>
         </FadeTransitions>
     )
 }

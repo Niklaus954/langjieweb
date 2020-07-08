@@ -62,6 +62,14 @@ const fetchContactUs = async params => {
     return result;
 }
 
+//获取access_token
+const fetchAccessToken = async() => {
+    const result = await api({
+        url: '/wx/getToken'
+    })
+    return result
+}
+
 export default {
     fetchBasicInfo,
     fetchRecommendReading,
@@ -70,4 +78,5 @@ export default {
     fetchRecentActivityById,
     fetchEventRecord,
     fetchContactUs,
+    fetchAccessToken,
 };
