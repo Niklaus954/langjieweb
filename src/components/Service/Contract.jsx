@@ -71,9 +71,9 @@ function ComponentSteps(props){
 
     return(
         <div>
-            <Steps direction="horizontal" current={steps.indexOf(props.children.delivery_state)}>{
+            <Steps size="mini" direction="horizontal" current={steps.indexOf(props.children.delivery_state)}>{
                 steps.map((s, i) => (
-                    <Step key={i} title={s} />
+                    <Step key={i} title={(<span style={{fontSize: 14}}>{s}</span>)} />
                 ))
             }</Steps>
         </div>
@@ -288,9 +288,9 @@ const Contract = props => {
                     </div>
                 </div>
                 { isPc && <div style={{ flex: 1, height: "100%", width:"70%", marginLeft: "10px" }} id="grid">
-                    <div style={{height: "26%"}}>{ParagraphStyles.RenderServiceCarousel(album)}</div>
-                    <div style={{height: "7%"}}><ComponentSteps>{dataSource}</ComponentSteps></div>
-                    <div style={{ height: "67%", overflow: 'auto'}}>
+                    <div>{ParagraphStyles.RenderServiceCarousel(album)}</div>
+                    <div><ComponentSteps>{dataSource}</ComponentSteps></div>
+                    <div style={{ height: "70%", overflow: 'auto'}}>
                         <MobileTabs
                         tabs={tabs}
                         initialPage={0}

@@ -30,7 +30,6 @@
     "slick-carousel": "^1.8.1",
     "superagent": "^5.1.3"
   },
-  "proxy":"https://api.weixin.qq.com",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

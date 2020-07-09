@@ -20,12 +20,9 @@ const WxPublicPlat = ({history}) => {
     const isPc = useMediaQuery(CONFIG.minDeviceWidth);
     const [data, setData] = useState([]);
     const [page, setPage] = useState(1)
-    const [newsList, setNewsList] = useState([])
-    const [offset, setOffset] = useState(0)
 
     useEffect(() => {
-       // fetch()
-        fetchWxNewsList()
+        fetch()
     },[])
     const fetch = async() => {
         const result = await apiAboutLangjie.fetchRecommendReading({
@@ -35,45 +32,6 @@ const WxPublicPlat = ({history}) => {
         if(result.code === 200) setData(result.data)
     }
 
-    const fetchWxNewsList = async () => {
-        Axios.get('/getToken/wx/getToken').then(res => {
-            Axios({
-                method: "POST",
-                url:'/wxApi/cgi-bin/material/batchget_material?access_token='+res.data.access_token,
-                data: {
-                    "type": 'news',
-                    "offset": offset,
-                    "count": 20
-                }
-            }).then(val => {
-                setNewsList(val.data.item)
-                console.log(val)
-            })
-        })
-    }
-
-    const listView = () => {
-        if(newsList.length === 0) return;
-        const resArr = []
-        newsList.map((item, index) => {
-            const newsItem = item['content']['news_item']
-            resArr.push(<div key={index}>
-                <List className="my-list">
-                    <Item
-                        arrow="horizontal"
-                        multipleLine
-                        onClick={() => {DirectSuggestReadingContent(item['media_id'])}}
-                        wrap={true}
-                        extra={(<img src={newsItem[0]['thumb_url']} width="60px"></img>)}
-                        style={{height: 80}}
-                    >
-                       {newsItem[0]['title']}<Brief>{newsItem[0]['digest']}</Brief>
-                    </Item>
-                </List>
-            </div>)
-        })
-        return resArr
-    }
 
 
 
@@ -171,31 +129,14 @@ const WxPublicPlat = ({history}) => {
             </div>
         )
     }
-
-    // $.ajaxPrefilter(function(options){
-    //     if(options.crossDomain && $.support.cors) {
-    //         var http = (window.location.protocol === "http:" ? "http:" : "https:");
-    //         options.url = http + '//cors-anywhere.herokuapp.com/'+ options.url
-    //     }
-    // })
-    // var shareLink ="https://mp.weixin.qq.com/s/5dB6yPZbLTRGk47vTIl3_Q" // "http://mp.weixin.qq.com/mp/homepage?__biz=MzAwMjE3NDY2MA==&hid=5&sn=79387bd180516a86eba2b13e172e83aa&scene=18#wechat_redirect"//
-    // $.get(shareLink, function(res){
-    //     var html = res
-    //     html = html.replace(/data-src/g, "src");
-    //     //var html_src = 'data:text/html;charset=utf-8,' + html; //防止乱码
-    //     var html_src =  html;
-    //     $("#iframe").attr("srcdoc" , html_src);
-    // })
-    // console.log(window)
     return(
         <FadeTransitions>
-            {/* <div>
+            <div>
                 {isPc ?
                     <div><div >{PcView()}</div><PcPagination/></div> :
                     <div><div>{MobileView()}</div><MobilePagination/>
                 </div>}
-            </div> */}
-            <div>{listView()}</div>
+            </div>
         </FadeTransitions>
     )
 }
