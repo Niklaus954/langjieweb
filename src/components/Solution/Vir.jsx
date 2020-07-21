@@ -7,7 +7,8 @@ import CONFIG from "../../config";
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { withRouter } from 'react-router-dom';
 import Divider from '@material-ui/core/Divider';
-import '../../public/css/ImgDisplayStyle.css'
+import '../../public/css/ImgDisplayStyle.css';
+    
 
 
 const Vir = ({history}) => {
@@ -58,7 +59,7 @@ const Vir = ({history}) => {
                 </div> :
                 <div id={index} key={index} style={{padding: "20px", }} onClick={() => {history.push({pathname: `/virProInfo/${items[`id`]}`})}} >
                     <div style={{ display:'flex', flexDirection: 'column', alignItems: 'center'}}>
-                        <div style={{backgroundImage: `url(${CONFIG.url(`/img/gallery/${items['value']}`)})`, width:  "60%", height: 180,  backgroundSize:'contain', backgroundRepeat: "no-repeat", backgroundPosition:"center", cursor:"pointer" }}></div>
+                        <div style={{backgroundImage: `url(${CONFIG.url(`/img/gallery/${items['value']}`)})`, width:  "60%", height: 180,  backgroundSize:'contain', backgroundRepeat: "no-repeat", backgroundPosition:"center", cursor:"pointer" }} ></div>
                         <div style={{textAlign: "center", color: "#3498db", cursor:'pointer',fontSize: 18, fontWeight: 600}}><p>{items['value'].split('.')[0]}</p></div>
                     </div>
                     <p style={{fontSize:  14, textIndent:  28, lineHeight: 1.4, fontWeight: 400, color: '#333'}}>{items.content}</p>

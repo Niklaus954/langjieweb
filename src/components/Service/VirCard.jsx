@@ -142,6 +142,8 @@ const VirCard = props => {
         )
     }
 
+    const tabs = Object.keys(infoList).filter(item => Object.keys(transTab).includes(item) && infoList[item].length > 0)
+
     return (
         <FadeTransitions>
             <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'row', borderRight: '1px solid #eee' }}>
@@ -161,13 +163,13 @@ const VirCard = props => {
                     <div style={{overflowY: 'auto', width: "60%", margin: "0 auto"}}>
                     <div style={{height: "100%"}}>
                         <MobileTabs
-                        tabs={Object.keys(infoList).filter(item => infoList[item].length > 0)}
+                        tabs={tabs}
                         page={tabPage}
                         renderTab={tab => <span style={{cursor: 'pointer'}}>{transTab[tab]}</span>}
-                        onTabClick={e => setTabPage(Object.keys(infoList).filter(item => infoList[item].length > 0).indexOf(e))}
+                        onTabClick={e => setTabPage(tabs.indexOf(e))}
                         tabBarBackgroundColor="#eee"
                         >
-                            {Object.keys(infoList).filter(item => infoList[item].length > 0).map((items, index) => (
+                            {tabs.map((items, index) => (
                                 <TabPanel key={index+'tabPanel'} param={props} infoListKey={items}>{infoList[items]}</TabPanel>
                             ))}
                         </MobileTabs>

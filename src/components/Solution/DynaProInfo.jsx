@@ -169,8 +169,26 @@ function HardInfoPopover(props){
     const [ anchorEl, setAnchorEl ] = useState(null)
     const res = []
     const { children, variant, history } = props
+    const StyledTableCell = withStyles((theme) => ({
+        head: {
+          backgroundColor: "#0679e6",
+          color: "#fff",
+        },
+        body: {
+          fontSize: 12,
+        },
+      }))(TableCell);
+    
+      const StyledTableRow = withStyles((theme) => ({
+        root: {
+          '&:nth-of-type(odd)': {
+            backgroundColor: theme.palette.action.hover,
+          },
+        },
+      }))(TableRow);
 
-    const handleClickChip = (info, e) => {
+
+    const handleClick = (info, e) => {
         if(isPc) {
             const fetchHardInfo = async params => {
                 const result = await apiSolution.fetchHardInterfaceInfo(params)
@@ -228,13 +246,20 @@ function HardInfoPopover(props){
         return res
     }
     return(
-        <div style={{width: "100%", display: "flex", justifyContent: "center"}}>
-            <div style={{display: variant === "contained" ? "none" : "flex", width: isPc ? "60%" : "100%",  justifyContent: "space-around"}}>
-                {children.map((info, index) => (
-                    <Chip size={ isPc ? "medium" : "small" } key={index} label={info} color="primary" variant="outlined" aria-describedby={id} onClick={(e) => handleClickChip(info, e)} />
-                ))}
-            </div>
+        <div style={{display: variant === "outlined" ? "block" : "none", minWidth: 280}}>
+            <TableContainer style={{display: children.length !== 0 ? "block" : "none"}}>
+                <Table size="small">
+                    <TableBody>
+                        {children.map((child,index) => (
+                            <StyledTableRow key={index}>{child.split('：').map((item, ind) => (
+                            <StyledTableCell key={index + ind}>{ind === 0 ? <span>{item}</span> : <span style={{color: '#0679e6', cursor: "pointer"}} onClick={(e) => handleClick(item, e)}>{item}</span>}</StyledTableCell>
+                            ))}</StyledTableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
             <Popover
+            id={id}
             open={open}
             anchorEl={anchorEl}
             onClose={handleClose}
@@ -266,7 +291,7 @@ const DynaProInfo = state => {
                         setData(item)
                         for (const key in item['content']) {
                             if(key === "硬件接口") {
-                                setHardInfo(item.content[key].split('、'))
+                                setHardInfo(item.content[key])
                                 
                             }
                         }
@@ -312,27 +337,29 @@ const DynaProInfo = state => {
             const arr = []
             const val = Common.transToView(content[key])
             if(val.type === 'picture') {
-                resArr.push(<div key={key} style={{display: 'flex', justifyContent:'space-around', flexDirection: "row"}}>
-                    <div style={{width: "80%", height: 250}}>
+                resArr.push(<div key={key} style={{display: 'flex', justifyContent:'space-around', flexDirection: "column"}}>
+                    <div>
                         <Carousel
-                        autoplay={ isPc ? false : true}
+                        autoplay={ isPc ? false : true }
                         infinite
                         selectedIndex={variant === "contained" ? 0 : 1}
                         dots={false}
                         beforeChange={(from, to) => beforeChange(from, to)}
                         >
                             {val.valueArr.map((img, index) => (
-                                <div key={index} style={{display: "flex", alignItems: "center", flexDirection: "column"}}>
-                                    <div style={{display: "flex", alignItems: "center", flexDirection: "column"}}>
-                                        <img
+                                <div key={index} 
+                                style={{
+                                    display: "flex", 
+                                    alignItems: "center", 
+                                    flexDirection: isPc ?  "row" : "column", 
+                                    justifyContent: variant === "contained" ? "center" : hardInfo.length === 0 ? "center" : "space-around"
+                                }}>
+                                    <div style={{textAlign: 'center'}}><img
                                         src={`${CONFIG.url(`/img/gallery/${img}`)}`}
                                         alt=""
-                                        style={{ width: isPc ? "350px": "80%", verticalAlign: 'top' }}
-                                        onLoad={() => {
-                                            window.dispatchEvent(new Event('resize'));
-                                        }}
-                                            />
-                                    </div>
+                                        style={{ width: isPc ? "350px": "80%", maxWidth: "350px", verticalAlign: 'top' }}
+                                        onClick={() => window.open(`${CONFIG.url(`/img/gallery/${img}`)}`)}
+                                        /></div>
                                     <HardInfoPopover variant={variant} history={state}>{hardInfo}</HardInfoPopover>
                                 </div>
                             ))}

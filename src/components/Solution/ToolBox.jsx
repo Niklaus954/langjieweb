@@ -29,7 +29,7 @@ const ToolBox = () => {
             try {
                 if(typeof content[key] === 'string') {
                     const it = JSON.parse(content[key])
-                    imgItemArr.push(<div key={key} style={{width: '50%', display: 'flex', justifyContent: 'center', margin: "20px 0"}}>
+                    imgItemArr.push(<div key={key} style={{width: '50%', display: 'flex', justifyContent: 'center', margin: "20px 0", alignSelf: "flex-start"}}>
                         <div style={{width: "70%", display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center'}}>
                             <div style={{backgroundImage: `url(${CONFIG.url(`/img/gallery/${it.name}`)})`, width: 70, height: 70,  backgroundSize:'contain', backgroundRepeat: "no-repeat", backgroundPosition:"center"}}></div>
                             <h3>{key}</h3>
@@ -46,8 +46,8 @@ const ToolBox = () => {
         
 
         const download = <div key="kit">
-            <div style={{display: 'flex', justifyContent: 'space-around', height: 240, alignItems: 'center'}}>
-                <div style={{backgroundImage: `url(${CONFIG.url(`/img/gallery/工具箱`)})`, width: 100, height: 100,  backgroundSize:'contain', backgroundRepeat: "no-repeat", backgroundPosition:"center"}}></div>
+            <div style={{display: 'flex', justifyContent: 'space-around', height: 240, alignItems: 'center', flexDirection: isPc ? "row" : "column"}}>
+                <div style={{backgroundImage: `url(${CONFIG.url(`/img/gallery/toolBox.png`)})`, width:"100%", height: "100%", maxWidth: 400,  backgroundSize:'contain', backgroundRepeat: "no-repeat", backgroundPosition:"center"}}></div>
                 <div style={{display:'flex', justifyContent:'space-around', flexDirection:'column', height: "70%", alignItems: 'center'}}>
                     <h2>安可迅工具箱</h2>
                     <div className="download"><Button startIcon={<CloudDownload/>} color="primary" variant="contained">免费下载</Button></div>

@@ -10,8 +10,6 @@ import { hasHistory} from 'react-router'
 import { List, Toast, Button as MoButton } from 'antd-mobile';
 import { ButtonGroup, Button, Typography } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
-import Axios from 'axios';
-import $ from 'jquery'
 const Item = List.Item;
 const Brief = Item.Brief;
 

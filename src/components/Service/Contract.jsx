@@ -51,8 +51,8 @@ const packingItemLabel = {
         link: false
     },
     otherSn: {
-        name: "其它控制器序列号",
-        link: true
+        name: "其它序列号",
+        link: false
     },
     sendType: {
         name: "发货类型",
@@ -81,9 +81,11 @@ function ComponentSteps(props){
 }
 
 
+
 // 
 function AppendPopover(props){
     const { name, children } = props
+    const availableProLabel = ["model","serialNo","batch","inputDate","chnlNum","caliCoeff","remark"];
     const [anchorEl, setAnchorEl] = useState(null);
     const [infoList, setInfoList] = useState([]);
     const [expressInfo, setExpressInfo] = useState([])
@@ -104,7 +106,8 @@ function AppendPopover(props){
         }else{
             const result = await apiService.fetchVirCardInfo({serialNo: params})
             if(result.code === -1) return
-            setInfoList([...result.data['hardInfo'],...result.data['productInfo']])
+            result.data['productInfo'] = result.data['productInfo'].filter( item => availableProLabel.includes(item.column_name))
+            setInfoList([...result.data['productInfo'], ...result.data['hardInfo']])
         }
         
     }
@@ -122,7 +125,7 @@ function AppendPopover(props){
             >
                 <div style={{width: 500, height: 600}}>
                     <div style={{height: "100%"}}>
-                        <div style={{padding: '10px 0', textAlign: 'center', background: '#ccc', fontSize: 18}}>{name === "expressNo" ? <span>快递信息</span> : <span>产品详情</span>}</div>
+                        <div style={{padding: '10px 0', textAlign: 'center', background: '#ccc', fontSize: 18}}>{name === "expressNo" ? <span>快递信息</span> : <span>出厂信息</span>}</div>
                         <div style={{overflow: 'auto', height: "92%"}}>
                             {name === "expressNo" ? 
                                 <Stepper orientation="vertical" activeStep={-1}>
@@ -162,7 +165,12 @@ function TypographyValue(props){
                 <Box key={index} style={{marginRight: 15}}><AppendPopover name={name}>{item}</AppendPopover></Box>
             ))}</div> :
             <AppendPopover name={name}>{children}</AppendPopover> :
-            <Typography variant="body2">{children}</Typography>}
+            children instanceof Array ?
+            <div style={{display: "flex", flexWrap: "wrap"}}>{children.map((item, index) => (
+                <Typography style={{width: 65}} key={index+'other'} variant="body2">{item}</Typography>
+            )) }</div> :
+            <Typography variant="body2">{children}</Typography>
+            }
         </div>
     )
 }
@@ -210,7 +218,7 @@ function TabPanel(props){
                             <div style={{display: "flex", justifyContent: "center", alignItems: "center", width: "20%", borderRight: "#eee 1px solid"}}><Typography>#{index+1}</Typography></div>
                             <div style={{margin: "10px 20px", width: "80%"}}>{labelArr.map((label, ind) =>(
                                 <div key={index+ind} style={{display: "flex"}}>
-                                    <Typography variant="subtitle2" style={{minWidth: 150,}}>{packingItemLabel[label]['name']}：</Typography>
+                                    <Typography variant="subtitle2" style={{minWidth: 150}}>{packingItemLabel[label]['name']}：</Typography>
                                     <TypographyValue isLink={packingItemLabel[label]['link']} name={label}>{item[label]}</TypographyValue>
                                 </div>
                             ))}</div>
