@@ -6,6 +6,7 @@ import CONFIG from '../../config';
 import Common from '../Common/Common';
 import { Carousel } from "antd-mobile";
 import SwipeableViews from 'react-swipeable-views';
+import AbstractComp from '../Common/AbstractComp';
 
 function TabPanel (props) {
     const { value, index, children } = props
@@ -285,16 +286,15 @@ const DynaProInfo = state => {
     useEffect(() => {
         const fetch = async() => {
             const result = await apiSolution.fetchDyna()
+            console.log(result)
             if(result.code === 200){
                 result.data.forEach((item, index) => {
                     if(item['id'] == DynaProType) {
+                        
+                        setHardInfo(item['content']['硬件接口'])
+                        item.linkContent = result.data.filter(items => items.id == item['link'][0])
                         setData(item)
-                        for (const key in item['content']) {
-                            if(key === "硬件接口") {
-                                setHardInfo(item.content[key])
-                                
-                            }
-                        }
+                        console.log(item)
                     }
                 })
             }
@@ -333,55 +333,51 @@ const DynaProInfo = state => {
         if(data.length === 0) return
         const content = data.content;
         const resArr = []
+        var tabs = []
         for(let key in content) {
-            const arr = []
             const val = Common.transToView(content[key])
-            if(val.type === 'picture') {
+           if(val.type === 'picture') {
                 resArr.push(<div key={key} style={{display: 'flex', justifyContent:'space-around', flexDirection: "column"}}>
-                    <div>
-                        <Carousel
-                        autoplay={ isPc ? false : true }
-                        infinite
-                        selectedIndex={variant === "contained" ? 0 : 1}
-                        dots={false}
-                        beforeChange={(from, to) => beforeChange(from, to)}
-                        >
-                            {val.valueArr.map((img, index) => (
-                                <div key={index} 
-                                style={{
-                                    display: "flex", 
-                                    alignItems: "center", 
-                                    flexDirection: isPc ?  "row" : "column", 
-                                    justifyContent: variant === "contained" ? "center" : hardInfo.length === 0 ? "center" : "space-around"
-                                }}>
-                                    <div style={{textAlign: 'center'}}><img
-                                        src={`${CONFIG.url(`/img/gallery/${img}`)}`}
-                                        alt=""
-                                        style={{ width: isPc ? "350px": "80%", maxWidth: "350px", verticalAlign: 'top' }}
-                                        onClick={() => window.open(`${CONFIG.url(`/img/gallery/${img}`)}`)}
-                                        /></div>
-                                    <HardInfoPopover variant={variant} history={state}>{hardInfo}</HardInfoPopover>
-                                </div>
-                            ))}
-                        </Carousel>
-                    </div>
-                    <div style={{display: isPc ? "flex" : "none", alignSelf: "flex-end"}}>
-                        <ButtonGroup color="primary" size="small">
-                            <Button variant={variant === "contained" ? "contained" : "outlined"} onClick={() => setVariant('contained')}>正面图</Button>
-                            <Button variant={variant === "outlined" ? "contained" : "outlined" } onClick={() => setVariant('outlined')}>背面图</Button>
-                        </ButtonGroup>
-                    </div>
-                </div>)
-            }else{
-                resArr.push(<div key={key}><h3>{key}</h3></div>)
-                val.valueArr.map((item, index) => {
-                    arr.push(<div key={index} style={{fontSize: isPc ? 16 : 14, textIndent: isPc ? 32 : 28, fontWeight: 400, lineHeight: 1.4, color: "#333"}}>
-                        <div><p>{item}</p></div>
-                    </div>)
+                <div>
+                    <Carousel
+                    autoplay={ isPc ? false : true }
+                    infinite
+                    selectedIndex={variant === "contained" ? 0 : 1}
+                    dots={false}
+                    beforeChange={(from, to) => beforeChange(from, to)}
+                    >
+                        {val.valueArr.map((img, index) => (
+                            <div key={index} 
+                            style={{
+                            display: "flex", 
+                            alignItems: "center", 
+                            flexDirection: isPc ?  "row" : "column", 
+                            justifyContent: variant === "contained" ? "center" : hardInfo.length === 0 ? "center" : "space-around",
+                            }}>
+                                <div style={{backgroundImage: `url(${CONFIG.url(`/img/gallery/${img}`)})`, backgroundRepeat: "no-repeat", backgroundSize: "cover", width: isPc ? 300 : "70%", height: 220, backgroundPosition: "center", cursor: "pointer"}}
+                                onClick={() => window.open(`${CONFIG.url(`/img/gallery/${img}`)}`)}
+                                ></div>
+                                <HardInfoPopover variant={variant} history={state}>{hardInfo}</HardInfoPopover>
+                            </div>
+                        ))}
+                    </Carousel>
+                </div>
+                <div style={{display: isPc ? "flex" : "none", alignSelf: "flex-end"}}>
+                    <ButtonGroup color="primary" size="small">
+                        <Button variant={variant === "contained" ? "contained" : "outlined"} onClick={() => setVariant('contained')}>正面图</Button>
+                        <Button variant={variant === "outlined" ? "contained" : "outlined" } onClick={() => setVariant('outlined')}>背面图</Button>
+                    </ButtonGroup>
+                </div>
+            </div>)
+        }else{
+                tabs.push({
+                    key: key,
+                    content: val
                 })
-                resArr.push(arr)
             }
         }
+        resArr.push(<AbstractComp.AbTabs key="abTabs" >{tabs}</AbstractComp.AbTabs>)
+        resArr.push(<AbstractComp.AbSourceDownload key="abDownload">{data.linkContent}</AbstractComp.AbSourceDownload>)
         return resArr
     }
     return(

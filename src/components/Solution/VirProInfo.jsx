@@ -352,14 +352,11 @@ const VirProInfo = state => {
                                     display: "flex", 
                                     alignItems: "center", 
                                     flexDirection: isPc ?  "row" : "column", 
-                                    justifyContent: variant === "contained" ? "center" : hardInfo.length === 0 ? "center" : "space-around"
+                                    justifyContent: variant === "contained" ? "center" : hardInfo.length === 0 ? "center" : "space-around",
                                 }}>
-                                    <div style={{textAlign: 'center'}}><img
-                                        src={`${CONFIG.url(`/img/gallery/${img}`)}`}
-                                        alt=""
-                                        style={{ width: isPc ? "350px": "80%", maxWidth: "350px", verticalAlign: 'top' }}
-                                        onClick={() => window.open(`${CONFIG.url(`/img/gallery/${img}`)}`)}
-                                        /></div>
+                                    <div style={{backgroundImage: `url(${CONFIG.url(`/img/gallery/${img}`)})`, backgroundRepeat: "no-repeat", backgroundSize: "cover", width: isPc ? 300 : "70%", height: 220, backgroundPosition: "center", cursor: "pointer"}}
+                                    onClick={() => window.open(`${CONFIG.url(`/img/gallery/${img}`)}`)}
+                                    ></div>
                                     <HardInfoPopover variant={variant} history={state}>{hardInfo}</HardInfoPopover>
                                 </div>
                             ))}

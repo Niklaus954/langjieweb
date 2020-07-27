@@ -16,6 +16,7 @@ const Dyna = ({history}) => {
     useEffect(() => {
         const fetch = async() => {
             const result = await apiSolution.fetchDyna()
+            console.log(result)
             if(result.code === 200) setData(result.data)
         }
         fetch()
@@ -25,7 +26,7 @@ const Dyna = ({history}) => {
     const RenderImg = () => {
         const orderArr = []
         const resArr = []
-        if(data.length === 0) return
+        if(data.length === 0) return;
         data.forEach((items, index) => {
             if(data[0]['link'].indexOf(items['id'].toString()) != -1){
                 const content = items['content']['介绍'][0].split('。')[0]
