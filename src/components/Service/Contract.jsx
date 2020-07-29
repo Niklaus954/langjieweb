@@ -296,9 +296,9 @@ const Contract = props => {
                     </div>
                 </div>
                 { isPc && <div style={{ flex: 1, height: "100%", width:"70%", marginLeft: "10px" }} id="grid">
-                    <div>{ParagraphStyles.RenderServiceCarousel(album)}</div>
+                    <div style={{height: "32%"}}>{ParagraphStyles.RenderServiceCarousel(album)}</div>
                     <div><ComponentSteps>{dataSource}</ComponentSteps></div>
-                    <div style={{ height: "70%", overflow: 'auto'}}>
+                    <div style={{ height: "60%", overflow: 'auto'}}>
                         <MobileTabs
                         tabs={tabs}
                         initialPage={0}

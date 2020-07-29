@@ -102,6 +102,13 @@ const fetchHardInterfaceInfo = async params => {
     return result
 }
 
+const fetchResourceDownload = async params => {
+    const result = await api({
+        url: `/open/soft/${params}`
+    })
+    return result
+}
+
 export default {
     fetchActionPlat,
     fetchApplication,
@@ -115,5 +122,6 @@ export default {
     fetchVirInfo,
     fetchDynaTest,
     fetchMaxTest,
-    fetchHardInterfaceInfo
+    fetchHardInterfaceInfo,
+    fetchResourceDownload
 }

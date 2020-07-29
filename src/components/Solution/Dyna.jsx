@@ -16,7 +16,6 @@ const Dyna = ({history}) => {
     useEffect(() => {
         const fetch = async() => {
             const result = await apiSolution.fetchDyna()
-            console.log(result)
             if(result.code === 200) setData(result.data)
         }
         fetch()

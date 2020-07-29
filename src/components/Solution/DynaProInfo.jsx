@@ -6,7 +6,7 @@ import CONFIG from '../../config';
 import Common from '../Common/Common';
 import { Carousel } from "antd-mobile";
 import SwipeableViews from 'react-swipeable-views';
-import AbstractComp from '../Common/AbstractComp';
+import { AbTabs, AbHardInterfacePopover } from '../Common/BaseComp';
 
 function TabPanel (props) {
     const { value, index, children } = props
@@ -145,6 +145,7 @@ function RenderPicture(props){
   */
  function RenderText(props){
      const { name, children } = props
+     console.log(children)
     if(typeof children === 'string') {
         return(
             <div key={children+name} style={{display: 'flex', margin: 10}}>
@@ -277,24 +278,101 @@ function HardInfoPopover(props){
     )
 }
 
+//产品标题
+function ProductTitle(props){
+    const { children } = props
+    return(
+        <div>
+            <Typography variant="h6">{children.value}</Typography>
+        </div>
+    )
+}
+
+//产品展示轮播
+function ProductCarousel(props) {
+    let { children, proIntroduce, history, hardInfo } = props;
+    const [variant, setVariant] = useState("contained");
+    const isPc = useMediaQuery(CONFIG.minDeviceWidth);
+    const imgArr = children.valueArr
+    proIntroduce = proIntroduce[0].split('。')[0];
+    const beforeChange = (from, to) => {
+        to === 0 ? setVariant('contained') : setVariant('outlined')
+    }
+    return(
+        <div style={{display: 'flex', justifyContent:'space-around', flexDirection: "column"}}>
+            <div>
+                <Carousel
+                autoplay={ isPc ? false : false }
+                infinite
+                selectedIndex={variant === "contained" ? 0 : 1}
+                dots={false}
+                beforeChange={(from, to) => beforeChange(from, to)}
+                >
+                    <div className="car1" style={{ display: "flex", justifyContent: "space-around"}}>
+                        <div style={{display: "flex", alignItems: "center", width: "40%"}}><Typography variant="subtitle1">{proIntroduce}</Typography></div>
+                        <div style={{backgroundImage: `url(${CONFIG.url(`/img/gallery/${imgArr[0]}`)})`, backgroundRepeat: "no-repeat", backgroundSize: "cover", width: isPc ? 300 : "70%", maxWidth: 300, height: 220, backgroundPosition: "center", cursor: "pointer"}}
+                        onClick={() => window.open(`${CONFIG.url(`/img/gallery/${imgArr[0]}`)}`)}
+                        ></div>
+                    </div>
+                    <div className="car2" style={{ display: "flex", justifyContent: "space-around"}}>
+                        <div style={{backgroundImage: `url(${CONFIG.url(`/img/gallery/${imgArr[1]}`)})`, backgroundRepeat: "no-repeat", backgroundSize: "cover", width: isPc ? 300 : "70%", maxWidth: 300, height: 220, backgroundPosition: "center", cursor: "pointer"}}
+                        onClick={() => window.open(`${CONFIG.url(`/img/gallery/${imgArr[1]}`)}`)}
+                        ></div>
+                        <AbHardInterfacePopover variant={variant} history={history}>{hardInfo}</AbHardInterfacePopover>
+                    </div>
+                </Carousel>
+            </div>
+            <div style={{display: isPc ? "flex" : "none", alignSelf: "flex-end"}}>
+                <ButtonGroup color="primary" size="small">
+                    <Button variant={variant === "contained" ? "contained" : "outlined"} onClick={() => setVariant('contained')}>正面图</Button>
+                    <Button variant={variant === "outlined" ? "contained" : "outlined" } onClick={() => setVariant('outlined')}>背面图</Button>
+                </ButtonGroup>
+            </div>
+        </div>
+    )
+
+}
+
 const DynaProInfo = state => {
     const isPc = useMediaQuery(CONFIG.minDeviceWidth)
     const [data, setData] = useState([])
     const [hardInfo, setHardInfo] = useState([])
-    const [variant, setVariant] = useState("contained")
+    const [resourceDownload, setResourceDownload] = useState([])
     const DynaProType = state.location.pathname.split('/')[state.location.pathname.split('/').length - 1]
+    const keyObj = {
+        "proName":"名称",
+        "proIntroduce": "介绍",
+        "proAlbum": "图片",
+        "hardInterface": "硬件接口",
+        "softWare": "软件"
+    }
+
     useEffect(() => {
         const fetch = async() => {
             const result = await apiSolution.fetchDyna()
-            console.log(result)
             if(result.code === 200){
                 result.data.forEach((item, index) => {
                     if(item['id'] == DynaProType) {
-                        
-                        setHardInfo(item['content']['硬件接口'])
+                        setHardInfo(item['content'][keyObj.hardInterface])
                         item.linkContent = result.data.filter(items => items.id == item['link'][0])
+                        const resourceArr = []
+                        try {
+                            (async() => {
+                                for(let i = 0; i < item.linkContent[0]['content'][keyObj.softWare].length; i++) {
+                                    const result = await apiSolution.fetchResourceDownload(item.linkContent[0]['content'][keyObj.softWare][i])
+                                    if(result.code === 200) {
+                                        resourceArr.push(result.data)
+                                    }
+                                }
+                            })().then(() => {
+                                setResourceDownload(resourceArr)
+                            })
+                            
+                        } catch (error) {
+                            
+                        }
                         setData(item)
-                        console.log(item)
+                        
                     }
                 })
             }
@@ -324,11 +402,6 @@ const DynaProInfo = state => {
         }
     }
 
-
-    const beforeChange = (from, to) => {
-        to === 0 ? setVariant('contained') : setVariant('outlined')
-    }
-
     const RenderContent = () => {
         if(data.length === 0) return
         const content = data.content;
@@ -336,53 +409,28 @@ const DynaProInfo = state => {
         var tabs = []
         for(let key in content) {
             const val = Common.transToView(content[key])
-           if(val.type === 'picture') {
-                resArr.push(<div key={key} style={{display: 'flex', justifyContent:'space-around', flexDirection: "column"}}>
-                <div>
-                    <Carousel
-                    autoplay={ isPc ? false : true }
-                    infinite
-                    selectedIndex={variant === "contained" ? 0 : 1}
-                    dots={false}
-                    beforeChange={(from, to) => beforeChange(from, to)}
-                    >
-                        {val.valueArr.map((img, index) => (
-                            <div key={index} 
-                            style={{
-                            display: "flex", 
-                            alignItems: "center", 
-                            flexDirection: isPc ?  "row" : "column", 
-                            justifyContent: variant === "contained" ? "center" : hardInfo.length === 0 ? "center" : "space-around",
-                            }}>
-                                <div style={{backgroundImage: `url(${CONFIG.url(`/img/gallery/${img}`)})`, backgroundRepeat: "no-repeat", backgroundSize: "cover", width: isPc ? 300 : "70%", height: 220, backgroundPosition: "center", cursor: "pointer"}}
-                                onClick={() => window.open(`${CONFIG.url(`/img/gallery/${img}`)}`)}
-                                ></div>
-                                <HardInfoPopover variant={variant} history={state}>{hardInfo}</HardInfoPopover>
-                            </div>
-                        ))}
-                    </Carousel>
-                </div>
-                <div style={{display: isPc ? "flex" : "none", alignSelf: "flex-end"}}>
-                    <ButtonGroup color="primary" size="small">
-                        <Button variant={variant === "contained" ? "contained" : "outlined"} onClick={() => setVariant('contained')}>正面图</Button>
-                        <Button variant={variant === "outlined" ? "contained" : "outlined" } onClick={() => setVariant('outlined')}>背面图</Button>
-                    </ButtonGroup>
-                </div>
-            </div>)
-        }else{
+            if(key === keyObj.proName) {
+                resArr.push(<ProductTitle key="productTitle">{val}</ProductTitle>)
+            }else if(key === keyObj.proAlbum) {
+                resArr.push(<ProductCarousel
+                key="carousel"
+                history={state} 
+                proIntroduce={content[keyObj.proIntroduce]} 
+                hardInfo={hardInfo}
+                >{val}</ProductCarousel>)
+            }else {
                 tabs.push({
                     key: key,
                     content: val
                 })
             }
         }
-        resArr.push(<AbstractComp.AbTabs key="abTabs" >{tabs}</AbstractComp.AbTabs>)
-        resArr.push(<AbstractComp.AbSourceDownload key="abDownload">{data.linkContent}</AbstractComp.AbSourceDownload>)
+        resArr.push(<AbTabs key="abTabs" resourceDownload={resourceDownload}  >{tabs}</AbTabs>)
         return resArr
     }
     return(
         <FadeTransitions>
-            <div style={{padding: isPc ? "20px 40px" : "20px", overflow:'auto', background: "#fff"}}>
+            <div style={{padding: isPc ? "20px 40px" : "10px", overflow:'auto', background: "#fff", width: '100%'}}>
                 <div>{RenderContent()}</div>
             </div>
         </FadeTransitions>
