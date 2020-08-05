@@ -38,9 +38,11 @@ const DynaProInfo = state => {
                                        if(linkContent[key][i].length !== 0) {
                                             const result = await apiSolution.fetchResourceDownload(linkContent[key][i])
                                             if(result.code === 200) {
-                                                resourceArr.push(Object.assign({
-                                                    softName: linkContent[key][i],
-                                                }, result.data))
+                                                if(result.data.versonArr.length !== 0) {
+                                                    resourceArr.push(Object.assign({
+                                                        softName: linkContent[key][i],
+                                                    }, result.data))
+                                                }
                                             }
                                         }
                                     }

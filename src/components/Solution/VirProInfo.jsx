@@ -27,7 +27,7 @@ const VirProInfo = state => {
                         setHardInfo(item['content'][keyObj.hardInterface])
                         setData(item)
                         if(item['link'].length === 0) return
-                        const linkContent = result.data.filter(items => items.id == item['link'][0])[0]['content']
+                        const linkContent = result.data.filter(items => items.id == item['link'][0])[0]['content'];
                         const resourceArr = []
                         try {
                             (async() => {
@@ -36,11 +36,11 @@ const VirProInfo = state => {
                                         if(linkContent[key][i].length !== 0) {
                                             const result = await apiSolution.fetchResourceDownload(linkContent[key][i])
                                             if(result.code === 200) {
-                                               // result.data[0].softName = linkContent[key][i]
-                                               
-                                                resourceArr.push(Object.assign({
-                                                    softName: linkContent[key][i]
-                                                }, result.data))
+                                               if(result.data.versonArr.length !== 0) {
+                                                    resourceArr.push(Object.assign({
+                                                        softName: linkContent[key][i]
+                                                    }, result.data))
+                                               }
                                             }
                                         }
                                     }
