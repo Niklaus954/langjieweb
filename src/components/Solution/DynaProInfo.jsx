@@ -1,337 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import apiSolution from '../../api/apiSolution';
 import FadeTransitions from '../Common/FadeTransitions';
-import { useMediaQuery, Button, ButtonGroup, Chip, Typography, Paper, Popover, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, withStyles, AppBar, Tabs, Tab } from '@material-ui/core';
+import { useMediaQuery } from '@material-ui/core';
 import CONFIG from '../../config';
 import Common from '../Common/Common';
-import { Carousel } from "antd-mobile";
-import SwipeableViews from 'react-swipeable-views';
-import { AbTabs, AbHardInterfacePopover } from '../Common/BaseComp';
+import { AbTabs, ProductCarousel, ProductTitle } from '../Common/BaseComp';
 
-function TabPanel (props) {
-    const { value, index, children } = props
-    return(
-        <div
-        role="tabpanel"
-        hidden={value !== index}
-        id={`full-width-tabpanel-${index}`}
-        aria-labelledby={`full-width-tab-${index}`}
-        >
-        {value === index && Object.keys(children).map((item, index) => {
-            if(children[item]['class'] === 'picture'){
-                return (<div key={index+'tabPicture'}><RenderPicture name={item}>{children[item]}</RenderPicture></div>)
-            }else{
-                return(<div key={index+'text'}><RenderText name={item}>{children[item]}</RenderText></div>)
-            }
-        })}
-    </div>
-    )
-}
-
-/**
- * tabs组件
- */
-
-function RenderTabs(props){
-    const { children } = props
-    const [tab, setTab] = useState(0)
-    const handleChange = (e, v) => {
-        setTab(v)
-    }
-    return(
-        <div key="tabs">
-            <AppBar position="static" color="default">
-                <Tabs
-                value={tab}
-                onChange={handleChange}
-                indicatorColor="primary"
-                textColor="primary"
-                variant={children.length >= 5 ? "scrollable" : "fullWidth"}
-                scrollButtons="on"
-
-                >
-                    {children.map((tab, index) => (
-                        <Tab key={index+'tab'} label={Object.values(tab)[0]['title']}/>
-                    ))}
-                </Tabs>
-            </AppBar>
-            <SwipeableViews
-            index={tab}
-            >
-                {children.map((item, index) => (
-                    <div style={{margin: "20px 10px", minHeight:240}} key={index+"tabPanel"}><TabPanel value={tab} index={index}>{item}</TabPanel></div>
-                ))}
-            </SwipeableViews>
-        </div>
-    )
-}
-
-/**
- * Table组件
- */
-
-function RenderTable(props) {
-    const { name, children} = props
-    if(children['name'].length === 0) return
-    const tableData = children['name']
-    const StyledTableCell = withStyles((theme) => ({
-        head: {
-          backgroundColor: "#3f51b5",
-          color: "#fff",
-        },
-        body: {
-          fontSize: 12,
-        },
-      }))(TableCell);
-    
-      const StyledTableRow = withStyles((theme) => ({
-        root: {
-          '&:nth-of-type(odd)': {
-            backgroundColor: theme.palette.action.hover,
-          },
-        },
-      }))(TableRow);
-    return(
-        <div key="table" style={{display: 'flex', margin: 10}} >
-           <div style={{width: "25%",textAlign: 'end'}}><Typography variant="subtitle2">{name}：</Typography></div>
-            <div>
-                <TableContainer>
-                    <Table style={{minWidth: 400}} size="small">
-                        <TableHead>
-                            <TableRow>
-                                {tableData[0].map((title, index) => (
-                                    <StyledTableCell key={index+title} align="center"><div>{title}</div></StyledTableCell>
-                                ))}
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {tableData.splice(1,tableData.length - 1).map((rows, rowIndex) => (
-                                <StyledTableRow key={rows}>{rows.map((row, index) =>(
-                                    <StyledTableCell key={row+index} align="center">{row}</StyledTableCell>
-                                ))}</StyledTableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </div>
-        </div>
-    )
-}
-
-/**
- * picture组件
- */
-
-function RenderPicture(props){
-    const { name, children } = props
-    return(
-        <div key={children['name'].toString()+ name} style={{display: 'flex', alignItems: 'center', margin: 10}}>
-            <div style={{width: "25%",textAlign: 'end'}}><Typography variant="subtitle2">{name}：</Typography></div>
-            { children['name'] instanceof Array === true ? 
-                children['name'].map((item, index) => (
-                    <div key={index+item}><img style={{cursor: 'pointer'}} src={CONFIG.url(`/img/gallery/${item}`)} alt="" width={children.width} onClick={() => window.open(CONFIG.url(`/img/gallery/${item}`))}></img></div>
-                )) :
-                <div>
-                    <div><img style={{cursor: 'pointer'}} src={CONFIG.url(`/img/gallery/${children['name']}`)} alt="" width={children.width} onClick={() => window.open(CONFIG.url(`/img/gallery/${children['name']}`))}></img></div>
-                    <div style={{textAlign:'center'}}><Typography variant="caption">{children['title']}</Typography></div>
-                </div>
-            } 
-        </div>
-    )
-}
-
- /**
-  *  text组件
-  */
- function RenderText(props){
-     const { name, children } = props
-     console.log(children)
-    if(typeof children === 'string') {
-        return(
-            <div key={children+name} style={{display: 'flex', margin: 10}}>
-                <div style={{width: "25%",textAlign: 'end'}}><Typography variant="subtitle2">{name}：</Typography></div>
-                <div><Typography variant="subtitle2">{children}</Typography></div>
-            </div>
-        )
-    }else{
-        return(
-            <div key={children['name'].toString()+name} style={{display: 'flex', margin: 10}}>
-                <div style={{width: "25%",textAlign: 'end'}}><Typography variant="subtitle2">{name}：</Typography></div>
-                <div style={{width: '75%'}} >{children['name'].map((ele, index) => (
-                    <Typography variant="subtitle2" key={ele+index}>{index+1+"、"+ele}</Typography>
-                ))}</div>
-            </div>
-        )
-    }
-}
-
-function HardInfoPopover(props){
-    const isPc = useMediaQuery(CONFIG.minDeviceWidth)
-    const [hardInfo, setHardInfo] = useState([])
-    const [ anchorEl, setAnchorEl ] = useState(null)
-    const res = []
-    const { children, variant, history } = props
-    const StyledTableCell = withStyles((theme) => ({
-        head: {
-          backgroundColor: "#0679e6",
-          color: "#fff",
-        },
-        body: {
-          fontSize: 12,
-        },
-      }))(TableCell);
-    
-      const StyledTableRow = withStyles((theme) => ({
-        root: {
-          '&:nth-of-type(odd)': {
-            backgroundColor: theme.palette.action.hover,
-          },
-        },
-      }))(TableRow);
-
-
-    const handleClick = (info, e) => {
-        if(isPc) {
-            const fetchHardInfo = async params => {
-                const result = await apiSolution.fetchHardInterfaceInfo(params)
-                let note = result.data[0].content['说明']
-                note = typeof note === "object" ? note : JSON.parse(note)
-                setHardInfo(note)
-            }
-            fetchHardInfo(info)
-            setAnchorEl(e.currentTarget);
-        }else{
-            history.history.push('/hardInfo/'+info)
-        }
-        
-    }
-    
-      const handleClose = () => {
-        setAnchorEl(null);
-      };
-    
-      const open = Boolean(anchorEl);
-      const id = open ? 'simple-popover' : undefined;
-
-    //解析json
-    function JpackParse(Jpack, params){
-        if(Jpack instanceof Array) {
-            Jpack.map((pack, index) => {
-                if(pack instanceof Array) {
-                    res.push(<RenderTabs key={index+"pack"}>{pack}</RenderTabs>)
-                }else{
-                    JpackParse(pack)
-                }
-            })
-        }else{
-            for (const key in Jpack) {
-                if(key !== 'class') {
-                    if (Jpack.hasOwnProperty(key)) {
-                        const element = Jpack[key];
-                        if(element instanceof Object) {
-                            if(element['class'] === 'picture') {
-                                res.push(<RenderPicture key={key} name={key}>{element}</RenderPicture>)
-                            }else if(element['class'] === 'table') {
-                                res.push(<RenderTable key={key} name={key}>{element}</RenderTable>)
-                            }else if(element['class'] === 'text'){
-                                res.push(<RenderText key={key} name={key}>{element}</RenderText>)
-                            }else{
-                                JpackParse(element, key)
-                            }
-                        }else{
-                            res.push(<RenderText key={key} name={key}>{element}</RenderText>)
-                        }
-                    }
-                }
-            }
-        }
-        return res
-    }
-    return(
-        <div style={{display: variant === "outlined" ? "block" : "none", minWidth: 280}}>
-            <TableContainer style={{display: children.length !== 0 ? "block" : "none"}}>
-                <Table size="small">
-                    <TableBody>
-                        {children.map((child,index) => (
-                            <StyledTableRow key={index}>{child.split('：').map((item, ind) => (
-                            <StyledTableCell key={index + ind}>{ind === 0 ? <span>{item}</span> : <span style={{color: '#0679e6', cursor: "pointer"}} onClick={(e) => handleClick(item, e)}>{item}</span>}</StyledTableCell>
-                            ))}</StyledTableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-            <Popover
-            id={id}
-            open={open}
-            anchorEl={anchorEl}
-            onClose={handleClose}
-            anchorReference="anchorPosition"
-            anchorPosition={{top: 300, left: 300}}
-            >
-                <div>
-                    <Paper elevation={3} style={{width: 650, margin: 'auto'}}>
-                        <div style={{padding: "20px", height: 550, overflow: 'auto'}}>{JpackParse(hardInfo)}</div>
-                    </Paper>
-                </div>
-            </Popover>
-        </div>
-    )
-}
-
-//产品标题
-function ProductTitle(props){
-    const { children } = props
-    return(
-        <div>
-            <Typography variant="h6">{children.value}</Typography>
-        </div>
-    )
-}
-
-//产品展示轮播
-function ProductCarousel(props) {
-    let { children, proIntroduce, history, hardInfo } = props;
-    const [variant, setVariant] = useState("contained");
-    const isPc = useMediaQuery(CONFIG.minDeviceWidth);
-    const imgArr = children.valueArr
-    proIntroduce = proIntroduce[0].split('。')[0];
-    const beforeChange = (from, to) => {
-        to === 0 ? setVariant('contained') : setVariant('outlined')
-    }
-    return(
-        <div style={{display: 'flex', justifyContent:'space-around', flexDirection: "column"}}>
-            <div>
-                <Carousel
-                autoplay={ isPc ? false : false }
-                infinite
-                selectedIndex={variant === "contained" ? 0 : 1}
-                dots={false}
-                beforeChange={(from, to) => beforeChange(from, to)}
-                >
-                    <div className="car1" style={{ display: "flex", justifyContent: "space-around"}}>
-                        <div style={{display: "flex", alignItems: "center", width: "40%"}}><Typography variant="subtitle1">{proIntroduce}</Typography></div>
-                        <div style={{backgroundImage: `url(${CONFIG.url(`/img/gallery/${imgArr[0]}`)})`, backgroundRepeat: "no-repeat", backgroundSize: "cover", width: isPc ? 300 : "70%", maxWidth: 300, height: 220, backgroundPosition: "center", cursor: "pointer"}}
-                        onClick={() => window.open(`${CONFIG.url(`/img/gallery/${imgArr[0]}`)}`)}
-                        ></div>
-                    </div>
-                    <div className="car2" style={{ display: "flex", justifyContent: "space-around"}}>
-                        <div style={{backgroundImage: `url(${CONFIG.url(`/img/gallery/${imgArr[1]}`)})`, backgroundRepeat: "no-repeat", backgroundSize: "cover", width: isPc ? 300 : "70%", maxWidth: 300, height: 220, backgroundPosition: "center", cursor: "pointer"}}
-                        onClick={() => window.open(`${CONFIG.url(`/img/gallery/${imgArr[1]}`)}`)}
-                        ></div>
-                        <AbHardInterfacePopover variant={variant} history={history}>{hardInfo}</AbHardInterfacePopover>
-                    </div>
-                </Carousel>
-            </div>
-            <div style={{display: isPc ? "flex" : "none", alignSelf: "flex-end"}}>
-                <ButtonGroup color="primary" size="small">
-                    <Button variant={variant === "contained" ? "contained" : "outlined"} onClick={() => setVariant('contained')}>正面图</Button>
-                    <Button variant={variant === "outlined" ? "contained" : "outlined" } onClick={() => setVariant('outlined')}>背面图</Button>
-                </ButtonGroup>
-            </div>
-        </div>
-    )
-
-}
 
 const DynaProInfo = state => {
     const isPc = useMediaQuery(CONFIG.minDeviceWidth)
@@ -343,8 +17,7 @@ const DynaProInfo = state => {
         "proName":"名称",
         "proIntroduce": "介绍",
         "proAlbum": "图片",
-        "hardInterface": "硬件接口",
-        "softWare": "软件"
+        "hardInterface": "硬件接口"
     }
 
     useEffect(() => {
@@ -354,14 +27,22 @@ const DynaProInfo = state => {
                 result.data.forEach((item, index) => {
                     if(item['id'] == DynaProType) {
                         setHardInfo(item['content'][keyObj.hardInterface])
-                        item.linkContent = result.data.filter(items => items.id == item['link'][0])
+                        setData(item)
+                        if(item['link'].length === 0) return
+                        const linkContent = result.data.filter(items => items.id == item['link'][0])[0]['content']
                         const resourceArr = []
                         try {
                             (async() => {
-                                for(let i = 0; i < item.linkContent[0]['content'][keyObj.softWare].length; i++) {
-                                    const result = await apiSolution.fetchResourceDownload(item.linkContent[0]['content'][keyObj.softWare][i])
-                                    if(result.code === 200) {
-                                        resourceArr.push(result.data)
+                                for(let key in linkContent) {
+                                    for(let i = 0; i < linkContent[key].length; i++) {
+                                       if(linkContent[key][i].length !== 0) {
+                                            const result = await apiSolution.fetchResourceDownload(linkContent[key][i])
+                                            if(result.code === 200) {
+                                                resourceArr.push(Object.assign({
+                                                    softName: linkContent[key][i],
+                                                }, result.data))
+                                            }
+                                        }
                                     }
                                 }
                             })().then(() => {
@@ -371,8 +52,7 @@ const DynaProInfo = state => {
                         } catch (error) {
                             
                         }
-                        setData(item)
-                        
+
                     }
                 })
             }
@@ -412,12 +92,13 @@ const DynaProInfo = state => {
             if(key === keyObj.proName) {
                 resArr.push(<ProductTitle key="productTitle">{val}</ProductTitle>)
             }else if(key === keyObj.proAlbum) {
-                resArr.push(<ProductCarousel
-                key="carousel"
-                history={state} 
-                proIntroduce={content[keyObj.proIntroduce]} 
-                hardInfo={hardInfo}
-                >{val}</ProductCarousel>)
+                resArr.push(<div key="carousel" >
+                    <ProductCarousel
+                    history={state} 
+                    proIntroduce={content[keyObj.proIntroduce]} 
+                    hardInfo={hardInfo}
+                    >{val}</ProductCarousel>
+                </div>)
             }else {
                 tabs.push({
                     key: key,
@@ -425,7 +106,7 @@ const DynaProInfo = state => {
                 })
             }
         }
-        resArr.push(<AbTabs key="abTabs" resourceDownload={resourceDownload}  >{tabs}</AbTabs>)
+        resArr.push(<AbTabs key="abTabs" resourceDownload={resourceDownload}>{tabs}</AbTabs>)
         return resArr
     }
     return(
