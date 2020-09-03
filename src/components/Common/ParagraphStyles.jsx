@@ -85,7 +85,11 @@ const RenderServiceCarousel = (album) => {
         autoplay: false,
         arrows: false
     }
-    albumArr = album[0].val.split(',');
+    try {
+        albumArr = album[0].val.split(',');
+    } catch (error) {
+        albumArr = album.split(',')
+    }
 
     return(
         <div style={{paddingBottom: 10}}>

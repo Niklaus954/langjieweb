@@ -6,7 +6,8 @@ import apiService from '../../api/apiService';
 import FadeTransitions from '../Common/FadeTransitions'
 import { List, Tabs as MobileTabs, Steps } from 'antd-mobile';
 import ParagraphStyles from "../Common/ParagraphStyles";
-import { Paper, Box, Typography, Card, CardContent } from "@material-ui/core"
+import { Paper, Box, Typography, Card, CardContent, Button } from "@material-ui/core"
+import $ from 'jquery'
 const Item = List.Item;
 
 const tabs = [
@@ -63,8 +64,53 @@ const packingItemLabel = {
 
 //步骤条
 function ComponentSteps(props){
+    const { contractNo } = props
     const Step = Steps.Step
     const steps = ["审核中", "待发货", "发货中", "已发货", "已收货"]
+    if(props.children.delivery_state === '已发货') {
+        steps[steps.length - 1] = <Button size="small" color="primary" variant="outlined" onClick={() => {confirmExpress(contractNo)}} >确认收件</Button>
+    }
+    const confirmExpress = async params => {
+        const lastStep = '<div class="am-steps-item am-steps-item-process" style="width: 20%" >'+
+        '<div class="am-steps-item-tail">::after</div>'+
+        '<div class="am-steps-item-icon">'+
+            '<span class="am-steps-icon">4</span>'+
+        '</div>'+
+        '<div class="am-steps-item-content">'+
+            '<div class="am-steps-item-title">'+
+                '<span style="font-size: 14px;">已收货</span>'+
+            '</div>'+
+        '</div>'+
+    '</div>'
+    const replaceNode = '<div class="am-steps-item am-steps-item-finish am-steps-item-custom" style="width: 20%">'+
+        '<div class="am-steps-item-tail">::after</div>'+
+            '<div class="am-steps-item-icon">'+
+                '<span class="am-steps-icon">'+
+                    '<svg class="am-icon am-icon-check-circle-o am-icon-xs">'+
+                        '<use xlink:href="#check-circle-o">'+
+                            '<svg id="check-circle-o" viewBox="0 0 48 48">'+
+                                '<g fill-rule="evenodd">'+
+                                    '<path d="M24 48c13.255 0 24-10.745 24-24S37.255 0 24 0 0 10.745 0 24s10.745 24 24 24zm0-3c11.598 0 21-9.402 21-21S35.598 3 24 3 3 12.402 3 24s9.402 21 21 21z"></path>'+
+                                    '<path d="M12.2 23.2L10 25.3l10 9.9L37.2 15 35 13 19.8 30.8z"></path>'+
+                                '</g>'+
+                            '</svg>'+
+                        '</use>'+
+                    '</svg>'+
+                '</span>'+
+            '</div>'+
+            '<div class="am-steps-item-content">'+
+                '<div class="am-steps-item-title">'+
+                    '<span style="font-size: 14px;">已发货</span>'+
+                '</div>'+
+            '</div>'+
+        '</div>'
+
+        const result = await apiService.contractTakeConfirm(params)
+        if(result.code === 200) {
+            $(".am-steps-item").eq(-1).replaceWith(lastStep)
+            $(".am-steps-item").eq(-2).replaceWith(replaceNode)
+        }
+    }
 
     return(
         <div>
@@ -211,6 +257,7 @@ const ContractInfo = props => {
     const [GoodsList, setGoodsList] = useState([])
     const [PackingList, setPackingList] = useState([])
     const [dataSource, setDataSource] = useState([])
+    const [contractNo, setContractNo] = useState([])
     useEffect(() => {
         const contract_no = props.location.pathname.split('/contractInfo/')[1];
         fetch(contract_no);
@@ -237,6 +284,7 @@ const ContractInfo = props => {
         setGoodsList(goodsList);
         setPackingList(packingList);
         setDataSource(result.data.data)
+        setContractNo(contract_no)
     }
 
     return (
@@ -244,7 +292,7 @@ const ContractInfo = props => {
             <div style={{ width: '96%', height: '100%', display: 'flex', borderRight: '1px solid #eee', margin: "auto" }}>
                 <div style={{ flex: 1, overflow: 'auto' }} id="grid">
                     <div>{ParagraphStyles.RenderServiceCarousel(album)}</div>
-                    <div style={{width: "90%"}}><ComponentSteps>{dataSource}</ComponentSteps></div>
+                    <div style={{width: "90%"}}><ComponentSteps contractNo={contractNo}>{dataSource}</ComponentSteps></div>
                     <div>
                         <MobileTabs
                         tabs={tabs}

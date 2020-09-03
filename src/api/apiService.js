@@ -77,6 +77,23 @@ const getExpressInfo = async params  => {
     })
     return result
 }
+//维修确认收件
+const repairTakeConfirm = async params => {
+    const result = await api({
+        method: "put",
+        url: "/open/service/repair/takeConfirm/"+params
+    })
+    return result
+}
+
+//合同确认收件
+const contractTakeConfirm = async params => {
+    const result = await api({
+        method: "put",
+        url: "/open/service/contract/takeConfirm/"+params
+    })
+    return result
+}
 
 export default {
     getTicket,
@@ -87,4 +104,6 @@ export default {
     fetchContract,
     getContractInfo,
     getExpressInfo,
+    repairTakeConfirm,
+    contractTakeConfirm,
 };

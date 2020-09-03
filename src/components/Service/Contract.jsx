@@ -1,16 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ItemList from '../Common/ItemList';
 import apiService from '../../api/apiService';
 import CONFIG from '../../config';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import FadeTransitions from '../Common/FadeTransitions'
-import { List, Tabs as MobileTabs, Steps  } from 'antd-mobile';
-import { Paper, Card, CardContent, Typography, Link, Box, Popover, Stepper, Step, StepLabel, StepContent } from '@material-ui/core'
-import { AssignmentOutlined as AssignmentIcon} from '@material-ui/icons'
+import { List, Tabs as MobileTabs, Steps, Toast  } from 'antd-mobile';
+import { Paper, Card, CardContent, Typography, Link, Box, Popover, Stepper, Step, StepLabel, CircularProgress, Fade, Button } from '@material-ui/core'
 import {
     withRouter,
 } from 'react-router-dom'
 import ParagraphStyles from "../Common/ParagraphStyles";
+import $ from 'jquery'
+
 const Item = List.Item;
 
 const tabs = [
@@ -66,14 +67,58 @@ const packingItemLabel = {
 }
 //步骤条
 function ComponentSteps(props){
+    const { contractNo } = props
     const Step = Steps.Step
     const steps = ["审核中", "待发货", "发货中", "已发货", "已收货"]
-
+    if(props.children.delivery_state === '已发货') {
+        steps[steps.length - 1] = <Button size="small" color="primary" variant="outlined" onClick={() => {confirmExpress(contractNo)}} >确认收件</Button>
+    }
+    const confirmExpress = async params => {
+        const lastStep = '<div class="am-steps-item am-steps-item-process" >'+
+        '<div class="am-steps-item-tail">::after</div>'+
+        '<div class="am-steps-item-icon">'+
+            '<span class="am-steps-icon">4</span>'+
+        '</div>'+
+        '<div class="am-steps-item-content">'+
+            '<div class="am-steps-item-title">'+
+                '<span style="font-size: 14px;">已收货</span>'+
+            '</div>'+
+        '</div>'+
+    '</div>'
+    const replaceNode = '<div class="am-steps-item am-steps-item-finish am-steps-item-custom">'+
+        '<div class="am-steps-item-tail">::after</div>'+
+            '<div class="am-steps-item-icon">'+
+                '<span class="am-steps-icon">'+
+                    '<svg class="am-icon am-icon-check-circle-o am-icon-md">'+
+                        '<use xlink:href="#check-circle-o">'+
+                            '<svg id="check-circle-o" viewBox="0 0 48 48">'+
+                                '<g fill-rule="evenodd">'+
+                                    '<path d="M24 48c13.255 0 24-10.745 24-24S37.255 0 24 0 0 10.745 0 24s10.745 24 24 24zm0-3c11.598 0 21-9.402 21-21S35.598 3 24 3 3 12.402 3 24s9.402 21 21 21z"></path>'+
+                                    '<path d="M12.2 23.2L10 25.3l10 9.9L37.2 15 35 13 19.8 30.8z"></path>'+
+                                '</g>'+
+                            '</svg>'+
+                        '</use>'+
+                    '</svg>'+
+                '</span>'+
+            '</div>'+
+            '<div class="am-steps-item-content">'+
+                '<div class="am-steps-item-title">'+
+                    '<span style="font-size: 14px;">已发货</span>'+
+                '</div>'+
+            '</div>'+
+        '</div>'
+        
+        const result = await apiService.contractTakeConfirm(params)
+        if(result.code === 200) {
+            $(".am-steps-item").eq(-1).replaceWith(lastStep)
+            $(".am-steps-item").eq(-2).replaceWith(replaceNode)
+        }
+    }
     return(
         <div>
             <Steps size="mini" direction="horizontal" current={steps.indexOf(props.children.delivery_state)}>{
                 steps.map((s, i) => (
-                    <Step key={i} title={(<span style={{fontSize: 14}}>{s}</span>)} />
+                    <Step key={i} title={(<span style={{fontSize: 14}}>{s}</span>)}  />
                 ))
             }</Steps>
         </div>
@@ -89,6 +134,7 @@ function AppendPopover(props){
     const [anchorEl, setAnchorEl] = useState(null);
     const [infoList, setInfoList] = useState([]);
     const [expressInfo, setExpressInfo] = useState([])
+    const [loading, setLoading] = useState(true)
     
     const handleClose = () => {
         setAnchorEl(null)
@@ -102,14 +148,18 @@ function AppendPopover(props){
     const fetch = async (params) => {
         if(name === 'expressNo') {
             const result = await apiService.getExpressInfo(params)
-            setExpressInfo(result.data.result.list)
+            if(result.data.result.list.length !== 0) {
+                setExpressInfo(result.data.result.list)
+            }else{
+                Toast.info("暂无快递信息");
+            }
         }else{
             const result = await apiService.fetchVirCardInfo({serialNo: params})
             if(result.code === -1) return
             result.data['productInfo'] = result.data['productInfo'].filter( item => availableProLabel.includes(item.column_name))
             setInfoList([...result.data['productInfo'], ...result.data['hardInfo']])
         }
-        
+        setLoading(false)
     }
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
@@ -126,19 +176,22 @@ function AppendPopover(props){
                 <div style={{width: 500, height: 600}}>
                     <div style={{height: "100%"}}>
                         <div style={{padding: '10px 0', textAlign: 'center', background: '#ccc', fontSize: 18}}>{name === "expressNo" ? <span>快递信息</span> : <span>出厂信息</span>}</div>
-                        <div style={{overflow: 'auto', height: "92%"}}>
+                        <div style={{overflow: 'auto', height: "92%", display: "flex", justifyContent: "center", alignItems: "center"}}>
                             {name === "expressNo" ? 
-                                <Stepper orientation="vertical" activeStep={-1}>
-                                    {expressInfo.map((item, index) => (
-                                        <Step key={index+ "exp"}>
-                                            <StepLabel>{item['status']}：{item['time']}</StepLabel>
-                                        </Step>
-                                    ))}
-                                </Stepper>
-                                :
-                                infoList.map((item, index) => (
+                            loading ? <CircularProgress /> :
+                                <div style={{height: "100%", display: "flex", flexDirection: "column"}} >
+                                    <Stepper orientation="vertical" activeStep={-1}>
+                                        {expressInfo.map((item, index) => (
+                                            <Step key={index+ "exp"}>
+                                                <StepLabel>{item['status']}：{item['time']}</StepLabel>
+                                            </Step>
+                                        ))}
+                                    </Stepper>
+                            </div> : 
+                                loading ? <Fade in={loading}><CircularProgress /></Fade> :
+                                <div style={{height: "100%", width: "100%"}}>{infoList.map((item, index) => (
                                     <Item key={index} extra={item.val} wrap={true}>{item.column_comment}</Item>
-                                ))
+                                ))}</div>
                             }
                         </div>
                     </div>
@@ -219,7 +272,7 @@ function TabPanel(props){
                             <div style={{margin: "10px 20px", width: "80%"}}>{labelArr.map((label, ind) =>(
                                 <div key={index+ind} style={{display: "flex"}}>
                                     <Typography variant="subtitle2" style={{minWidth: 150}}>{packingItemLabel[label]['name']}：</Typography>
-                                    <TypographyValue isLink={packingItemLabel[label]['link']} name={label}>{item[label]}</TypographyValue>
+                                    <TypographyValue isLink={packingItemLabel[label]['link']} name={label} >{item[label]}</TypographyValue>
                                 </div>
                             ))}</div>
                         </div>
@@ -238,6 +291,7 @@ const Contract = props => {
     const [PackingList, setPackingList] = useState([]);
     const [album, setAlbum] = useState([]);
     const [dataSource, setDataSource] = useState([])
+    const [contractNo, setContractNo] = useState([])
     const isPc = useMediaQuery(CONFIG.minDeviceWidth);
 
     const backSelectedItem = async item => {
@@ -260,10 +314,12 @@ const Contract = props => {
                 });
             });
 
+
             setInfoList(renderList);
             setGoodsList(goodsList)
             setPackingList(packingList)
             setDataSource(result.data.data)
+            setContractNo(item.contract_no)
         } else {
             props.history.push({
                 pathname: '/contractInfo/' + item.contract_no, 
@@ -297,7 +353,7 @@ const Contract = props => {
                 </div>
                 { isPc && <div style={{ flex: 1, height: "100%", width:"70%", marginLeft: "10px" }} id="grid">
                     <div style={{height: "32%"}}>{ParagraphStyles.RenderServiceCarousel(album)}</div>
-                    <div><ComponentSteps>{dataSource}</ComponentSteps></div>
+                    <div><ComponentSteps contractNo={contractNo}>{dataSource}</ComponentSteps></div>
                     <div style={{ height: "60%", overflow: 'auto'}}>
                         <MobileTabs
                         tabs={tabs}

@@ -16,10 +16,12 @@ import Slider from 'react-slick';
 
 
 function AbTabs (props) {
+
     const isPc = useMediaQuery(CONFIG.minDeviceWidth)
     const { children, resourceDownload } = props;
     const resourceArr = []
     const filterWords = ['名称','尺寸（L*W）','尺寸（L*W/L*W*H）', '尺寸（L*W*H）','硬件接口','通讯接口']
+    const combainTabsKeywords = ['输入','输出']
     const filterChildren = children.filter(child => !filterWords.includes(child.key))
     resourceDownload.map(val => {
         resourceArr.push({
@@ -30,12 +32,44 @@ function AbTabs (props) {
         })
         
     })
-    filterChildren.push({
-        key: "相关下载",
-        content: {
-            valueArr: resourceArr
-        }
-    })
+    // filterChildren.push({
+    //     key: "相关下载",
+    //     content: {
+    //         valueArr: resourceArr
+    //     }
+    // })
+
+    const combainTabs = params => {
+        const resTabs = [
+            {
+                tabName: "介绍",
+                val: []
+            },
+            {
+                tabName: "输入",
+                val: []
+            },
+            {
+                tabName: "输出",
+                val: []
+            },
+            {
+                tabName: "相关下载",
+                val: resourceArr
+            }
+        ]
+        params.map(item => {
+            if(item.key.indexOf(combainTabsKeywords[0]) !== -1) {
+                resTabs[1].val.push(item)
+            }else if(item.key.indexOf(combainTabsKeywords[1]) !== -1) {
+                resTabs[2].val.push(item)
+            }else {
+                resTabs[0].val.push(item)
+            }
+        })
+
+        return resTabs
+    }
     
     
     const [value, setValue] = useState(0);
@@ -48,7 +82,7 @@ function AbTabs (props) {
         },
         tabs: {},
         MuitabRoot: {
-            minWidth: 60,
+            minWidth: 100,
             fontSize: 16,
             borderBottom: "#ccc solid 2px",
         },
@@ -75,22 +109,48 @@ function AbTabs (props) {
     }
 
     const TabPanel = (props) => {
-        const { children, index } = props
+        const { children, index } = props;
+        const StyledTableCell = withStyles((theme) => ({
+            body: {
+              fontSize: 16,
+            },
+          }))(TableCell);
+        
+          const StyledTableRow = withStyles((theme) => ({
+            root: {
+              '&:nth-of-type(odd)': {
+                backgroundColor: '#fff',
+              },
+            },
+          }))(TableRow);
         return(
             <div
             role="tabpanel"
             hidden={value !== index}
             >
             {value === index && (
-                <div>{children.valueArr.map((item, index) => (
-                    typeof item === "object" ? 
-                    <div key={index}>
-                        <div style={{display: "flex", fontSize: isPc ? 16 : 14, color: "#333", borderBottom: "#ddd 0.5px solid", alignItems: "center"}}>
-                            <div onClick={() => {window.open(CONFIG.url(`/open/soft/${item.softName}/${item.softVersionNo}`))}} style={{margin: 14, width: isPc ? "20%" : "40%", color: "#0679e6", cursor: "pointer"}}>{item.softPackage}</div>
-                            <div style={{margin: 14}}>{item.usage}</div>
-                        </div>
+                <div>{children.map((child, cIndex) => (
+                    child.key !== undefined ?
+                    <div key={cIndex}>
+                        <TableContainer>
+                            <Table>
+                                <TableBody>
+                                    <StyledTableRow>
+                                        <StyledTableCell style={{width: "16%"}}>{child.key}</StyledTableCell>
+                                        <StyledTableCell>{child.content.valueArr.map((item, index) => (
+                                            <Typography key={index+'li'} className={classes.typography} >{item}</Typography>
+                                        ))}</StyledTableCell>
+                                    </StyledTableRow>
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
                     </div> :
-                    <Typography key={index+'li'} className={classes.typography} >{item}</Typography>
+                    <div key={cIndex}>
+                        <div style={{display: "flex", fontSize: isPc ? 16 : 14, color: "#333", borderBottom: "#ddd 0.5px solid", alignItems: "center"}}>
+                            <div onClick={() => {window.open(CONFIG.url(`/open/soft/${child.softName}/${child.softVersionNo}`))}} style={{margin: 14, width: isPc ? "20%" : "40%", color: "#0679e6", cursor: "pointer"}}>{child.softPackage}</div>
+                            <div style={{margin: 14}}>{child.usage}</div>
+                        </div>
+                    </div>
                 ))}</div>
             )}
             </div>
@@ -109,12 +169,12 @@ function AbTabs (props) {
             aria-label="scrollable auto tabs example"
             className={classes.tabs}
             >
-                {filterChildren.map((child, index) => (
-                    <Tab key={index+'tab'} classes={{root: classes.MuitabRoot, selected: classes.MuitabSelected, }} wrapped={true} label={(<span>{child.key}</span>)}></Tab>
+                {combainTabs(filterChildren).map((child, index) => (
+                    <Tab key={index+'tab'} classes={{root: classes.MuitabRoot, selected: classes.MuitabSelected, }} wrapped={true} label={(<span>{child.tabName}</span>)}></Tab>
                 ))}
             </Tabs>
-            <div style={{margin: 10}}>{filterChildren.map((child, index) => (
-                <TabPanel key={index} index={index}>{child.content}</TabPanel>
+            <div style={{margin: 10}}>{combainTabs(filterChildren).map((child, index) => (
+                <TabPanel key={index} index={index}>{child.val}</TabPanel>
             ))}</div>
         </div>
     )
@@ -214,26 +274,26 @@ function HardInfoChildTabsComponent(props) {
             tabsArr.push(Object.values(child)[0]['title'])
         })
         return(
-        <div style={{margin: "12px 0"}}>
-            <div className={classes.root}>
-                <Tabs 
-                value={value} 
-                onChange={handleChange}
-                variant="scrollable" 
-                aria-label="ant example"
-                orientation="vertical"
-                className={classes.tabs}
-                >
-                {tabsArr.map((tab, index) => (
-                    <Tab key={index} label={tab} />
-                ))}
-                </Tabs>
-                {children.map((child, index) => (
-                    <TabPanel key={index} index={index} value={value}>{child}</TabPanel>
-                ))}
+            <div style={{margin: "12px 0"}}>
+                <div className={classes.root}>
+                    <Tabs 
+                    value={value} 
+                    onChange={handleChange}
+                    variant="scrollable" 
+                    aria-label="ant example"
+                    orientation="vertical"
+                    className={classes.tabs}
+                    >
+                    {tabsArr.map((tab, index) => (
+                        <Tab key={index} label={tab} />
+                    ))}
+                    </Tabs>
+                    {children.map((child, index) => (
+                        <TabPanel key={index} index={index} value={value}>{child}</TabPanel>
+                    ))}
+                </div>
             </div>
-        </div>
-    )
+        )
     }else{        
         return(
             <div>{Object.keys(children).map((item, index) => (
