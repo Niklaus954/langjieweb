@@ -10,6 +10,7 @@ import FadeTransitions from '../Common/FadeTransitions'
 import { List, Steps } from 'antd-mobile';
 import { Paper, Stepper, Step, StepLabel, Typography, Box, Link, Button, Popover } from '@material-ui/core'
 import ParagraphStyles from "../Common/ParagraphStyles";
+
 const Item = List.Item;
 
 
@@ -35,7 +36,7 @@ function AppendPopover(props){
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
     return(
-        <div>
+        <div style={{paddingRight: 20}}>
             <Typography variant="body2" component="a" aria-describedby={id} style={{cursor: "pointer"}} color="primary" onClick={(event) => toViewContent(children, event)}>{children}</Typography>
             <Popover
             open={open}
@@ -81,7 +82,9 @@ const RepairStatus = props => {
 
     const confirmTakeExpress = async params => {
         const result = await apiService.repairTakeConfirm(params)
+        console.log(result)
         if(result.code === 200) {
+            
             const b = document.getElementById("receiveExpress")
             const btn = document.getElementById("btn")
             b.removeChild(btn)
@@ -94,18 +97,17 @@ const RepairStatus = props => {
         <div>
             <Stepper activeStep={-1} orientation="vertical">
                 {children.slice(0, step).reverse().map((child, index) => {
+                    console.log(child)
                     const optional = child.subColumnArr.map((item, ind) => (
-                        item.val === "" ||  item.val === null ? 
-                        item.column_name === "take_person" ?
-                        <Box key={index + ind} id="receiveExpress">
-                            <Button id="btn"  variant="outlined" color="primary" size="small" onClick={() => confirmTakeExpress(repairNo)}>确认收件</Button>
-                        </Box> :
-                        null : 
+                        item.val === "" ||  item.val === null ? null : 
                         <Box key={index + ind} style={{display: "flex"}}>
                             <Typography variant="body2" >{item.column_comment}：</Typography>
                             {
                                 item.column_name === "express" ?        
-                                <AppendPopover>{item.val}</AppendPopover> :
+                                <Box style={{display: "flex"}}>
+                                    <AppendPopover>{item.val}</AppendPopover>
+                                    <Button id="btn" variant="outlined" color="primary" size="small" onClick={() => confirmTakeExpress(repairNo)}>确认收件</Button>
+                                </Box> :
                                 <Typography variant="body2">{item.val}</Typography>
                             }
                         </Box> 
@@ -170,15 +172,22 @@ const Repair = props => {
             column_comment: "维修中",
             val: "",
             subColumnArr: [
+                
+            ],
+        },{
+            column_name: "stage2",
+            column_comment: "维修检验中",
+            val: "",
+            subColumnArr: [
                 {
                     column_name: "repair_conclusion",
                     column_comment: "维修操作",
                     val: "",
                 }
-            ],
+            ]
         },{
-            column_name: "stage2",
-            column_comment: "维修检验中",
+            column_name: "stage3",
+            column_comment: "待发件",
             val: "",
             subColumnArr: [
                 {
@@ -188,8 +197,8 @@ const Repair = props => {
                 }
             ]
         },{
-            column_name: "stage3",
-            column_comment: "待发件",
+            column_name: "stage4",
+            column_comment: "已发件",
             val: "",
             subColumnArr: [
                 {
@@ -203,8 +212,8 @@ const Repair = props => {
                 }
             ]
         },{
-            column_name: "stage4",
-            column_comment: "已发件",
+            column_name: "stage5",
+            column_comment: "已收件",
             val: "",
             subColumnArr: [
                 {
@@ -286,15 +295,6 @@ const Repair = props => {
                 { isPc &&  <div style={{ flex: 1, overflow: 'auto' }} id="grid">
                     <div style={{width: "80%", margin: 'auto', paddingBottom: 20}}>{ParagraphStyles.RenderServiceCarousel(album)}</div>
                     <RepairStatus status={status} repairNo={repairNo}>{infoList}</RepairStatus>
-                    {/* <div style={{margin: 20}}>
-                        <Paper elevation={3}>
-                            <List renderHeader={() => '明细'}>
-                                {
-                                    infoList.map((items, index) => <Item key={items.column_name + index} extra={items.val} wrap={true}>{items.column_comment}</Item>)
-                                }
-                            </List>
-                        </Paper>
-                    </div> */}
                 </div>}
             </div>
         </FadeTransitions>
