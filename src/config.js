@@ -20,9 +20,9 @@ import Contract from './components/Service/Contract'
 import GoodsList from './components/Shop/GoodsList'
 
 const CONFIG = {
-     url: pathname => 'http://192.168.50.230:8090' + pathname,
+    // url: pathname => 'http://192.168.50.230:8090' + pathname,
     // shopUrl: 'http://192.168.50.230:3002',
-    //url: pathname => 'https://www.langjie.com' + pathname,
+    url: pathname => 'https://www.langjie.com' + pathname,
     shopUrl: 'https://shop.langjie.com',
     wxLoginAppid: 'wx1dbbbe221c943cd9',
     minDeviceWidthNum: 800,

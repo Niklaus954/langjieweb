@@ -65,7 +65,8 @@ function AppendPopover(props){
 }
 
 const RepairStatus = props => {
-    const { status, children, repairNo } = props
+   // console.log(props)
+    const { status, children, repairNo, confirmTakeExpress } = props
     let step = 0
     if(status === "关闭") {
         step = 1
@@ -80,24 +81,12 @@ const RepairStatus = props => {
         }
     }
 
-    const confirmTakeExpress = async params => {
-        const result = await apiService.repairTakeConfirm(params)
-        console.log(result)
-        if(result.code === 200) {
-            
-            const b = document.getElementById("receiveExpress")
-            const btn = document.getElementById("btn")
-            b.removeChild(btn)
-            b.innerHTML = "<span>已收件</span>"
-        }
-    }
-
 
     return(
         <div>
             <Stepper activeStep={-1} orientation="vertical">
                 {children.slice(0, step).reverse().map((child, index) => {
-                    console.log(child)
+                 //   console.log(child)
                     const optional = child.subColumnArr.map((item, ind) => (
                         item.val === "" ||  item.val === null ? null : 
                         <Box key={index + ind} style={{display: "flex"}}>
@@ -106,7 +95,7 @@ const RepairStatus = props => {
                                 item.column_name === "express" ?        
                                 <Box style={{display: "flex"}}>
                                     <AppendPopover>{item.val}</AppendPopover>
-                                    <Button id="btn" variant="outlined" color="primary" size="small" onClick={() => confirmTakeExpress(repairNo)}>确认收件</Button>
+                                    {status === "已收件" ? null : <Button id="btn" variant="outlined" color="primary" size="small" onClick={() => confirmTakeExpress(repairNo)}>确认收件</Button>}
                                 </Box> :
                                 <Typography variant="body2">{item.val}</Typography>
                             }
@@ -233,32 +222,7 @@ const Repair = props => {
 
     const backSelectedItem = async item => {
         if (isPc) {
-            const result = await apiService.fetchRepairInfo(item);
-            repairState.forEach(items=> {
-                // items.val = result.data.data[items.column_name]
-                if(items.column_name === "receive_time") {
-                    items.val = result.data.data[items.column_name]
-                }else{
-                    if(result.data.data[items.column_name]) {
-                        items.val = ((Date.parse(result.data.data[items.column_name]) - Date.parse(result.data.data['receive_time']))/1000/60/60).toFixed(2) +' h'
-                    }else{
-                        items.val = result.data.data[items.column_name]
-                    }
-                }
-                if(items.subColumnArr) {
-                    items.subColumnArr.forEach(item => {
-                        item.val = result.data.data[item.column_name]
-                    })
-                }
-            })
-            let resAlbum = result.data.data['album']
-            if(resAlbum === null || resAlbum === ''){
-                resAlbum = '/no_img.png'
-            }
-            setRepairNo(result.data.data['repair_contractno'])
-            setInfoList(repairState);
-            setAlbum(resAlbum)
-            setStatus(result.data.status)
+            fetch(item)
         } else {
             props.history.push({
                 pathname: '/repairInfo/' + item.repair_contractno, 
@@ -275,6 +239,43 @@ const Repair = props => {
             </div>
         )
     }
+
+    const confirmTakeExpress = async (v) => {
+        const result = await apiService.repairTakeConfirm(v)
+        if(result.code === 200) {
+            fetch({repair_contractno:v})
+        }
+    }
+
+    const fetch = async (v) => {
+        const result = await apiService.fetchRepairInfo(v)
+        repairState.forEach(items=> {
+            // items.val = result.data.data[items.column_name]
+            if(items.column_name === "receive_time") {
+                items.val = result.data.data[items.column_name]
+            }else{
+                if(result.data.data[items.column_name]) {
+                    items.val = ((Date.parse(result.data.data[items.column_name]) - Date.parse(result.data.data['receive_time']))/1000/60/60).toFixed(2) +' h'
+                }else{
+                    items.val = result.data.data[items.column_name]
+                }
+            }
+            if(items.subColumnArr) {
+                items.subColumnArr.forEach(item => {
+                    item.val = result.data.data[item.column_name]
+                })
+            }
+        })
+        let resAlbum = result.data.data['album']
+        if(resAlbum === null || resAlbum === ''){
+            resAlbum = '/no_img.png'
+        }
+        setRepairNo(result.data.data['repair_contractno'])
+        setInfoList(repairState);
+        setAlbum(resAlbum)
+        setStatus(result.data.status)
+    }
+
 
     return (
         <FadeTransitions>
@@ -294,7 +295,7 @@ const Repair = props => {
                 </div>
                 { isPc &&  <div style={{ flex: 1, overflow: 'auto' }} id="grid">
                     <div style={{width: "80%", margin: 'auto', paddingBottom: 20}}>{ParagraphStyles.RenderServiceCarousel(album)}</div>
-                    <RepairStatus status={status} repairNo={repairNo}>{infoList}</RepairStatus>
+                    <RepairStatus status={status} repairNo={repairNo} confirmTakeExpress={ (v) => confirmTakeExpress(v)}>{infoList}</RepairStatus>
                 </div>}
             </div>
         </FadeTransitions>

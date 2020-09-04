@@ -10,7 +10,7 @@ import ParagraphStyles from "../Common/ParagraphStyles";
 const Item = List.Item;
 
 const RepairStatus = props => {
-    const { status, children, history } = props
+    const { status, children, history, confirmTakeExpress } = props
     const repairNo = history.location.pathname.split('/')[history.location.pathname.split('/').length - 1]
     let step = 0
     if(status === "关闭") {
@@ -26,39 +26,30 @@ const RepairStatus = props => {
         }
     }
 
-    const confirmTakeExpress = async params => {
-        const result = await apiService.repairTakeConfirm(params)
-        if(result.code === 200) {
-            const b = document.getElementById("receiveExpress")
-            const btn = document.getElementById("btn")
-            b.removeChild(btn)
-            b.innerHTML = "<span>已收件</span>"
-        }
-    }
+
 
 
     return(
         <div>
-            <Stepper activeStep={-1} orientation="vertical">
+            <Stepper style={{padding: 12}} activeStep={-1} orientation="vertical">
                 {children.slice(0, step).reverse().map((child, index) => {
                     const optional = child.subColumnArr.map((item, ind) => (
                         item.val === "" ||  item.val === null ? 
-                        item.column_name === "take_person" ?
-                        <Box key={index + ind} id="receiveExpress">
-                            <Button id="btn" variant="outlined" color="primary" size="small" onClick={() => confirmTakeExpress(repairNo)}>确认收件</Button>
-                        </Box> :
                         null : 
                         <Box key={index + ind} style={{display: "flex"}}>
                             <Typography variant="body2" >{item.column_comment}：</Typography>
                             {
                                 item.column_name === "express" ?        
-                                <Link
-                                component="button"
-                                variant="body2"
-                                onClick={() => {
-                                    history.history.push('/deliveryInfo/'+item.val)
-                                }}
-                                >{item.val}</Link> :
+                                <Box style={{display: "flex", alignItems: "flex-start"}}>
+                                    <Link
+                                    component="button"
+                                    variant="body2"
+                                    onClick={() => {
+                                        history.history.push('/deliveryInfo/'+item.val)
+                                    }}
+                                    >{item.val}</Link>
+                                    {status === "已收件" ? null : <Typography style={{color:"#3f51b5", paddingLeft: 12}} variant="body2" onClick={() => confirmTakeExpress(repairNo)}>确认收件</Typography>}
+                                </Box> :
                                 <Typography variant="body2">{item.val}</Typography>
                             }
                         </Box> 
@@ -127,15 +118,22 @@ const RepairInfo = props => {
             column_comment: "维修中",
             val: "",
             subColumnArr: [
+                
+            ],
+        },{
+            column_name: "stage2",
+            column_comment: "维修检验中",
+            val: "",
+            subColumnArr: [
                 {
                     column_name: "repair_conclusion",
                     column_comment: "维修操作",
                     val: "",
                 }
-            ],
+            ]
         },{
-            column_name: "stage2",
-            column_comment: "维修检验中",
+            column_name: "stage3",
+            column_comment: "待发件",
             val: "",
             subColumnArr: [
                 {
@@ -145,8 +143,8 @@ const RepairInfo = props => {
                 }
             ]
         },{
-            column_name: "stage3",
-            column_comment: "待发件",
+            column_name: "stage4",
+            column_comment: "已发件",
             val: "",
             subColumnArr: [
                 {
@@ -160,8 +158,8 @@ const RepairInfo = props => {
                 }
             ]
         },{
-            column_name: "stage4",
-            column_comment: "已发件",
+            column_name: "stage5",
+            column_comment: "已收件",
             val: "",
             subColumnArr: [
                 {
@@ -207,6 +205,14 @@ const RepairInfo = props => {
         setStatus(result.data.status)
     }
 
+    const confirmTakeExpress = async params => {
+        const result = await apiService.repairTakeConfirm(params)
+        if(result.code === 200) {
+            fetch(params)
+        }
+    }
+
+
     return (
         <FadeTransitions>
             <div style={{width: '100%'}}>
@@ -215,7 +221,7 @@ const RepairInfo = props => {
                     <div style={{ flex: 1, overflow: 'auto' }} id="grid">
                         <div style={{margin: 5}}>
                             <Paper elevation={3}>
-                                <RepairStatus status={status} history={props}>{infoList}</RepairStatus>
+                                <RepairStatus status={status} history={props} confirmExpress={(v) => confirmTakeExpress(v) }>{infoList}</RepairStatus>
                             </Paper>
                         </div>
                     </div>
