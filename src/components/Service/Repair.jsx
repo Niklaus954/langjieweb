@@ -7,11 +7,10 @@ import {
 } from 'react-router-dom'
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import FadeTransitions from '../Common/FadeTransitions'
-import { List, Steps } from 'antd-mobile';
-import { Paper, Stepper, Step, StepLabel, Typography, Box, Link, Button, Popover } from '@material-ui/core'
+import { List, Steps as MobileSteps } from 'antd-mobile';
+import { Stepper, Step, StepLabel, Typography, Box, Button, Popover } from '@material-ui/core'
 import ParagraphStyles from "../Common/ParagraphStyles";
 
-const Item = List.Item;
 
 
 function AppendPopover(props){
@@ -67,6 +66,7 @@ function AppendPopover(props){
 const RepairStatus = props => {
    // console.log(props)
     const { status, children, repairNo, confirmTakeExpress } = props
+    const MobileStep = MobileSteps.Step
     let step = 0
     if(status === "关闭") {
         step = 1
@@ -83,14 +83,14 @@ const RepairStatus = props => {
 
 
     return(
-        <div>
-            <Stepper activeStep={-1} orientation="vertical">
+        <div style={{padding: 20}}>
+            <MobileSteps size="large" current={step}>
                 {children.slice(0, step).reverse().map((child, index) => {
                  //   console.log(child)
                     const optional = child.subColumnArr.map((item, ind) => (
                         item.val === "" ||  item.val === null ? null : 
                         <Box key={index + ind} style={{display: "flex"}}>
-                            <Typography variant="body2" >{item.column_comment}：</Typography>
+                            <Typography  variant="body2" >{item.column_comment}：</Typography>
                             {
                                 item.column_name === "express" ?        
                                 <Box style={{display: "flex"}}>
@@ -103,17 +103,10 @@ const RepairStatus = props => {
                         
                     ))
                     return(
-                        <Step key={index} completed={false} >
-                            <StepLabel 
-                            optional={optional}
-                            >
-                                <span style={{fontSize: 16, fontWeight: 600}}>{child.column_comment}</span>
-                                <span style={{paddingLeft: 15}}>{child.val}</span>
-                            </StepLabel>
-                        </Step>
+                        <MobileStep key={index} title={child.column_comment  +  `${child.val === null ? "" : child.val}`} description={optional}></MobileStep>
                     )
                 })}
-            </Stepper>
+            </MobileSteps>
         </div>
     )
 }
@@ -161,16 +154,21 @@ const Repair = props => {
             column_comment: "维修中",
             val: "",
             subColumnArr: [
-                
+                {
+                    column_name: "repair_conclusion",
+                    column_comment: "维修操作",
+                    val: "",
+                }
             ],
         },{
             column_name: "stage2",
             column_comment: "维修检验中",
             val: "",
             subColumnArr: [
+                
                 {
-                    column_name: "repair_conclusion",
-                    column_comment: "维修操作",
+                    column_name: "again_conclusion",
+                    column_comment: "维修检验结果",
                     val: "",
                 }
             ]
@@ -179,11 +177,7 @@ const Repair = props => {
             column_comment: "待发件",
             val: "",
             subColumnArr: [
-                {
-                    column_name: "again_conclusion",
-                    column_comment: "维修检验结果",
-                    val: "",
-                }
+                
             ]
         },{
             column_name: "stage4",
@@ -217,8 +211,6 @@ const Repair = props => {
             ]
         }
     ]
-
-    const delCol = [ 'id', 'related_contract_salary', 'related_contract_owncost', 'album', 'sql_stamp', 'update_time', 'update_person', 'insert_time', 'insert_person', 'complete', 'outer_cost', 'own_cost', 'again_check_person', 'pri_check_person' ];
 
     const backSelectedItem = async item => {
         if (isPc) {

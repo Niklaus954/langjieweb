@@ -92,6 +92,7 @@ const Login = ({ location, history, updateSelectedSideName, updateMemberInfo }) 
             formData: {
                 phone,
                 verCode,
+                appName: '官网',
             },
         });
         Toast.hide();

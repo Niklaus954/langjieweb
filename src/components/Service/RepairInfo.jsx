@@ -4,14 +4,14 @@ import {
 } from 'react-router-dom'
 import apiService from '../../api/apiService';
 import FadeTransitions from '../Common/FadeTransitions'
-import { List } from 'antd-mobile';
-import { Paper, Stepper, Step, StepLabel, Typography, Box, Link, Button } from '@material-ui/core'
+import { List, Steps as MobileSteps } from 'antd-mobile';
+import { Typography, Box, Link } from '@material-ui/core'
 import ParagraphStyles from "../Common/ParagraphStyles";
-const Item = List.Item;
 
 const RepairStatus = props => {
     const { status, children, history, confirmTakeExpress } = props
     const repairNo = history.location.pathname.split('/')[history.location.pathname.split('/').length - 1]
+    const MobileStep = MobileSteps.Step
     let step = 0
     if(status === "关闭") {
         step = 1
@@ -30,14 +30,14 @@ const RepairStatus = props => {
 
 
     return(
-        <div>
-            <Stepper style={{padding: 12}} activeStep={-1} orientation="vertical">
+        <div style={{padding: 10}}>
+            <MobileSteps size="small" current={step}>
                 {children.slice(0, step).reverse().map((child, index) => {
                     const optional = child.subColumnArr.map((item, ind) => (
                         item.val === "" ||  item.val === null ? 
                         null : 
                         <Box key={index + ind} style={{display: "flex"}}>
-                            <Typography variant="body2" >{item.column_comment}：</Typography>
+                            <Typography style={{minWidth: 100}} variant="body2" >{item.column_comment}：</Typography>
                             {
                                 item.column_name === "express" ?        
                                 <Box style={{display: "flex", alignItems: "flex-start"}}>
@@ -56,17 +56,10 @@ const RepairStatus = props => {
                         
                     ))
                     return(
-                        <Step key={index} completed={false} >
-                            <StepLabel 
-                            optional={optional}
-                            >
-                                <span style={{fontSize: 16, fontWeight: 600}}>{child.column_comment}</span>
-                                <span style={{paddingLeft: 15}}>{child.val}</span>
-                            </StepLabel>
-                        </Step>
+                        <MobileStep key={index} title={child.column_comment + `${child.val === null ? "" : child.val}`} description={optional}></MobileStep>
                     )
                 })}
-            </Stepper>
+            </MobileSteps>
         </div>
     )
 }
@@ -77,7 +70,6 @@ const RepairInfo = props => {
     const [infoList, setInfoList] = useState([]);
     const [album, setAlbum] = useState([]);
     const [status, setStatus] = useState([]);
-    const [repairNo, setRepairNo] = useState([])
     useEffect(() => {
         const repair_contractno = props.location.pathname.split('/repairInfo/')[1];
         fetch(repair_contractno);
@@ -118,7 +110,11 @@ const RepairInfo = props => {
             column_comment: "维修中",
             val: "",
             subColumnArr: [
-                
+                {
+                    column_name: "repair_conclusion",
+                    column_comment: "维修操作",
+                    val: "",
+                }
             ],
         },{
             column_name: "stage2",
@@ -126,8 +122,8 @@ const RepairInfo = props => {
             val: "",
             subColumnArr: [
                 {
-                    column_name: "repair_conclusion",
-                    column_comment: "维修操作",
+                    column_name: "again_conclusion",
+                    column_comment: "维修检验结果",
                     val: "",
                 }
             ]
@@ -136,11 +132,7 @@ const RepairInfo = props => {
             column_comment: "待发件",
             val: "",
             subColumnArr: [
-                {
-                    column_name: "again_conclusion",
-                    column_comment: "维修检验结果",
-                    val: "",
-                }
+                
             ]
         },{
             column_name: "stage4",
@@ -220,9 +212,7 @@ const RepairInfo = props => {
                 <div style={{ width: '96%', display: 'flex', borderRight: '1px solid #eee', margin: "auto" }}>
                     <div style={{ flex: 1, overflow: 'auto' }} id="grid">
                         <div style={{margin: 5}}>
-                            <Paper elevation={3}>
-                                <RepairStatus status={status} history={props} confirmExpress={(v) => confirmTakeExpress(v) }>{infoList}</RepairStatus>
-                            </Paper>
+                            <RepairStatus status={status} history={props} confirmExpress={(v) => confirmTakeExpress(v) }>{infoList}</RepairStatus>
                         </div>
                     </div>
                 </div>
