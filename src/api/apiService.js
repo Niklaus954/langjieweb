@@ -95,6 +95,73 @@ const contractTakeConfirm = async params => {
     return result
 }
 
+// 获取云盘列表
+const fetchCloudDiskList = async params => {
+    const result = await api({
+        url: '/open/service/cloudDisk/getList',
+    })
+    return result;
+}
+
+// 获取指定云盘信息
+const fetchCloudDiskInfo = async params => {
+    const result = await api({
+        url: '/open/service/cloudDisk/info',
+        queryData: {
+            fileId: params.fileId,
+        },
+    })
+    return result;
+}
+
+// 根据云盘id下载软件，文档，安装盘，图库
+const downloadByCloudDiskId = async params => {
+    const { fileId, picId } = params;
+    let url = '/open/service/cloudDisk/download/' + fileId;
+    if (picId) {
+        url += '/' + picId;
+    }
+    const result = await api({
+        method: 'post',
+        url,
+    })
+    return result;
+}
+
+// 下载安装盘中的依赖
+const downloadDependency = async params => {
+    const { fileId, type, installDiskId } = params;
+    const result = await api({
+        url: '/open/service/burnDisk/buildDependency/' + installDiskId,
+        method: 'post',
+        queryData: {
+            fileId,
+            type,
+        },
+    })
+    return result;
+}
+
+// 根据sn下载安装盘
+const downloadInstallDiskBySn = async params => {
+    const { sn } = params;
+    const result = await api({
+        url: '/open/service/cloudDisk/download/' + sn,
+        method: 'post',
+    })
+    return result;
+}
+
+// 是否在控制器产品显示下载安装盘
+const checkSnAccess = async params => {
+    const { sn } = params;
+    const result = await api({
+        url: '/open/service/burnDisk/checkSnAccess',
+        queryData: { sn },
+    })
+    return result;
+}
+
 export default {
     getTicket,
     fetchRepair,
@@ -106,4 +173,10 @@ export default {
     getExpressInfo,
     repairTakeConfirm,
     contractTakeConfirm,
+    fetchCloudDiskList,
+    fetchCloudDiskInfo,
+    downloadByCloudDiskId,
+    downloadDependency,
+    downloadInstallDiskBySn,
+    checkSnAccess,
 };
