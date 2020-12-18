@@ -18,11 +18,12 @@ import VirCard from './components/Service/VirCard'
 import Repair from './components/Service/Repair'
 import Contract from './components/Service/Contract'
 import GoodsList from './components/Shop/GoodsList'
+import CloudDisk from './components/Service/CloudDisk'
 
 const CONFIG = {
-    // url: pathname => 'http://192.168.50.230:8090' + pathname,
+    url: pathname => 'http://192.168.50.230:8090' + pathname,
     // shopUrl: 'http://192.168.50.230:3002',
-    url: pathname => 'https://www.langjie.com' + pathname,
+    // url: pathname => 'https://www.langjie.com' + pathname,
     shopUrl: 'https://shop.langjie.com',
     wxLoginAppid: 'wx1dbbbe221c943cd9',
     minDeviceWidthNum: 800,
@@ -280,6 +281,15 @@ const CONFIG = {
                     text: '合同查询',
                     pathname: '/service/contract',  
                     component: Contract,                          
+                    auth: true,
+                    type: 'service',
+                },
+                {
+                    id: 25,
+                    supId: -3,
+                    text: '企业云盘',
+                    pathname: '/service/cloudDisk',  
+                    component: CloudDisk,                          
                     auth: true,
                     type: 'service',
                 },
