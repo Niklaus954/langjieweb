@@ -68,16 +68,11 @@ const SuperAuth = props => {
     const postSuperAuth = async () => {
         const hashMapper = Common.getLocationParamMapper(props.location.search);
         const redirectUrl = hashMapper['path'];
-        if (!selectedCompany) {
-            Toast.info('请选择公司');
-            return;
-        }
         if (!selectedMember) {
             Toast.info('请选择会员');
             return;
         }
         const result = await apiLogin.postSuperAuthMember({
-            company: selectedCompany,
             open_id: selectedMember,
         });
         const { updateMemberInfo, history } = props;
