@@ -30,6 +30,7 @@ import DynaProInfo from '../containers/DynaProInfoContainer';
 import SuperAuth from '../containers/SuperAuth';
 import DeliveryInfo from './Service/DeliveryInfo';
 import HardInterfaceInfo from './Solution/HardInterfaceInfo'
+import CloudDiskInfo from './Service/CloudDiskInfo'
 
 
 const App = ({ selectedSideMenu }) => {
@@ -83,6 +84,7 @@ const App = ({ selectedSideMenu }) => {
                             <Route path="/checkLogin" component={CheckLogin} />
                             <Route path="/repairInfo" component={RepairInfo}/>
                             <Route path="/contractInfo" component={ContractInfo}/>
+                            <Route path="/cloudDiskInfo" component={CloudDiskInfo}/>
                             <Route path="/DeliveryInfo" component={DeliveryInfo}/>
                             <Route path="/hardInfo" component={HardInterfaceInfo} />
                             <Route path="/virInfo" component={VirInfo}/>

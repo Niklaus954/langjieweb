@@ -9,7 +9,8 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import FadeTransitions from '../Common/FadeTransitions'
 import { List, Tabs as MobileTabs } from 'antd-mobile';
 import AppBar from '@material-ui/core/AppBar';
-import { Typography, Card, CardContent, Popover, Link } from '@material-ui/core';
+import { Typography, Card, CardContent, Popover, Link, IconButton } from '@material-ui/core';
+import { GetApp as GetAppIcon } from '@material-ui/icons'
 import ParagraphStyles from '../Common/ParagraphStyles';
 
 const Item = List.Item;
@@ -18,7 +19,8 @@ const transTab = {
     "hardInfo": "硬件信息",
     "contractInfo": "销售信息",
     "regHistoryList": "注册历史",
-    "warrantyInfo": "保修单"
+    "warrantyInfo": "保修单",
+    "download": "下载"
 }
 
 function RegCard(props) {
@@ -98,11 +100,15 @@ function ContractPopover(props){
 //tab滑动组件
 function TabPanel(props) {
     const { children, infoListKey } = props;
+
+    
+
     return (
         <div >{infoListKey === "regHistoryList" ? 
         children.map((item, index) => {
             return(<RegCard key={index}>{item}</RegCard>)
-        }) : children.map((item, index) => {
+        }) :
+        children.map((item, index) => {
             if(item.column_name === 'contract_no') {
                 return(<Item key={index} extra={(<ContractPopover>{item.val}</ContractPopover>)} wrap={true}>{item.column_comment}</Item>)
             }else{
@@ -122,12 +128,28 @@ const VirCard = props => {
     const backSelectedItem = async item => {
         if (isPc) {
             const result = await apiService.fetchVirCardInfo(item)
+            const checkSnAccess = await apiService.checkSnAccess({sn: item.serialNo})
+            const isShowDownLoad = checkSnAccess.code === 200 ? true : false
+            if (isShowDownLoad) {
+                Object.assign(result.data, {
+                    download:  [{column_name: 'download', column_comment: '软件安装包', val: <IconButton onClick={() => downloadInstallDiskBySn(item.serialNo)}><GetAppIcon color='primary'/></IconButton>}]
+                })
+            }
             setInfoList(result.data)
             setTabPage(0)
         } else {
             props.history.push({
                 pathname: '/virInfo/' + item.serialNo, 
             });
+        }
+    }
+
+    const downloadInstallDiskBySn = async e => {
+        const res = await apiService.downloadInstallDiskBySn({sn: e})
+        if (res.code === 200) {
+            window.open('https://www.langjie.com/open/burnDisk/download/'+res.data)
+        } else {
+
         }
     }
 
@@ -142,7 +164,7 @@ const VirCard = props => {
         )
     }
 
-    const tabs = Object.keys(infoList).filter(item => Object.keys(transTab).includes(item) && infoList[item].length > 0)
+    const tabs = Object.keys(infoList).filter(item => Object.keys(transTab).includes(item) && infoList[item].length >= 0)
 
     return (
         <FadeTransitions>

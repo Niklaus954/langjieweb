@@ -134,12 +134,19 @@ const downloadDependency = async params => {
     const result = await api({
         url: '/open/service/burnDisk/buildDependency/' + installDiskId,
         method: 'post',
-        queryData: {
+        formData: {
             fileId,
             type,
         },
     })
     return result;
+}
+
+const downLoadSoftDisk = async params => {
+    const result = await api({
+        url: '/open/burnDisk/download/'+params
+    })
+    return result
 }
 
 // 根据sn下载安装盘
@@ -162,6 +169,19 @@ const checkSnAccess = async params => {
     return result;
 }
 
+const changeCloudDiskStar = async params => {
+    const { id, star } = params
+    const result = await api({
+        url: '/open/service/cloudDisk/star',
+        method: 'PUT',
+        formData: {
+            _id: id,
+            star
+        }
+    })
+    return result
+}
+
 export default {
     getTicket,
     fetchRepair,
@@ -177,6 +197,8 @@ export default {
     fetchCloudDiskInfo,
     downloadByCloudDiskId,
     downloadDependency,
+    downLoadSoftDisk,
     downloadInstallDiskBySn,
     checkSnAccess,
+    changeCloudDiskStar
 };

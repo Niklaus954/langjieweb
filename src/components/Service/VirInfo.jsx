@@ -4,8 +4,9 @@ import {
 } from 'react-router-dom'
 import apiService from '../../api/apiService';
 import FadeTransitions from '../Common/FadeTransitions'
-import { List, Tabs as MobileTabs } from 'antd-mobile';
-import { Card, CardContent, Typography } from '@material-ui/core';
+import { List, Tabs as MobileTabs, Toast } from 'antd-mobile';
+import { Card, CardContent, IconButton, Typography } from '@material-ui/core';
+import { GetApp as GetAppIcon } from '@material-ui/icons'
 import PropTypes from 'prop-types';
 const Item = List.Item;
 
@@ -14,7 +15,8 @@ const transTab = {
     "hardInfo": "硬件信息",
     "contractInfo": "销售信息",
     "regHistoryList": "注册历史",
-    "warrantyInfo": "保修单"
+    "warrantyInfo": "保修单",
+    "download": "下载"
 }
 
 function RegCard(props) {
@@ -61,15 +63,16 @@ function TabPanel(props) {
 
 function TabsComponent(props) {
     let { infoList, param } = props
-    const [value ,setValue] = useState(0);
+    const [value, setValue] = useState(0);
+    const tabs = Object.keys(infoList).filter(item => Object.keys(transTab).includes(item) && infoList[item].length >= 0)
     return(
         <div style={{width: "100%", height: "100%"}}>
             <MobileTabs
-            tabs={Object.keys(infoList).filter(item => infoList[item].length > 0)}
+            tabs={tabs}
             initialPage={0}
             renderTab={tab => <span>{transTab[tab]}</span>}
             >
-                {Object.keys(infoList).filter(item => infoList[item].length > 0).map((items, index) => (
+                {tabs.map((items, index) => (
                     <TabPanel key={index+'tabPanel'} value={value} index={index} param={param} infoListKey={items}>{infoList[items]}</TabPanel>
                 ))}
             </MobileTabs>
@@ -90,6 +93,13 @@ const VirInfo = props => {
 
     const fetch = async serialNo => {
         const result = await apiService.fetchVirCardInfo({serialNo});
+        const checkSnAccess = await apiService.checkSnAccess({sn: serialNo})
+        const isShowDownLoad = checkSnAccess.code === 200 ? true : false
+        if (isShowDownLoad) {
+            Object.assign(result.data, {
+                download: [{column_name: 'download', column_comment: '软件安装包', val: <IconButton onClick={() => Toast.info('仅支持在PC端下载')}><GetAppIcon color='primary'/></IconButton>}]
+            })
+        }
         setInfoList(result.data);
     }
 
