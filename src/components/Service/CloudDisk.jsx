@@ -208,7 +208,7 @@ const CloudDisk = props => {
                         ></ItemList>
                     </div>
                 </div>
-                {isPc && <RenderPanel info={info} />}
+                {Object.keys(info).length !==0 ? isPc &&  <RenderPanel info={info} /> : isPc &&  <div style={{textAlign: 'center', width: '60%'}}>暂无数据</div>} 
                 
             </div>
         </FadeTransitions>
