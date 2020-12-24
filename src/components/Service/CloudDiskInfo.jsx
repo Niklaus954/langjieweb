@@ -27,24 +27,38 @@ const CloudDiskInfo = props => {
     
     const RenderItem = () => {
         const itemArr = []
-        const list = []
+        let TransRowCell = ['type','fileName','remark','size','uploadPerson','uploadTime']
+        if (!Object.prototype.hasOwnProperty.call(info, 'remark')) {
+            info.remark = ''
+        }
         for (let key in info) {
             if (key === 'type') {
-                itemArr.push(<Item key={key} extra={info[key]} wrap={true}>类型</Item>)
+                itemArr[TransRowCell.indexOf(key)] = (<Item key={key} extra={info[key]} wrap={true}>类型</Item>)
             } else if (key === 'fileName') {
-                itemArr.push(<Item multipleLine={true} key={key} extra={info[key]} wrap={true}>文件名</Item>)
+                itemArr[TransRowCell.indexOf(key)] = (<Item multipleLine={true} key={key} extra={info[key]} wrap={true}>文件名</Item>)
             } else if (key === 'remark') {
                 if (info['type'] === '安装盘') {
-                    itemArr.push(<Item key={key} extra={info[key]} wrap={true}>定制</Item>)
+                    itemArr[TransRowCell.indexOf(key)] = (<Item key={key} extra={info[key]} wrap={true}>定制</Item>)
                 } else {
-                    itemArr.push(<Item key={key} extra={info[key]} wrap={true}>附言</Item>)
+                    TransRowCell.splice(TransRowCell.indexOf(key), 1)
+                    itemArr[TransRowCell.length] = (<Item key={key} extra={info[key]} wrap={true}>附言</Item>)
                 }     
             } else if (key === 'uploadTime') {
-                itemArr.push(<Item key={key} extra={moment(info[key]).format('YYYY-MM-DD')} wrap={true}>更新时间</Item>)
+                itemArr[TransRowCell.indexOf(key)] = (<Item key={key} extra={moment(info[key]).format('YYYY-MM-DD')} wrap={true}>更新时间</Item>)
             } else if (key === 'uploadPerson') {
-                itemArr.push(<Item key={key} extra={info[key]} wrap={true}>上传人</Item>)
+                itemArr[TransRowCell.indexOf(key)] = (<Item key={key} extra={info[key]} wrap={true}>上传人</Item>)
             } else if (key === 'size') {
-                itemArr.push(<Item key={key} extra={<span>{parseFloat(info[key]/1024/1024).toFixed(2)}MB</span>} wrap={true}>尺寸</Item>)
+                if (info["type"] !== '安装盘') {
+                    let size = info[key]/1024 //parseFloat().toFixed(2)
+                    if (Number(size) > 1024) {
+                        size = parseFloat(size/1024).toFixed(2) + 'MB'
+                    } else {
+                        size = parseFloat(size).toFixed(2) + 'KB'
+                    }
+                    itemArr[TransRowCell.indexOf(key)] = (<Item key={key} extra={<span>{size}</span>} wrap={true}>尺寸</Item>)
+                    
+                }
+                
             }
         }
         return <List key='detail' renderHeader={() => '详情'}>{itemArr}</List>

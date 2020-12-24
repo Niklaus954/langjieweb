@@ -7,7 +7,7 @@ import {
 } from 'react-router-dom'
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import FadeTransitions from '../Common/FadeTransitions'
-import { Typography, TableContainer, Table, TableRow, TableCell, TableBody, TableHead, IconButton, Button, GridListTile, GridListTileBar, GridList } from '@material-ui/core';
+import { Typography, CircularProgress, TableContainer, Table, TableRow, TableCell, TableBody, TableHead, IconButton, Button, GridListTile, GridListTileBar, GridList } from '@material-ui/core';
 import {GetApp as GetAppIcon} from '@material-ui/icons'
 import moment from 'moment';
 
@@ -20,8 +20,17 @@ function RenderPanel (param) {
     const dependencyInfo = []
     const galleryInfo = []
     const galleryArr = []
-    
+    let TransRowCell = []
+    const [btnInfo, setBtnInfo] = useState({
+        node: <GetAppIcon/>,
+        msg: '下载',
+        disabled: false
+    })
+    if (!Object.prototype.hasOwnProperty.call(info, 'remark')) {
+        info.remark = ''
+    }
     if (info.type === '安装盘') {
+        TransRowCell = ['type','fileName','remark','size','uploadPerson','uploadTime']
         tableCellTitle = '定制'
         info.installDiskInfo.dependencies.map((item, index) => {
             dependencyArr.push(
@@ -40,11 +49,12 @@ function RenderPanel (param) {
         )
         
     } else if (info.type === '图库') {
+        TransRowCell = ['type','fileName','size','uploadPerson','uploadTime','remark']
         tableCellTitle = '附言'
         info.galleryInfo.GallerySubs.map((item, index) => {
             if (item.album.split('.')[item.album.split('.').length - 1] === 'mp4') {
-                item.suffixName = '.mp4';
-                item.type = '视频'
+                // item.suffixName = '.mp4';
+                // item.type = '视频'
                 galleryArr.push(<GridListTile key={index}>
                     <video controls width="100%" height="160px" src={CONFIG.url(`/img/gallery/${item.album}`)}></video>
                     <GridListTileBar
@@ -68,51 +78,63 @@ function RenderPanel (param) {
                 {galleryArr}
             </GridList>)
     } else {
+        TransRowCell = ['type','fileName','size','uploadPerson','uploadTime','remark']
         tableCellTitle = '附言'
     }
-    const TransRowCell = []
     for(let key in info) {
         if (key === 'type') {
-            TransRowCell.push(<TableRow key={key}>
+            TransRowCell[TransRowCell.indexOf(key)] = (<TableRow key={key}>
                     <TableCell style={{background:'#eee'}}>类型</TableCell>
                     <TableCell>{info[key]}</TableCell>
                 </TableRow>
             )
         } else if (key === 'fileName') {
-            TransRowCell.push(
+            TransRowCell[TransRowCell.indexOf(key)] = (
                 <TableRow key={key}>
                     <TableCell style={{background:'#eee'}}>文件名</TableCell>
                     <TableCell>{info[key]}</TableCell>
                 </TableRow>
             )
-        } else if (key === 'remark') {
-            TransRowCell.push(
-                <TableRow key={key}>
-                    <TableCell style={{background:'#eee'}}>{tableCellTitle}</TableCell>
-                    <TableCell>{info[key]}</TableCell>
-                </TableRow>
-            )
         } else if (key === 'uploadPerson') {
-            TransRowCell.push(
+            TransRowCell[TransRowCell.indexOf(key)] = (
                 <TableRow key={key}>
                     <TableCell style={{background:'#eee'}}>上传人</TableCell>
                     <TableCell>{info[key]}</TableCell>
                 </TableRow>
             )
         } else if (key === 'uploadTime') {
-            TransRowCell.push(
+            TransRowCell[TransRowCell.indexOf(key)] = (
                 <TableRow key={key}>
                     <TableCell style={{background:'#eee'}}>更新时间</TableCell>
                     <TableCell>{moment(info[key]).format('YYYY-MM-DD')}</TableCell>
                 </TableRow>
             )
-        } else if (key === 'docSize') {
-            TransRowCell.push(
+        } else if (key === 'size') {
+            if (info['type'] !== '安装盘') {
+                let size = info[key]/1024 //parseFloat().toFixed(2)
+                if (Number(size) > 1024) {
+                    size = parseFloat(size/1024).toFixed(2) + 'MB'
+                } else {
+                    size = parseFloat(size).toFixed(2) + 'KB'
+                }
+                TransRowCell[TransRowCell.indexOf(key)] = (
+                    <TableRow key={key}>
+                        <TableCell style={{background:'#eee'}}>尺寸</TableCell>
+                        <TableCell>{size}</TableCell>
+                    </TableRow>
+                )
+            } else {
+                TransRowCell.splice(TransRowCell.indexOf(key), 1)
+            }
+        } else if (key === 'remark') {
+            //视频
+            TransRowCell[TransRowCell.indexOf(key)] = (
                 <TableRow key={key}>
-                    <TableCell style={{background:'#eee'}}>文档大小</TableCell>
-                    <TableCell>{parseFloat(info[key]/1024/1024).toFixed(2)}MB</TableCell>
+                    <TableCell style={{background:'#eee'}}>{tableCellTitle}</TableCell>
+                    <TableCell>{info[key]}</TableCell>
                 </TableRow>
             )
+            
         }
     }
 
@@ -127,9 +149,18 @@ function RenderPanel (param) {
     }
 
     const downLoadSource = async (e) => {
-
+        setBtnInfo({
+            node: <CircularProgress color="secondary" size={20} />,
+            msg: '下载中...',
+            disabled: true
+        })
         const res = await apiService.downloadByCloudDiskId({ fileId: e._id })
         if (res.code === 200) {
+            setBtnInfo({
+                node: <GetAppIcon/>,
+                msg: '下载',
+                disabled: false
+            })
             window.open('https://www.langjie.com/open/burnDisk/download/'+res.data)
         } else {
 
@@ -153,7 +184,7 @@ function RenderPanel (param) {
                     <TableBody>{TransRowCell}</TableBody>
                 </Table>
             </TableContainer>
-            <div style={{margin: 20, float: 'right', display: info.type === '图库' ?  'none' : 'block' }}><Button variant="contained" startIcon={<GetAppIcon/>} color='primary' onClick={() => {downLoadSource(info)}}>下载</Button></div>
+            <div style={{margin: 20, float: 'right', display: info.type === '图库' ?  'none' : 'block' }}><Button disabled={btnInfo.disabled} variant="contained" startIcon={btnInfo.node} color='primary' onClick={() => {downLoadSource(info)}}>{btnInfo.msg}</Button></div>
             <TableContainer style={{width: '97%', margin: 10}}>{dependencyInfo}</TableContainer>
             <TableContainer style={{overflow: 'hidden'}}>{galleryInfo}</TableContainer>
         </div>
@@ -209,7 +240,6 @@ const CloudDisk = props => {
                     </div>
                 </div>
                 {Object.keys(info).length !==0 ? isPc &&  <RenderPanel info={info} /> : isPc &&  <div style={{textAlign: 'center', width: '60%'}}>暂无数据</div>} 
-                
             </div>
         </FadeTransitions>
     )

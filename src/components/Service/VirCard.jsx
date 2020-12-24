@@ -9,7 +9,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import FadeTransitions from '../Common/FadeTransitions'
 import { List, Tabs as MobileTabs } from 'antd-mobile';
 import AppBar from '@material-ui/core/AppBar';
-import { Typography, Card, CardContent, Popover, Link, IconButton } from '@material-ui/core';
+import { Typography, Card, CardContent, Popover, Link, IconButton, CircularProgress, Button } from '@material-ui/core';
 import { GetApp as GetAppIcon } from '@material-ui/icons'
 import ParagraphStyles from '../Common/ParagraphStyles';
 
@@ -100,9 +100,6 @@ function ContractPopover(props){
 //tab滑动组件
 function TabPanel(props) {
     const { children, infoListKey } = props;
-
-    
-
     return (
         <div >{infoListKey === "regHistoryList" ? 
         children.map((item, index) => {
@@ -122,9 +119,42 @@ function TabPanel(props) {
 
 const VirCard = props => {
     const [infoList, setInfoList] = useState([]);
-    const [album, setAlbum] = useState([])
     const isPc = useMediaQuery(CONFIG.minDeviceWidth);
     const [tabPage,setTabPage] = useState(0)
+
+    const downloadInstallDiskBySn = async e => {
+    
+        const downloadDocument = document.getElementById('download')
+        const oldChild = downloadDocument.childNodes[0]
+        const newChild = document.createElement('button')
+        newChild.style=` 
+            padding:4px;  
+            background-color: #428bca;  
+            border-color: #357ebd;  
+            color: #fff;  
+            -moz-border-radius: 6px;  
+            -webkit-border-radius: 6px;  
+            border-radius: 6px;
+            -khtml-border-radius: 6px;
+            text-align: center;  
+            border: 1px solid transparent;    
+            font-size:10px;
+            margin: 8px 0 8px 0; 
+            `
+        newChild.textContent = '下载中...'
+        newChild.disabled = true
+        downloadDocument.removeChild(oldChild)
+        downloadDocument.append(newChild)
+        const res = await apiService.downloadInstallDiskBySn({sn: e})
+        if (res.code === 200) {
+            downloadDocument.removeChild(newChild)
+            downloadDocument.append(oldChild)
+            window.open('https://www.langjie.com/open/burnDisk/download/'+res.data)
+        } else {
+
+        }
+    }
+
     const backSelectedItem = async item => {
         if (isPc) {
             const result = await apiService.fetchVirCardInfo(item)
@@ -132,7 +162,7 @@ const VirCard = props => {
             const isShowDownLoad = checkSnAccess.code === 200 ? true : false
             if (isShowDownLoad) {
                 Object.assign(result.data, {
-                    download:  [{column_name: 'download', column_comment: '软件安装包', val: <IconButton onClick={() => downloadInstallDiskBySn(item.serialNo)}><GetAppIcon color='primary'/></IconButton>}]
+                    download:  [{column_name: 'download', column_comment: '软件安装包', val: <div id='download'><Button children={<GetAppIcon color='primary' />} onClick={() => downloadInstallDiskBySn(item.serialNo)}></Button></div>}]
                 })
             }
             setInfoList(result.data)
@@ -144,14 +174,7 @@ const VirCard = props => {
         }
     }
 
-    const downloadInstallDiskBySn = async e => {
-        const res = await apiService.downloadInstallDiskBySn({sn: e})
-        if (res.code === 200) {
-            window.open('https://www.langjie.com/open/burnDisk/download/'+res.data)
-        } else {
-
-        }
-    }
+    
 
     const renderList = items => {
         const validTime = items.validTime === 0 ? '永久注册' : items.validTime;

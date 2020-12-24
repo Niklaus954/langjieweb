@@ -120,7 +120,8 @@ class ItemList extends Component {
             loading: false,
         },
         keywords: '',
-        openSnackbar: false
+        openSnackbar: false,
+        searchList: []
     };
 
     componentWillMount() {
@@ -178,15 +179,6 @@ class ItemList extends Component {
                 infoList = result.data
             }
             infoList.map(item => {
-                if (item.type === '图库') {
-                    item.picList.forEach(pic => {
-                        if (pic.album.split('.')[pic.album.split('.').length - 1] === 'mp4') {
-                            item.suffixName = '.mp4';
-                            item.type = '视频'
-                            return
-                        }
-                    })
-                }
                 item.fileSuffixIcon = IconSuffixName(item.suffixName)
             })
         } catch (error) {
@@ -206,6 +198,7 @@ class ItemList extends Component {
             scroll.hasMore = false
             this.setState({
                 list: [...infoList],
+                searchList: [...infoList],
                 scroll,
                 cloudDiskInfo
             })
@@ -258,15 +251,30 @@ class ItemList extends Component {
         }
         
     }
+    
 
     async searchFetch(param) {
         const type = this.props.serviceType
         if (type === 'CloudDisk') {
-            let list = this.state.list
-            list = list.filter(item => item.type === param)
-            this.setState({
-                list
+            const { scroll, cloudDiskInfo } = this.state;
+            const result = await this.props.fetchList({
+                page: scroll.page,
+                pageSize: scroll.pageSize,
+            });
+            const infoList = result.data.data.filter(item => item.type === param)
+            cloudDiskInfo.totalNumber = infoList.length
+            let totalSize = 0
+            infoList.map(item => {
+                item.fileSuffixIcon = IconSuffixName(item.suffixName)
+                totalSize += item.size
             })
+            cloudDiskInfo.totalSize = parseFloat(totalSize/1024/1024).toFixed(2)
+            this.setState({
+                list: infoList,
+                cloudDiskInfo
+            })
+            this.itemSelected(infoList[0], 0)
+            
         } else {
             const { scroll } = this.state;
             scroll.loading = true;
