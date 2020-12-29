@@ -346,6 +346,7 @@ class ItemList extends Component {
 
     render() {
         const { list, scroll, cloudDiskInfo } = this.state;
+        const { serviceType } = this.props
         const renderAlbum = this.props.renderAlbum ? true : false;
         const renderStar = this.props.serviceType === 'CloudDisk' ? true : false
         const renderCloudDiskInfo = this.props.serviceType === 'CloudDisk' ? true : false
@@ -370,7 +371,7 @@ class ItemList extends Component {
                             <div key={items.id + '_' + index} style={{display: 'flex'}} className={"hoverItem"}>
                                 { renderStar && this.renderListStar(items) }
                                 <div style={{ display: 'flex', padding: 8, marginBottom: 4, width: '100%' }} onClick={() => this.itemSelected(items, index)}>
-                                    { renderAlbum && items.album === undefined ? <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>{items.fileSuffixIcon}<p>{items.type}</p></div> : <div style={{ width: 112, backgroundImage: 'url(' + items.album + ')', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundSize: 'contain' }}></div>}
+                                    { serviceType === 'CloudDisk' ? <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>{items.fileSuffixIcon}<p>{items.type}</p></div> : renderAlbum && <div style={{ width: 112, backgroundImage: 'url(' + items.album + ')', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundSize: 'contain' }}></div>}
                                     { this.props.renderList(items) }
                                 </div>
                             </div>

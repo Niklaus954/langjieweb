@@ -59,6 +59,7 @@ const fetchContract = async params => {
             keywords: params.keywords ? params.keywords : '',
         },
     });
+    console.log(result)
     return result;
 }
 
