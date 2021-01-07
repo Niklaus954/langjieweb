@@ -100,6 +100,11 @@ const contractTakeConfirm = async params => {
 const fetchCloudDiskList = async params => {
     const result = await api({
         url: '/open/service/cloudDisk/getList',
+        queryData: {
+            page: params.page ? Number(params.page) : 1,
+            pageSize: params.pageSize ? Number(params.pageSize) : 10,
+            keywords: params.keywords ? params.keywords : '',
+        },
     })
     return result;
 }

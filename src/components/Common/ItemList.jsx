@@ -55,7 +55,7 @@ var that
             }else if(child.serviceType === 'Contract'){
                 return ('请输入合同编号')
             } else if (child.serviceType === 'CloudDisk') {
-                return ('请输入文件类型')
+                return ('请输入文件名')
             }
         }
 
@@ -111,11 +111,12 @@ class ItemList extends Component {
         list: [],
         cloudDiskInfo: {
             totalNumber: 0,
-            totalSize: 0
+            totalSize: 0,
+            isAdmin: 0
         },
         scroll: {
             page: 1,
-            pageSize: 30,
+            pageSize: 20,
             hasMore: true,
             loading: false,
         },
@@ -157,7 +158,7 @@ class ItemList extends Component {
     };
 
     async fetch() {
-        const { scroll, list, keywords, cloudDiskInfo } = this.state;
+        const { scroll, list, keywords, cloudDiskInfo,  } = this.state;
         scroll.loading = true;
         this.setState({
             scroll,
@@ -174,6 +175,7 @@ class ItemList extends Component {
             if (result.data.data) {
                 cloudDiskInfo.totalNumber = result.data.totalNum
                 cloudDiskInfo.totalSize = parseFloat(result.data.totalSize/1024/1024).toFixed(2)
+                cloudDiskInfo.isAdmin = result.data.isAdmin
                 infoList = result.data.data
             } else {
                 infoList = result.data
@@ -195,14 +197,15 @@ class ItemList extends Component {
                 }
             });
         } else {
-            scroll.hasMore = false
+            if (infoList.length === 0) scroll.hasMore = false; 
+           // scroll.hasMore = false
             this.setState({
-                list: [...infoList],
+                list: [...list,...infoList],
                 searchList: [...infoList],
                 scroll,
                 cloudDiskInfo
             })
-            if (infoList.length !== 0 && this.props.isPc) {
+            if (scroll.page === 2 && infoList.length !== 0 && this.props.isPc) {
                 this.itemSelected(infoList[0], 0);
             }
         }
@@ -228,10 +231,13 @@ class ItemList extends Component {
     }
     resetSearchInput(){
         const type = that.props.serviceType
-        
+        const { scroll } = that.state
+        scroll.page = 1
         if (type === 'CloudDisk') {
             that.setState({
-                list: []
+                list: [],
+                scroll,
+                keywords: ''
             }, () => {
                 that.fetch()
             })
@@ -255,34 +261,40 @@ class ItemList extends Component {
 
     async searchFetch(param) {
         const type = this.props.serviceType
+        const { scroll } = this.state;
+        scroll.loading = true;
+        scroll.page = 1
+        this.setState({
+            scroll,
+            keywords: param
+        });
         if (type === 'CloudDisk') {
             const { scroll, cloudDiskInfo } = this.state;
-            const result = await this.props.fetchList({
+            const searchResult = await this.props.fetchList({
                 page: scroll.page,
                 pageSize: scroll.pageSize,
-            });
-            const infoList = result.data.data.filter(item => item.type === param)
-            cloudDiskInfo.totalNumber = infoList.length
-            let totalSize = 0
-            infoList.map(item => {
-                item.fileSuffixIcon = IconSuffixName(item.suffixName)
-                totalSize += item.size
-            })
-            cloudDiskInfo.totalSize = parseFloat(totalSize/1024/1024).toFixed(2)
-            this.setState({
-                list: infoList,
-                cloudDiskInfo
-            })
-            this.itemSelected(infoList[0], 0)
-            
-        } else {
-            const { scroll } = this.state;
-            scroll.loading = true;
-            scroll.page = 1
-            this.setState({
-                scroll,
                 keywords: param
             });
+
+            scroll.loading = false;
+            scroll.page++;
+            cloudDiskInfo.totalNumber = searchResult.data.totalNum
+            cloudDiskInfo.totalSize = parseFloat(searchResult.data.totalSize/1024/1024).toFixed(2)
+            cloudDiskInfo.isAdmin = searchResult.data.isAdmin
+            searchResult.data.data.map(item => {
+                item.fileSuffixIcon = IconSuffixName(item.suffixName)
+            })
+            if (searchResult.data.data.length === 0) scroll.hasMore = false;
+            this.setState({
+                list: [...searchResult.data.data],
+                scroll,
+            }, () => {
+                if (scroll.page === 2 && searchResult.data.data.length !== 0 && this.props.isPc) {
+                    this.itemSelected(searchResult.data.data[0], 0);
+                }
+            });
+            
+        } else {
             const searchResult = await this.props.fetchList({
                 page: scroll.page,
                 pageSize: scroll.pageSize,
@@ -348,7 +360,7 @@ class ItemList extends Component {
         const { list, scroll, cloudDiskInfo } = this.state;
         const { serviceType } = this.props
         const renderAlbum = this.props.renderAlbum ? true : false;
-        const renderStar = this.props.serviceType === 'CloudDisk' ? true : false
+        const renderStar = this.props.serviceType === 'CloudDisk' ? cloudDiskInfo.isAdmin === 1 ? false : true : false
         const renderCloudDiskInfo = this.props.serviceType === 'CloudDisk' ? true : false
         return (
             <InfiniteScroll
@@ -362,8 +374,8 @@ class ItemList extends Component {
             >
                 <div style={{position: 'sticky'}}><SearchBarComponent children={this.props} searchInput={this.searchInput} resetSearchInput={this.resetSearchInput}/></div>
                 <div style={{background: "#eee", color: "#333"}}>
-                    { renderCloudDiskInfo && <div style={{display: 'flex', justifyContent: 'space-around'}}>
-                        <p>占用空间：{cloudDiskInfo.totalSize}MB</p>
+                    { renderCloudDiskInfo && <div style={{display: 'flex', justifyContent: 'space-between', margin: '0 20px'}}>
+                        {cloudDiskInfo.isAdmin === 1 ? <p></p> : <p>占用空间：{cloudDiskInfo.totalSize}MB</p>}
                         <p>文件总数：{cloudDiskInfo.totalNumber}</p>
                     </div> }
                     {
@@ -371,7 +383,11 @@ class ItemList extends Component {
                             <div key={items.id + '_' + index} style={{display: 'flex'}} className={"hoverItem"}>
                                 { renderStar && this.renderListStar(items) }
                                 <div style={{ display: 'flex', padding: 8, marginBottom: 4, width: '100%' }} onClick={() => this.itemSelected(items, index)}>
-                                    { serviceType === 'CloudDisk' ? <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>{items.fileSuffixIcon}<p>{items.type}</p></div> : renderAlbum && <div style={{ width: 112, backgroundImage: 'url(' + items.album + ')', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundSize: 'contain' }}></div>}
+                                    {
+                                        serviceType === 'CloudDisk'
+                                        ? <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>{items.fileSuffixIcon}<p>{items.type}</p></div> 
+                                        : renderAlbum && <div style={{ width: 112, backgroundImage: 'url(' + items.album + ')', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundSize: 'contain' }}></div>
+                                    }
                                     { this.props.renderList(items) }
                                 </div>
                             </div>
