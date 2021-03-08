@@ -59,7 +59,6 @@ const fetchContract = async params => {
             keywords: params.keywords ? params.keywords : '',
         },
     });
-    console.log(result)
     return result;
 }
 
@@ -92,6 +91,18 @@ const contractTakeConfirm = async params => {
     const result = await api({
         method: "put",
         url: "/open/service/contract/takeConfirm/"+params
+    })
+    return result
+}
+//获取公共云盘列表
+const fetchCloudDiskPublicList = async params => {
+    const result = await api({
+        url: '/open/service/cloudDisk/getPublicList',
+        queryData: {
+            page: params.page ? Number(params.page) : 1,
+            pageSize: params.pageSize ? Number(params.pageSize) : 10,
+            keywords: params.keywords ? params.keywords : '',
+        },
     })
     return result
 }
@@ -206,5 +217,6 @@ export default {
     downLoadSoftDisk,
     downloadInstallDiskBySn,
     checkSnAccess,
-    changeCloudDiskStar
+    changeCloudDiskStar,
+    fetchCloudDiskPublicList
 };

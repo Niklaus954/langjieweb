@@ -2,12 +2,12 @@ import React, { Component, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import '../../public/css/hoverStyle.css';
 import { makeStyles } from '@material-ui/core/styles';
-import { Paper, InputBase, IconButton, useMediaQuery, Button, Divider, Snackbar } from '@material-ui/core';
+import { Paper, InputBase, IconButton, useMediaQuery, Button, Divider, Snackbar, AppBar, Tabs,Tab } from '@material-ui/core';
 import { Search as SearchIcon } from '@material-ui/icons';
 import CONFIG from '../../config';
 import apiService from '../../api/apiService';
-import { ListView } from 'antd-mobile';
 import { Alert } from '@material-ui/lab';
+// import { TabContext, TabList, TabPanel } from '@material-ui/lab'
 var that
 
     //朗杰服务 产品、维修、合同搜索框
@@ -99,6 +99,91 @@ var that
             return <svg t="1608518379369" className="icon" style={{width: 60, height: 60}} viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="9260" width="200" height="200"><path d="M921.6 1024H102.4a102.4 102.4 0 0 1-102.4-102.4V102.4a102.4 102.4 0 0 1 102.4-102.4h819.2a102.4 102.4 0 0 1 102.4 102.4v819.2a102.4 102.4 0 0 1-102.4 102.4zM609.655467 228.1472l-3.959467 151.6544h159.4368zM785.066667 430.353067l-203.298134-3.8912-27.921066-23.3472L549.853867 204.8H238.933333v614.4h546.133334V430.353067z" p-id="9261"></path></svg>
         }
     }
+    const useStyles = makeStyles((theme) => ({
+        root: {
+            flexGrow: 1,
+        }
+    }));
+
+    function TabPanel(props) {
+        const { children, value, index, parentProps, renderListStar, itemSelected, isAdmin, ...other } = props;
+        return (
+          <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`scrollable-auto-tabpanel-${index}`}
+            aria-labelledby={`scrollable-auto-tab-${index}`}
+            {...other}
+          >
+            {value === index && (
+              <div>{children.map((items, index) => (
+                <div className='hoverItem' key={items.id + '_' + index} style={{display: 'flex', cursor: 'pointer', background : index === 0 ? '#f8f8f8' : '#eee'}}>
+                    { isAdmin ? null : value === 0 ? renderListStar(items) : null }
+                    <div style={{ display: 'flex', padding: 8, marginBottom: 4, width: '100%' }} onClick={() => itemSelected(items, index)}>
+                    <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>{items.fileSuffixIcon}<p>{items.type}</p></div> 
+                        { parentProps.renderList(items) }
+                    </div>
+                </div>
+            ))}</div>
+            )}
+          </div>
+        );
+      }
+    function LabTabs(props) {
+        const tabsLabelName = ['我的下载','公共下载']
+        const { renderListStar, parentProps, children, itemSelected, isAdmin } = props
+        const classes = useStyles();
+        const [value, setValue] = useState(0);
+        const handleChange = async (event, newValue) => {
+          setValue(newValue);
+          props.changeTabsFetchList(newValue)
+        };
+      
+        return (
+            <div className={classes.root}>
+                {
+                isAdmin === true ? 
+                <TabPanel
+                    value={value} 
+                    index={0}
+                    renderListStar={renderListStar} 
+                    parentProps={parentProps} 
+                    itemSelected={itemSelected}
+                    isAdmin={isAdmin}
+                    >    
+                        {children}
+                    </TabPanel>
+                    : <div>
+                        <Tabs
+                        value={value}
+                        onChange={handleChange}
+                        indicatorColor="primary"
+                        textColor="primary"
+                        variant="fullWidth"
+                        >
+                    {tabsLabelName.map((item, index) => <Tab key={index} label={item}/>)}
+                </Tabs>
+                        {
+                            tabsLabelName.map((item, index) => 
+                                <TabPanel
+                                key={index} 
+                                value={value} 
+                                index={index} 
+                                renderListStar={renderListStar} 
+                                parentProps={parentProps} 
+                                itemSelected={itemSelected}
+                                isAdmin={isAdmin}
+                                >
+                                    {children}
+                                </TabPanel>
+                            )
+                        }
+                    </div>
+                }
+            
+          </div>
+        );
+      }
 
 class ItemList extends Component {
 
@@ -116,18 +201,21 @@ class ItemList extends Component {
         },
         scroll: {
             page: 1,
-            pageSize: 20,
+            pageSize: 30,
             hasMore: true,
             loading: false,
         },
         keywords: '',
         openSnackbar: false,
-        searchList: []
+        searchList: [],
+        fetchListType: 'fetchCloudDiskList'
     };
 
-    componentWillMount() {
+    async componentWillMount() {
         that = this
-        this.fetch();
+       // console.log(fetchCloudDiskList)
+        this.fetch()
+
     }
 
     /**
@@ -158,17 +246,33 @@ class ItemList extends Component {
     };
 
     async fetch() {
-        const { scroll, list, keywords, cloudDiskInfo,  } = this.state;
+        const { scroll, list, cloudDiskInfo, fetchListType} = this.state;
+        let result
         scroll.loading = true;
         this.setState({
             scroll,
         });
         let infoList = []
-        const result = await this.props.fetchList({
-            page: scroll.page,
-            pageSize: scroll.pageSize,
-            keywords: keywords
-        });
+        if (this.props.serviceType === 'CloudDisk') {
+            scroll.pageSize = 10
+            if (fetchListType === 'fetchCloudDiskList') {
+                result = await this.props.fetchList({
+                    page: scroll.page,
+                    pageSize: scroll.pageSize,
+                });
+            } else {
+                result = await this.props.fetchPublicList({
+                    page: scroll.page,
+                    pageSize: scroll.pageSize,
+                })
+            }
+        } else {
+            scroll.pageSize = 30
+            result = await this.props.fetchList({
+                page: scroll.page,
+                pageSize: scroll.pageSize,
+            });
+        }
         scroll.loading = false;
         scroll.page++;
         try {
@@ -204,22 +308,24 @@ class ItemList extends Component {
                 searchList: [...infoList],
                 scroll,
                 cloudDiskInfo
+            },() => {
+                if (scroll.page === 2 && infoList.length !== 0 && this.props.isPc) {
+                    this.itemSelected(infoList[0], 0);
+                }
             })
-            if (scroll.page === 2 && infoList.length !== 0 && this.props.isPc) {
-                this.itemSelected(infoList[0], 0);
-            }
+            
         }
         
     }
 
     itemSelected(item, index) {
-        const len = document.getElementsByClassName('hoverItem').length;
+        that.props.backSelectedItem(item);
+        const len = document.getElementsByClassName('hoverItem').length
         for (let i = 0; i < len; i++) {
-            document.getElementsByClassName('hoverItem')[i].style.background = '#fff';
+            document.getElementsByClassName('hoverItem')[i].style.background = '#eee';
         }
         try {
-            document.getElementsByClassName('hoverItem')[index].style.background = '#f5f5f9';
-           // document.getElementsByClassName("hoverItem")[index].style.background = "#eee"
+            document.getElementsByClassName('hoverItem')[index].style.background = '#f8f8f8';
             this.props.backSelectedItem(item);
         } catch (e) {
             
@@ -229,7 +335,7 @@ class ItemList extends Component {
     searchInput(param){
         that.searchFetch(param)   
     }
-    resetSearchInput(){
+    async resetSearchInput(){
         const type = that.props.serviceType
         const { scroll } = that.state
         scroll.page = 1
@@ -261,20 +367,28 @@ class ItemList extends Component {
 
     async searchFetch(param) {
         const type = this.props.serviceType
-        const { scroll } = this.state;
+        const { scroll, cloudDiskInfo, fetchListType } = this.state;
         scroll.loading = true;
         scroll.page = 1
         this.setState({
             scroll,
             keywords: param
         });
+        let searchResult 
         if (type === 'CloudDisk') {
-            const { scroll, cloudDiskInfo } = this.state;
-            const searchResult = await this.props.fetchList({
-                page: scroll.page,
-                pageSize: scroll.pageSize,
-                keywords: param
-            });
+            if (fetchListType === 'fetchCloudDiskList') {
+                searchResult = await this.props.fetchList({
+                    page: scroll.page,
+                    pageSize: scroll.pageSize,
+                    keywords: param
+                });
+            } else {
+                searchResult = await this.props.fetchPublicList({
+                    page: scroll.page,
+                    pageSize: scroll.pageSize,
+                    keywords: param
+                })
+            }
 
             scroll.loading = false;
             scroll.page++;
@@ -356,11 +470,25 @@ class ItemList extends Component {
         )
     }
 
+    /**
+     * 切换Tab
+     */
+    changeTabsFetchList = async e => {
+        let { list, scroll } = this.state
+        list = []
+        scroll.page = 1
+        if (e === 0) {
+            this.setState({fetchListType: 'fetchCloudDiskList', list, scroll}, () => this.fetch())
+        } else {
+            this.setState({fetchListType: 'fetchCloudDiskPublicList', list, scroll}, () => this.fetch())
+        }
+    }
+
     render() {
         const { list, scroll, cloudDiskInfo } = this.state;
         const { serviceType } = this.props
         const renderAlbum = this.props.renderAlbum ? true : false;
-        const renderStar = this.props.serviceType === 'CloudDisk' ? cloudDiskInfo.isAdmin === 1 ? false : true : false
+        const isAdmin = this.props.serviceType === 'CloudDisk' ? cloudDiskInfo.isAdmin === 1 ? true : false : false
         const renderCloudDiskInfo = this.props.serviceType === 'CloudDisk' ? true : false
         return (
             <InfiniteScroll
@@ -374,25 +502,16 @@ class ItemList extends Component {
             >
                 <div style={{position: 'sticky'}}><SearchBarComponent children={this.props} searchInput={this.searchInput} resetSearchInput={this.resetSearchInput}/></div>
                 <div style={{background: "#eee", color: "#333"}}>
-                    { renderCloudDiskInfo && <div style={{display: 'flex', justifyContent: 'space-between', margin: '0 20px'}}>
-                        {cloudDiskInfo.isAdmin === 1 ? <p></p> : <p>占用空间：{cloudDiskInfo.totalSize}MB</p>}
-                        <p>文件总数：{cloudDiskInfo.totalNumber}</p>
-                    </div> }
-                    {
-                        list.map((items, index) => (
+                    { renderCloudDiskInfo
+                        ? <div><LabTabs changeTabsFetchList={this.changeTabsFetchList} renderListStar={this.renderListStar} parentProps={this.props} itemSelected={this.itemSelected} isAdmin={isAdmin}>{list}</LabTabs></div> 
+                        : list.map((items, index) => (
                             <div key={items.id + '_' + index} style={{display: 'flex'}} className={"hoverItem"}>
-                                { renderStar && this.renderListStar(items) }
                                 <div style={{ display: 'flex', padding: 8, marginBottom: 4, width: '100%' }} onClick={() => this.itemSelected(items, index)}>
-                                    {
-                                        serviceType === 'CloudDisk'
-                                        ? <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>{items.fileSuffixIcon}<p>{items.type}</p></div> 
-                                        : renderAlbum && <div style={{ width: 112, backgroundImage: 'url(' + items.album + ')', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundSize: 'contain' }}></div>
-                                    }
+                                    { renderAlbum && <div style={{ width: 112, backgroundImage: 'url(' + items.album + ')', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundSize: 'contain' }}></div> }
                                     { this.props.renderList(items) }
                                 </div>
                             </div>
-                        ))
-                    }
+                        ))}
                 </div>
             </InfiniteScroll>
         )

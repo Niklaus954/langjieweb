@@ -21,8 +21,8 @@ import GoodsList from './components/Shop/GoodsList'
 import CloudDisk from './components/Service/CloudDisk'
 
 const CONFIG = {
-    //url: pathname => 'http://192.168.50.230:8090' + pathname,
-    //shopUrl: 'http://192.168.50.230:3002',
+    // url: pathname => 'http://192.168.50.230:8090' + pathname,
+    // shopUrl: 'http://192.168.50.230:3002',
     url: pathname => 'https://www.langjie.com' + pathname,
     shopUrl: 'https://shop.langjie.com',
     wxLoginAppid: 'wx1dbbbe221c943cd9',

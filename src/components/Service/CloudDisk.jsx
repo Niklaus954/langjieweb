@@ -7,7 +7,7 @@ import {
 } from 'react-router-dom'
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import FadeTransitions from '../Common/FadeTransitions'
-import { Typography, CircularProgress, TableContainer, Table, TableRow, TableCell, TableBody, TableHead, IconButton, Button, GridListTile, GridListTileBar, GridList } from '@material-ui/core';
+import { Typography, CircularProgress, TableContainer, Table, TableRow, TableCell, TableBody, TableHead, IconButton, Button, GridListTile, GridListTileBar, GridList, Modal } from '@material-ui/core';
 import {GetApp as GetAppIcon} from '@material-ui/icons'
 import moment from 'moment';
 
@@ -141,10 +141,10 @@ function RenderPanel (param) {
     const downLoadPic = async (v1, v2) => {
         const param = { fileId: v1._id, picId: v2.id}
         const res = await apiService.downloadByCloudDiskId(param)
-        if (res.code === 200) {
-            window.open('https://www.langjie.com/open/burnDisk/download/'+res.data)
-        } else {
-
+        try {
+            window.open(CONFIG.url(`/open/burnDisk/download/${res.data}`))
+        } catch (error) {
+            
         }
     }
 
@@ -155,23 +155,25 @@ function RenderPanel (param) {
             disabled: true
         })
         const res = await apiService.downloadByCloudDiskId({ fileId: e._id })
-        if (res.code === 200) {
+        try {
             setBtnInfo({
                 node: <GetAppIcon/>,
                 msg: '下载',
                 disabled: false
             })
-            window.open('https://www.langjie.com/open/burnDisk/download/'+res.data)
-        } else {
-
+            window.open(CONFIG.url(`/open/burnDisk/download/${res.data}`))
+        } catch (error) {
+            
         }
     }
 
     const handleDownLoadDependency = async(v1, v2) => {
         const param = {fileId: v2.id, installDiskId: v1.installDiskId, type: v2.type}
         const res = await apiService.downloadDependency(param)
-        if (res.code === 200) {
-            window.open('https://www.langjie.com/open/burnDisk/download/'+res.data)
+        try {
+            window.open(CONFIG.url(`/open/burnDisk/download/${res.data}`))
+        } catch (error) {
+            
         }
        
     }
@@ -220,7 +222,6 @@ const CloudDisk = props => {
         )
     }
     
-    
 
     
 
@@ -232,6 +233,7 @@ const CloudDisk = props => {
                         <ItemList
                             isPc={isPc}
                             fetchList={apiService.fetchCloudDiskList}
+                            fetchPublicList={apiService.fetchCloudDiskPublicList}
                             renderAlbum={true}
                             renderList={renderList}
                             serviceType="CloudDisk"
